@@ -27,7 +27,6 @@ namespace Inventory_Management_System
             LoadProducts();
         }
 
-        private int var;
         private void LoadProducts(string search = "")
         {
             try
