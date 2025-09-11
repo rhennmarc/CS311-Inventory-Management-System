@@ -68,6 +68,18 @@
     <Compile Include="frmAddProduct.Designer.cs">
       <DependentUpon>frmAddProduct.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAddPuchaseOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddPuchaseOrder.Designer.cs">
+      <DependentUpon>frmAddPuchaseOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAddSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddSupplier.Designer.cs">
+      <DependentUpon>frmAddSupplier.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +91,18 @@
     </Compile>
     <Compile Include="frmProducts.Designer.cs">
       <DependentUpon>frmProducts.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPurchaseOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPurchaseOrders.Designer.cs">
+      <DependentUpon>frmPurchaseOrders.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSuppliers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSuppliers.Designer.cs">
+      <DependentUpon>frmSuppliers.cs</DependentUpon>
     </Compile>
     <Compile Include="frmUpdateAccount.cs">
       <SubType>Form</SubType>
@@ -98,6 +122,18 @@
     <Compile Include="frmLogin.Designer.cs">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmUpdatePurchaseOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdatePurchaseOrder.Designer.cs">
+      <DependentUpon>frmUpdatePurchaseOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUpdateSupplier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdateSupplier.Designer.cs">
+      <DependentUpon>frmUpdateSupplier.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="frmLogs.cs">
@@ -115,11 +151,23 @@
     <EmbeddedResource Include="frmAddProduct.resx">
       <DependentUpon>frmAddProduct.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmAddPuchaseOrder.resx">
+      <DependentUpon>frmAddPuchaseOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAddSupplier.resx">
+      <DependentUpon>frmAddSupplier.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmProducts.resx">
       <DependentUpon>frmProducts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPurchaseOrders.resx">
+      <DependentUpon>frmPurchaseOrders.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSuppliers.resx">
+      <DependentUpon>frmSuppliers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdateAccount.resx">
       <DependentUpon>frmUpdateAccount.cs</DependentUpon>
@@ -129,6 +177,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUpdatePurchaseOrder.resx">
+      <DependentUpon>frmUpdatePurchaseOrder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUpdateSupplier.resx">
+      <DependentUpon>frmUpdateSupplier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

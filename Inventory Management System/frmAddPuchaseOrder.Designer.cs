@@ -1,6 +1,6 @@
 ﻿namespace Inventory_Management_System
 {
-    partial class frmAddProduct
+    partial class frmAddPuchaseOrder
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -40,17 +39,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.txtunitprice = new System.Windows.Forms.TextBox();
+            this.txtquantity = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.panel7 = new System.Windows.Forms.Panel();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.txtcurrentstock = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.txtdescription = new System.Windows.Forms.TextBox();
+            this.txtunitcost = new System.Windows.Forms.TextBox();
             this.btncancel = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
@@ -60,8 +55,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            this.panel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -73,8 +66,7 @@
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
             this.panelHeader.Size = new System.Drawing.Size(686, 96);
-            this.panelHeader.TabIndex = 1005;
-            this.panelHeader.Paint += new System.Windows.Forms.PaintEventHandler(this.panelHeader_Paint);
+            this.panelHeader.TabIndex = 1009;
             // 
             // titleLabel
             // 
@@ -83,9 +75,9 @@
             this.titleLabel.ForeColor = System.Drawing.Color.White;
             this.titleLabel.Location = new System.Drawing.Point(110, 30);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(179, 37);
+            this.titleLabel.Size = new System.Drawing.Size(273, 37);
             this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "Add Product";
+            this.titleLabel.Text = "Add Purchase Order";
             // 
             // pictureBox1
             // 
@@ -107,14 +99,11 @@
             this.cardPanel.Controls.Add(this.panel2);
             this.cardPanel.Controls.Add(this.label8);
             this.cardPanel.Controls.Add(this.panel7);
-            this.cardPanel.Controls.Add(this.label7);
-            this.cardPanel.Controls.Add(this.panel6);
-            this.cardPanel.Location = new System.Drawing.Point(24, 128);
+            this.cardPanel.Location = new System.Drawing.Point(19, 131);
             this.cardPanel.Name = "cardPanel";
             this.cardPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.cardPanel.Size = new System.Drawing.Size(648, 402);
-            this.cardPanel.TabIndex = 1004;
-            this.cardPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.cardPanel_Paint);
+            this.cardPanel.Size = new System.Drawing.Size(648, 271);
+            this.cardPanel.TabIndex = 1008;
             // 
             // label2
             // 
@@ -165,16 +154,16 @@
             this.label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.label3.Location = new System.Drawing.Point(13, 96);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 19);
+            this.label3.Size = new System.Drawing.Size(66, 19);
             this.label3.TabIndex = 31;
-            this.label3.Text = "Unit Price";
+            this.label3.Text = "Quantity";
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.pictureBox3);
-            this.panel2.Controls.Add(this.txtunitprice);
+            this.panel2.Controls.Add(this.txtquantity);
             this.panel2.Location = new System.Drawing.Point(17, 118);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
@@ -191,17 +180,17 @@
             this.pictureBox3.TabIndex = 10;
             this.pictureBox3.TabStop = false;
             // 
-            // txtunitprice
+            // txtquantity
             // 
-            this.txtunitprice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtquantity.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtunitprice.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtunitprice.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtunitprice.Location = new System.Drawing.Point(44, 9);
-            this.txtunitprice.MaxLength = 100;
-            this.txtunitprice.Name = "txtunitprice";
-            this.txtunitprice.Size = new System.Drawing.Size(533, 20);
-            this.txtunitprice.TabIndex = 0;
+            this.txtquantity.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtquantity.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtquantity.Location = new System.Drawing.Point(44, 9);
+            this.txtquantity.MaxLength = 100;
+            this.txtquantity.Name = "txtquantity";
+            this.txtquantity.Size = new System.Drawing.Size(533, 20);
+            this.txtquantity.TabIndex = 0;
             // 
             // label8
             // 
@@ -209,16 +198,16 @@
             this.label8.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.label8.Location = new System.Drawing.Point(13, 168);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(100, 19);
+            this.label8.Size = new System.Drawing.Size(69, 19);
             this.label8.TabIndex = 40;
-            this.label8.Text = "Current Stock";
+            this.label8.Text = "Unit Cost";
             // 
             // panel7
             // 
             this.panel7.BackColor = System.Drawing.Color.White;
             this.panel7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel7.Controls.Add(this.pictureBox7);
-            this.panel7.Controls.Add(this.txtcurrentstock);
+            this.panel7.Controls.Add(this.txtunitcost);
             this.panel7.Location = new System.Drawing.Point(17, 190);
             this.panel7.Margin = new System.Windows.Forms.Padding(2);
             this.panel7.Name = "panel7";
@@ -235,50 +224,17 @@
             this.pictureBox7.TabIndex = 10;
             this.pictureBox7.TabStop = false;
             // 
-            // txtcurrentstock
+            // txtunitcost
             // 
-            this.txtcurrentstock.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtunitcost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtcurrentstock.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtcurrentstock.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtcurrentstock.Location = new System.Drawing.Point(44, 9);
-            this.txtcurrentstock.MaxLength = 100;
-            this.txtcurrentstock.Name = "txtcurrentstock";
-            this.txtcurrentstock.Size = new System.Drawing.Size(533, 20);
-            this.txtcurrentstock.TabIndex = 0;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.label7.Location = new System.Drawing.Point(13, 242);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(85, 19);
-            this.label7.TabIndex = 38;
-            this.label7.Text = "Description";
-            // 
-            // panel6
-            // 
-            this.panel6.BackColor = System.Drawing.Color.White;
-            this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel6.Controls.Add(this.txtdescription);
-            this.panel6.Location = new System.Drawing.Point(17, 264);
-            this.panel6.Margin = new System.Windows.Forms.Padding(2);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(599, 126);
-            this.panel6.TabIndex = 10;
-            // 
-            // txtdescription
-            // 
-            this.txtdescription.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtdescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtdescription.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtdescription.Location = new System.Drawing.Point(10, 10);
-            this.txtdescription.MaxLength = 200;
-            this.txtdescription.Multiline = true;
-            this.txtdescription.Name = "txtdescription";
-            this.txtdescription.Size = new System.Drawing.Size(578, 106);
-            this.txtdescription.TabIndex = 0;
+            this.txtunitcost.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtunitcost.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtunitcost.Location = new System.Drawing.Point(44, 9);
+            this.txtunitcost.MaxLength = 100;
+            this.txtunitcost.Name = "txtunitcost";
+            this.txtunitcost.Size = new System.Drawing.Size(533, 20);
+            this.txtunitcost.TabIndex = 0;
             // 
             // btncancel
             // 
@@ -291,13 +247,12 @@
             this.btncancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btncancel.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btncancel.ForeColor = System.Drawing.Color.White;
-            this.btncancel.Location = new System.Drawing.Point(352, 544);
+            this.btncancel.Location = new System.Drawing.Point(347, 419);
             this.btncancel.Name = "btncancel";
             this.btncancel.Size = new System.Drawing.Size(305, 40);
-            this.btncancel.TabIndex = 1003;
+            this.btncancel.TabIndex = 1007;
             this.btncancel.Text = "&Cancel";
             this.btncancel.UseVisualStyleBackColor = false;
-            this.btncancel.Click += new System.EventHandler(this.btncancel_Click);
             // 
             // btnsave
             // 
@@ -309,32 +264,27 @@
             this.btnsave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsave.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnsave.ForeColor = System.Drawing.Color.White;
-            this.btnsave.Location = new System.Drawing.Point(28, 544);
+            this.btnsave.Location = new System.Drawing.Point(23, 419);
             this.btnsave.Name = "btnsave";
             this.btnsave.Size = new System.Drawing.Size(305, 40);
-            this.btnsave.TabIndex = 1002;
+            this.btnsave.TabIndex = 1006;
             this.btnsave.Text = "&Save";
             this.btnsave.UseVisualStyleBackColor = false;
-            this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
             // 
-            // errorProvider1
-            // 
-            this.errorProvider1.ContainerControl = this;
-            // 
-            // frmAddProduct
+            // frmAddPuchaseOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(686, 608);
+            this.ClientSize = new System.Drawing.Size(686, 480);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.cardPanel);
             this.Controls.Add(this.btncancel);
             this.Controls.Add(this.btnsave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "frmAddProduct";
+            this.Name = "frmAddPuchaseOrder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Add Product";
+            this.Text = "Add Puchase Order";
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -349,9 +299,6 @@
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -369,16 +316,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.TextBox txtunitprice;
+        private System.Windows.Forms.TextBox txtquantity;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.PictureBox pictureBox7;
-        private System.Windows.Forms.TextBox txtcurrentstock;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Panel panel6;
-        private System.Windows.Forms.TextBox txtdescription;
+        private System.Windows.Forms.TextBox txtunitcost;
         private System.Windows.Forms.Button btncancel;
         private System.Windows.Forms.Button btnsave;
-        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

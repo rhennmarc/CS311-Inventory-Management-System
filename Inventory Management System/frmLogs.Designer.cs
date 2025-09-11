@@ -59,17 +59,15 @@
             this.panelHeader.Controls.Add(this.pictureBox1);
             this.panelHeader.Controls.Add(this.lblTitle);
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
-            this.panelHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(1221, 98);
+            this.panelHeader.Size = new System.Drawing.Size(916, 80);
             this.panelHeader.TabIndex = 2;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(24, 17);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Location = new System.Drawing.Point(18, 14);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 59);
+            this.pictureBox1.Size = new System.Drawing.Size(48, 48);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -79,10 +77,9 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location = new System.Drawing.Point(107, 27);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitle.Location = new System.Drawing.Point(80, 22);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(83, 41);
+            this.lblTitle.Size = new System.Drawing.Size(67, 32);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "Logs";
             // 
@@ -96,20 +93,18 @@
             this.cardPanel.Controls.Add(this.btnsearch);
             this.cardPanel.Controls.Add(this.dataGridView1);
             this.cardPanel.Controls.Add(this.btnreset);
-            this.cardPanel.Location = new System.Drawing.Point(16, 134);
-            this.cardPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cardPanel.Location = new System.Drawing.Point(12, 109);
             this.cardPanel.Name = "cardPanel";
-            this.cardPanel.Padding = new System.Windows.Forms.Padding(16, 15, 16, 15);
-            this.cardPanel.Size = new System.Drawing.Size(902, 403);
+            this.cardPanel.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
+            this.cardPanel.Size = new System.Drawing.Size(677, 328);
             this.cardPanel.TabIndex = 3;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(741, 373);
-            this.lblPageInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPageInfo.Location = new System.Drawing.Point(556, 303);
             this.lblPageInfo.Name = "lblPageInfo";
-            this.lblPageInfo.Size = new System.Drawing.Size(74, 16);
+            this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 4;
             this.lblPageInfo.Text = "Page 1 of 1";
             // 
@@ -117,10 +112,9 @@
             // 
             this.dateTimePicker1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dateTimePicker1.Location = new System.Drawing.Point(21, 20);
-            this.dateTimePicker1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dateTimePicker1.Location = new System.Drawing.Point(16, 16);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(212, 30);
+            this.dateTimePicker1.Size = new System.Drawing.Size(160, 25);
             this.dateTimePicker1.TabIndex = 0;
             // 
             // cmbaction
@@ -132,14 +126,10 @@
             this.cmbaction.Items.AddRange(new object[] {
             "All",
             "Update",
-            "Delete",
-            "Working",
-            "On-Repair",
-            "Retired"});
-            this.cmbaction.Location = new System.Drawing.Point(256, 20);
-            this.cmbaction.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            "Delete"});
+            this.cmbaction.Location = new System.Drawing.Point(192, 16);
             this.cmbaction.Name = "cmbaction";
-            this.cmbaction.Size = new System.Drawing.Size(292, 31);
+            this.cmbaction.Size = new System.Drawing.Size(220, 25);
             this.cmbaction.TabIndex = 1;
             // 
             // btnsearch
@@ -150,10 +140,9 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(571, 15);
-            this.btnsearch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnsearch.Location = new System.Drawing.Point(428, 12);
             this.btnsearch.Name = "btnsearch";
-            this.btnsearch.Size = new System.Drawing.Size(120, 37);
+            this.btnsearch.Size = new System.Drawing.Size(90, 30);
             this.btnsearch.TabIndex = 2;
             this.btnsearch.Text = "&Search";
             this.btnsearch.UseVisualStyleBackColor = false;
@@ -178,13 +167,12 @@
             this.dataGridView1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(21, 69);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView1.Location = new System.Drawing.Point(16, 56);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(859, 300);
+            this.dataGridView1.Size = new System.Drawing.Size(644, 244);
             this.dataGridView1.TabIndex = 3;
             // 
             // btnreset
@@ -196,10 +184,9 @@
             this.btnreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnreset.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnreset.ForeColor = System.Drawing.Color.White;
-            this.btnreset.Location = new System.Drawing.Point(721, 15);
-            this.btnreset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnreset.Location = new System.Drawing.Point(541, 12);
             this.btnreset.Name = "btnreset";
-            this.btnreset.Size = new System.Drawing.Size(137, 37);
+            this.btnreset.Size = new System.Drawing.Size(103, 30);
             this.btnreset.TabIndex = 4;
             this.btnreset.Text = "&Reset";
             this.btnreset.UseVisualStyleBackColor = false;
@@ -211,11 +198,9 @@
             this.groupBox1.Controls.Add(this.btndelete);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(939, 177);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(704, 144);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(267, 150);
+            this.groupBox1.Size = new System.Drawing.Size(200, 122);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Actions";
@@ -231,11 +216,10 @@
             this.btndeleteall.ForeColor = System.Drawing.Color.White;
             this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndeleteall.ImageIndex = 5;
-            this.btndeleteall.Location = new System.Drawing.Point(4, 75);
-            this.btndeleteall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btndeleteall.Location = new System.Drawing.Point(3, 61);
             this.btndeleteall.Name = "btndeleteall";
-            this.btndeleteall.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
-            this.btndeleteall.Size = new System.Drawing.Size(259, 49);
+            this.btndeleteall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btndeleteall.Size = new System.Drawing.Size(194, 40);
             this.btndeleteall.TabIndex = 4;
             this.btndeleteall.Text = "Delete &All";
             this.btndeleteall.UseVisualStyleBackColor = false;
@@ -252,11 +236,10 @@
             this.btndelete.ForeColor = System.Drawing.Color.White;
             this.btndelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndelete.ImageIndex = 5;
-            this.btndelete.Location = new System.Drawing.Point(4, 26);
-            this.btndelete.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btndelete.Location = new System.Drawing.Point(3, 21);
             this.btndelete.Name = "btndelete";
-            this.btndelete.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
-            this.btndelete.Size = new System.Drawing.Size(259, 49);
+            this.btndelete.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btndelete.Size = new System.Drawing.Size(194, 40);
             this.btndelete.TabIndex = 3;
             this.btndelete.Text = "&Delete";
             this.btndelete.UseVisualStyleBackColor = false;
@@ -268,11 +251,9 @@
             this.groupBox2.Controls.Add(this.btnnext);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(939, 335);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Location = new System.Drawing.Point(704, 272);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox2.Size = new System.Drawing.Size(267, 150);
+            this.groupBox2.Size = new System.Drawing.Size(200, 122);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Page";
@@ -288,11 +269,10 @@
             this.btnprev.ForeColor = System.Drawing.Color.White;
             this.btnprev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnprev.ImageIndex = 5;
-            this.btnprev.Location = new System.Drawing.Point(4, 75);
-            this.btnprev.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnprev.Location = new System.Drawing.Point(3, 61);
             this.btnprev.Name = "btnprev";
-            this.btnprev.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
-            this.btnprev.Size = new System.Drawing.Size(259, 49);
+            this.btnprev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnprev.Size = new System.Drawing.Size(194, 40);
             this.btnprev.TabIndex = 4;
             this.btnprev.Text = "&Prev";
             this.btnprev.UseVisualStyleBackColor = false;
@@ -309,11 +289,10 @@
             this.btnnext.ForeColor = System.Drawing.Color.White;
             this.btnnext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnnext.ImageIndex = 5;
-            this.btnnext.Location = new System.Drawing.Point(4, 26);
-            this.btnnext.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnnext.Location = new System.Drawing.Point(3, 21);
             this.btnnext.Name = "btnnext";
-            this.btnnext.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
-            this.btnnext.Size = new System.Drawing.Size(259, 49);
+            this.btnnext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnnext.Size = new System.Drawing.Size(194, 40);
             this.btnnext.TabIndex = 3;
             this.btnnext.Text = "&Next";
             this.btnnext.UseVisualStyleBackColor = false;
@@ -321,15 +300,14 @@
             // 
             // frmLogs
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1221, 554);
+            this.ClientSize = new System.Drawing.Size(916, 450);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.cardPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "frmLogs";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

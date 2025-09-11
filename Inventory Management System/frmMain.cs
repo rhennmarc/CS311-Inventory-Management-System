@@ -62,7 +62,9 @@ namespace Inventory_Management_System
 
         private void suppliersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Suppliers form
+            frmSuppliers suppliersForm = new frmSuppliers(username);
+            suppliersForm.MdiParent = this;
+            suppliersForm.Show();
         }
 
         private void salesToolStripMenuItem_Click(object sender, EventArgs e)

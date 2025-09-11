@@ -139,5 +139,15 @@ namespace Inventory_Management_System
             if (!string.IsNullOrEmpty(txtcurrentstock.Text))
                 errorProvider1.SetError(txtcurrentstock, "");
         }
+
+        private void cardPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
