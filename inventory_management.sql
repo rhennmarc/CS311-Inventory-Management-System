@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 10, 2025 at 03:49 AM
+-- Generation Time: Sep 11, 2025 at 12:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,14 +59,6 @@ CREATE TABLE `tbllogs` (
   `performedby` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `tbllogs`
---
-
-INSERT INTO `tbllogs` (`datelog`, `timelog`, `module`, `action`, `performedto`, `performedby`) VALUES
-('08/09/2025', '10:00 am', 'PRODUCTS MANAGEMENT', 'ADD', 'x', 'admin'),
-('08/09/2025', '10:05 am', 'PRODUCTS MANAGEMENT', 'DELETE', 'x', 'admin');
-
 -- --------------------------------------------------------
 
 --
@@ -81,6 +73,52 @@ CREATE TABLE `tblproducts` (
   `createdby` varchar(50) NOT NULL,
   `datecreated` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tblproducts`
+--
+
+INSERT INTO `tblproducts` (`products`, `description`, `unitprice`, `currentstock`, `createdby`, `datecreated`) VALUES
+('Mucotuss Forte', '', '7', '105', 'admin', '11/09/2025');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblpurchase_order`
+--
+
+CREATE TABLE `tblpurchase_order` (
+  `products` varchar(100) NOT NULL,
+  `quantity` varchar(20) NOT NULL,
+  `unitcost` varchar(20) NOT NULL,
+  `totalcost` varchar(20) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `createdby` varchar(50) NOT NULL,
+  `datecreated` varchar(20) NOT NULL,
+  `supplier` varchar(50) NOT NULL,
+  `datereceived` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblsupplier`
+--
+
+CREATE TABLE `tblsupplier` (
+  `supplier` varchar(50) NOT NULL,
+  `description` text NOT NULL,
+  `contactinfo` varchar(50) NOT NULL,
+  `createdby` varchar(50) NOT NULL,
+  `datecreated` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tblsupplier`
+--
+
+INSERT INTO `tblsupplier` (`supplier`, `description`, `contactinfo`, `createdby`, `datecreated`) VALUES
+('Test', '', '123456', 'admin', '09-11-2025');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
