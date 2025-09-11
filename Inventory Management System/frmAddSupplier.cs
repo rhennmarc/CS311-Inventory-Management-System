@@ -62,7 +62,7 @@ namespace Inventory_Management_System
                         string description = txtdescription.Text.Trim().Replace("'", "''");
                         string contactinfo = txtcontactinfo.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
-                        string dateCreated = DateTime.Now.ToString("MM-dd-yyyy");
+                        string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
 
                         string insertSupplier =
                             "INSERT INTO tblsupplier (supplier, description, contactinfo, createdby, datecreated) " +
@@ -76,7 +76,7 @@ namespace Inventory_Management_System
 
                             // log the action
                             newsupplier.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                                "VALUES ('" + DateTime.Now.ToString("MM-dd-yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                                "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                                 "', 'ADD', 'SUPPLIER MANAGEMENT', '" + supplier + "', '" + username + "')");
 
                             this.Close();

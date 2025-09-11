@@ -121,7 +121,7 @@ namespace Inventory_Management_System
                             MessageBox.Show("Product updated successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             updateproduct.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
-                                DateTime.Now.ToString("dd/MM/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
+                                DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
                                 "' , 'UPDATE', 'PRODUCT MANAGEMENT', '" + product + "', '" + username + "')");
 
                             this.Close();

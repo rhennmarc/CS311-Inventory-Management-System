@@ -88,7 +88,7 @@ namespace Inventory_Management_System
                         string unitprice = txtunitprice.Text.Trim().Replace("'", "''");
                         string stock = txtcurrentstock.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
-                        string dateCreated = DateTime.Now.ToString("dd/MM/yyyy");
+                        string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
 
                         string insertProduct =
                             "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
@@ -102,7 +102,7 @@ namespace Inventory_Management_System
 
                             // log the action
                             newproduct.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                                "VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                                "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                                 "', 'ADD', 'PRODUCTS MANAGEMENT', '" + product + "', '" + username + "')");
 
                             this.Close();

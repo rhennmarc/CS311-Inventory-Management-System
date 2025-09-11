@@ -27,7 +27,7 @@ namespace Inventory_Management_System
                     if (editaccount.rowAffected > 0)
                     {
                         MessageBox.Show("Account updated.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        editaccount.executeSQL("INSERT tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy")
+                        editaccount.executeSQL("INSERT tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy")
                             + "' , '" + DateTime.Now.ToShortTimeString() + "' , 'UPDATE', 'ACCOUNTS MANAGEMENT', '" + txtusername.Text + "', '" + username + "')");
                         this.Close();
                     }

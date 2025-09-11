@@ -8,7 +8,7 @@ namespace Inventory_Management_System
     public partial class frmProducts : Form
     {
         private string username;
-        private int row;
+        private int row = -1; // Initialize to -1 to indicate no selection
         private int currentPage = 1;
         private int pageSize = 10;
         private int totalRecords = 0;
@@ -25,6 +25,16 @@ namespace Inventory_Management_System
         private void frmProducts_Load(object sender, EventArgs e)
         {
             LoadProducts();
+            UpdateButtonStates();
+        }
+
+        private void UpdateButtonStates()
+        {
+            // Enable/disable buttons based on whether a row is selected
+            bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
+
+            btnupdate.Enabled = hasSelection;
+            btndelete.Enabled = hasSelection;
         }
 
         private void LoadProducts(string search = "")
@@ -95,9 +105,13 @@ namespace Inventory_Management_System
                 if (dataGridView1.Columns.Contains("datecreated"))
                 {
                     dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
-                    dataGridView1.Columns["datecreated"].DefaultCellStyle.Format = "MM-dd-yyyy";
+                    dataGridView1.Columns["datecreated"].DefaultCellStyle.Format = "MM/dd/yyyy";
                     dataGridView1.Columns["datecreated"].Width = 120;
                 }
+
+                // Clear any automatic selection and reset row selection
+                dataGridView1.ClearSelection();
+                row = -1;
 
                 // === Page Info ===
                 if (totalRecords == 0)
@@ -109,14 +123,15 @@ namespace Inventory_Management_System
                 {
                     lblPageInfo.Text = $"Page {currentPage} of {totalPages}";
                 }
+
+                // Update button states after clearing selection
+                UpdateButtonStates();
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on LoadProducts", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-
 
         private void btnrefresh_Click(object sender, EventArgs e)
         {
@@ -126,7 +141,6 @@ namespace Inventory_Management_System
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            
             frmAddProduct addProductForm = new frmAddProduct(username);
             addProductForm.FormClosed += (s, args) => { LoadProducts(); };
             addProductForm.Show();
@@ -136,13 +150,11 @@ namespace Inventory_Management_System
         {
             try
             {
-                if (dataGridView1.SelectedRows.Count == 0)
+                if (row < 0 || row >= dataGridView1.Rows.Count)
                 {
-                    MessageBox.Show("Please select a product to update.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a product to update.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                int row = dataGridView1.SelectedRows[0].Index;
 
                 string productname = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string description = dataGridView1.Rows[row].Cells["description"].Value.ToString();
@@ -185,7 +197,7 @@ namespace Inventory_Management_System
 
                         // Log deletion
                         products.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                            "VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                            "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'DELETE', 'PRODUCTS MANAGEMENT', '" + productname + "', '" + username + "')");
                     }
 
@@ -221,7 +233,11 @@ namespace Inventory_Management_System
         {
             try
             {
-                row = (int)e.RowIndex;
+                if (e.RowIndex >= 0) // Make sure it's a valid row
+                {
+                    row = e.RowIndex;
+                    UpdateButtonStates();
+                }
             }
             catch (Exception error)
             {

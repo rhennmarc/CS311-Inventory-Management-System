@@ -8,7 +8,7 @@ namespace Inventory_Management_System
     public partial class frmSuppliers : Form
     {
         private string username;
-        private int row;
+        private int row = -1; // Initialize to -1 to indicate no selection
         private int currentPage = 1;
         private int pageSize = 10;
         private int totalRecords = 0;
@@ -25,6 +25,19 @@ namespace Inventory_Management_System
         private void frmSuppliers_Load(object sender, EventArgs e)
         {
             LoadSuppliers();
+            UpdateButtonStates(); // Update button states on form load
+        }
+
+        private void UpdateButtonStates()
+        {
+            // Enable/disable buttons based on whether a row is selected
+            bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
+
+            // Assuming your View button is named btnView
+            btnView.Enabled = hasSelection;
+            btnupdate.Enabled = hasSelection;
+            btndelete.Enabled = hasSelection;
+            btnAddPO.Enabled = hasSelection;
         }
 
         private void LoadSuppliers(string search = "")
@@ -54,6 +67,10 @@ namespace Inventory_Management_System
                 }
 
                 dataGridView1.DataSource = dtPage;
+
+                // Reset row selection when data is reloaded
+                row = -1;
+                UpdateButtonStates();
 
                 // === Table Formatting ===
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -134,11 +151,11 @@ namespace Inventory_Management_System
                     return;
                 }
 
-                int row = dataGridView1.SelectedRows[0].Index;
+                int selectedRow = dataGridView1.SelectedRows[0].Index;
 
-                string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
-                string description = dataGridView1.Rows[row].Cells["description"].Value.ToString();
-                string contactinfo = dataGridView1.Rows[row].Cells["contactinfo"].Value.ToString();
+                string suppliername = dataGridView1.Rows[selectedRow].Cells["supplier"].Value.ToString();
+                string description = dataGridView1.Rows[selectedRow].Cells["description"].Value.ToString();
+                string contactinfo = dataGridView1.Rows[selectedRow].Cells["contactinfo"].Value.ToString();
 
                 frmUpdateSupplier updateSupplierForm = new frmUpdateSupplier(suppliername, description, contactinfo, username);
                 updateSupplierForm.FormClosed += (s, args) => { LoadSuppliers(); };
@@ -176,7 +193,7 @@ namespace Inventory_Management_System
 
                         // Log deletion
                         suppliers.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                            "VALUES ('" + DateTime.Now.ToString("MM-dd-yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                            "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'DELETE', 'SUPPLIER MANAGEMENT', '" + suppliername + "', '" + username + "')");
                     }
 
@@ -201,9 +218,9 @@ namespace Inventory_Management_System
 
                 string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
 
-                //frmAddPurchaseOrder addPOForm = new frmAddPurchaseOrder(username, suppliername);
-                //addPOForm.FormClosed += (s, args) => { LoadSuppliers(); };
-                //addPOForm.Show();
+                frmAddPurchaseOrder addPOForm = new frmAddPurchaseOrder(username, suppliername);
+                addPOForm.FormClosed += (s, args) => { LoadSuppliers(); };
+                addPOForm.Show();
             }
             catch (Exception error)
             {
@@ -215,8 +232,16 @@ namespace Inventory_Management_System
         {
             try
             {
-                //frmPurchaseOrders viewPOForm = new frmPurchaseOrders(username);
-                //viewPOForm.Show();
+                if (row < 0 || row >= dataGridView1.Rows.Count)
+                {
+                    MessageBox.Show("Please select a supplier first.", "View Purchase Orders", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
+
+                frmPurchaseOrders viewPOForm = new frmPurchaseOrders(username, suppliername);
+                viewPOForm.Show();
             }
             catch (Exception error)
             {
@@ -247,7 +272,11 @@ namespace Inventory_Management_System
         {
             try
             {
-                row = (int)e.RowIndex;
+                if (e.RowIndex >= 0) // Valid row clicked
+                {
+                    row = e.RowIndex;
+                    UpdateButtonStates(); // Update button states when a row is selected
+                }
             }
             catch (Exception error)
             {

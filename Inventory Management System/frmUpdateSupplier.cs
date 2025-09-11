@@ -98,7 +98,7 @@ namespace Inventory_Management_System
 
                             // Insert into logs
                             updatesupplier.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
-                                DateTime.Now.ToString("dd/MM/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
+                                DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
                                 "' , 'UPDATE', 'SUPPLIER MANAGEMENT', '" + supplier + "', '" + username + "')");
 
                             this.Close();

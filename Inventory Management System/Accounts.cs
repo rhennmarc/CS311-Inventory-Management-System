@@ -14,12 +14,16 @@ namespace Inventory_Management_System
     public partial class frmAccounts : Form
     {
         private string username;
+        private int row = -1; // Initialize to -1 to indicate no selection
+
         public frmAccounts(string username)
         {
             InitializeComponent();
             this.username = username;
         }
+
         Class1 accounts = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
+
         private void frmAccounts_Load(object sender, EventArgs e)
         {
             try
@@ -52,14 +56,26 @@ namespace Inventory_Management_System
                 dataGridView1.Columns["status"].MinimumWidth = 100;
                 dataGridView1.Columns["createdby"].MinimumWidth = 150;
                 dataGridView1.Columns["datecreated"].MinimumWidth = 150;
+
+                // Clear any selection that might have been made automatically
+                dataGridView1.ClearSelection();
+                row = -1; // Reset row selection
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on frmAccounts_Load", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            UpdateButtonStates();
         }
 
+        private void UpdateButtonStates()
+        {
+            // Enable/disable buttons based on whether a row is selected
+            bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
 
+            btnedit.Enabled = hasSelection;
+            btndelete.Enabled = hasSelection;
+        }
 
         private void btnrefresh_Click(object sender, EventArgs e)
         {
@@ -81,6 +97,11 @@ namespace Inventory_Management_System
             {
                 DataTable dt = accounts.GetData("SELECT * FROM tblaccounts WHERE username LIKE '%" + txtsearch.Text + "%' OR usertype LIKE '%" + txtsearch.Text + "%' ORDER BY username");
                 dataGridView1.DataSource = dt;
+
+                // Clear selection after search
+                dataGridView1.ClearSelection();
+                row = -1;
+                UpdateButtonStates();
             }
             catch (Exception error)
             {
@@ -95,11 +116,15 @@ namespace Inventory_Management_System
                 btnsearch_Click(sender, e);
             }
         }
-        private int row;
-        
 
         private void btnedit_Click(object sender, EventArgs e)
         {
+            if (row < 0 || row >= dataGridView1.Rows.Count)
+            {
+                MessageBox.Show("Please select an account to edit.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string editusername = dataGridView1.Rows[row].Cells[0].Value.ToString();
             string editpassword = dataGridView1.Rows[row].Cells[1].Value.ToString();
             string editusertype = dataGridView1.Rows[row].Cells[2].Value.ToString();
@@ -117,6 +142,12 @@ namespace Inventory_Management_System
         {
             try
             {
+                if (row < 0 || row >= dataGridView1.Rows.Count)
+                {
+                    MessageBox.Show("Please select an account to delete.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete this account?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
                 {
@@ -124,7 +155,7 @@ namespace Inventory_Management_System
                     if (accounts.rowAffected > 0)
                     {
                         MessageBox.Show("Account deleted.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        accounts.executeSQL("INSERT tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy")
+                        accounts.executeSQL("INSERT tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy")
                             + "' , '" + DateTime.Now.ToShortTimeString() + "' , 'DELETE', 'ACCOUNTS MANAGEMENT', '" + dataGridView1.Rows[row].Cells[0].Value.ToString() + "', '" + username + "')");
                     }
                     frmAccounts_Load(sender, e);
@@ -148,7 +179,11 @@ namespace Inventory_Management_System
         {
             try
             {
-                row = (int)e.RowIndex;
+                if (e.RowIndex >= 0) // Make sure it's a valid row
+                {
+                    row = e.RowIndex;
+                    UpdateButtonStates();
+                }
             }
             catch (Exception error)
             {

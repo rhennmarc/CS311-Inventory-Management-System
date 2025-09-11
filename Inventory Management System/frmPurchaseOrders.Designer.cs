@@ -31,7 +31,7 @@
             this.mainPanel = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txttotal = new System.Windows.Forms.TextBox();
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
@@ -39,7 +39,10 @@
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
-            this.btnrefresh = new System.Windows.Forms.Button();
+            this.btnrecieveall = new System.Windows.Forms.Button();
+            this.btnreceive = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btndeleteall = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
             this.btnupdate = new System.Windows.Forms.Button();
             this.btnadd = new System.Windows.Forms.Button();
@@ -50,8 +53,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.btnAddPO = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -80,7 +81,7 @@
             // contentPanel
             // 
             this.contentPanel.Controls.Add(this.label1);
-            this.contentPanel.Controls.Add(this.textBox1);
+            this.contentPanel.Controls.Add(this.txttotal);
             this.contentPanel.Controls.Add(this.lblPageInfo);
             this.contentPanel.Controls.Add(this.dataGridView1);
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -101,14 +102,14 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Total";
             // 
-            // textBox1
+            // txttotal
             // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(685, 48);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(115, 44);
-            this.textBox1.TabIndex = 2;
+            this.txttotal.Enabled = false;
+            this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txttotal.Location = new System.Drawing.Point(685, 48);
+            this.txttotal.Name = "txttotal";
+            this.txttotal.Size = new System.Drawing.Size(115, 31);
+            this.txttotal.TabIndex = 2;
             // 
             // lblPageInfo
             // 
@@ -141,6 +142,7 @@
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(652, 425);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // actionPanel
             // 
@@ -160,7 +162,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 300);
+            this.groupBox2.Location = new System.Drawing.Point(20, 339);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox2.Size = new System.Drawing.Size(160, 116);
@@ -208,9 +210,10 @@
             // 
             // actionGroupBox
             // 
-            this.actionGroupBox.Controls.Add(this.button1);
-            this.actionGroupBox.Controls.Add(this.btnAddPO);
-            this.actionGroupBox.Controls.Add(this.btnrefresh);
+            this.actionGroupBox.Controls.Add(this.btnrecieveall);
+            this.actionGroupBox.Controls.Add(this.btnreceive);
+            this.actionGroupBox.Controls.Add(this.btnRefresh);
+            this.actionGroupBox.Controls.Add(this.btndeleteall);
             this.actionGroupBox.Controls.Add(this.btndelete);
             this.actionGroupBox.Controls.Add(this.btnupdate);
             this.actionGroupBox.Controls.Add(this.btnadd);
@@ -220,29 +223,90 @@
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 280);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 319);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
             // 
-            // btnrefresh
+            // btnrecieveall
             // 
-            this.btnrefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(89)))), ((int)(((byte)(182)))));
-            this.btnrefresh.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnrefresh.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnrefresh.FlatAppearance.BorderSize = 0;
-            this.btnrefresh.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnrefresh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnrefresh.ForeColor = System.Drawing.Color.White;
-            this.btnrefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnrefresh.ImageIndex = 6;
-            this.btnrefresh.Location = new System.Drawing.Point(10, 148);
-            this.btnrefresh.Name = "btnrefresh";
-            this.btnrefresh.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnrefresh.Size = new System.Drawing.Size(140, 40);
-            this.btnrefresh.TabIndex = 3;
-            this.btnrefresh.Text = "&Refresh";
-            this.btnrefresh.UseVisualStyleBackColor = false;
+            this.btnrecieveall.BackColor = System.Drawing.Color.LimeGreen;
+            this.btnrecieveall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnrecieveall.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnrecieveall.FlatAppearance.BorderSize = 0;
+            this.btnrecieveall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnrecieveall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnrecieveall.ForeColor = System.Drawing.Color.White;
+            this.btnrecieveall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnrecieveall.ImageIndex = 5;
+            this.btnrecieveall.Location = new System.Drawing.Point(10, 268);
+            this.btnrecieveall.Name = "btnrecieveall";
+            this.btnrecieveall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnrecieveall.Size = new System.Drawing.Size(140, 40);
+            this.btnrecieveall.TabIndex = 6;
+            this.btnrecieveall.Text = "R&eceive All";
+            this.btnrecieveall.UseVisualStyleBackColor = false;
+            this.btnrecieveall.Click += new System.EventHandler(this.btnrecieveall_Click);
+            // 
+            // btnreceive
+            // 
+            this.btnreceive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
+            this.btnreceive.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnreceive.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnreceive.FlatAppearance.BorderSize = 0;
+            this.btnreceive.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnreceive.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnreceive.ForeColor = System.Drawing.Color.White;
+            this.btnreceive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnreceive.ImageIndex = 1;
+            this.btnreceive.Location = new System.Drawing.Point(10, 228);
+            this.btnreceive.Name = "btnreceive";
+            this.btnreceive.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnreceive.Size = new System.Drawing.Size(140, 40);
+            this.btnreceive.TabIndex = 5;
+            this.btnreceive.Text = "R&eceive";
+            this.btnreceive.UseVisualStyleBackColor = false;
+            this.btnreceive.Click += new System.EventHandler(this.btnreceive_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(89)))), ((int)(((byte)(182)))));
+            this.btnRefresh.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRefresh.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnRefresh.FlatAppearance.BorderSize = 0;
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRefresh.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefresh.ForeColor = System.Drawing.Color.White;
+            this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnRefresh.ImageIndex = 0;
+            this.btnRefresh.Location = new System.Drawing.Point(10, 188);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnRefresh.Size = new System.Drawing.Size(140, 40);
+            this.btnRefresh.TabIndex = 4;
+            this.btnRefresh.Text = "&Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = false;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
+            // btndeleteall
+            // 
+            this.btndeleteall.BackColor = System.Drawing.Color.DarkRed;
+            this.btndeleteall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btndeleteall.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btndeleteall.FlatAppearance.BorderSize = 0;
+            this.btndeleteall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btndeleteall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btndeleteall.ForeColor = System.Drawing.Color.White;
+            this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btndeleteall.ImageIndex = 6;
+            this.btndeleteall.Location = new System.Drawing.Point(10, 148);
+            this.btndeleteall.Name = "btndeleteall";
+            this.btndeleteall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btndeleteall.Size = new System.Drawing.Size(140, 40);
+            this.btndeleteall.TabIndex = 3;
+            this.btndeleteall.Text = "De&lete All";
+            this.btndeleteall.UseVisualStyleBackColor = false;
+            this.btndeleteall.Click += new System.EventHandler(this.btndeleteall_Click);
             // 
             // btndelete
             // 
@@ -262,6 +326,7 @@
             this.btndelete.TabIndex = 2;
             this.btndelete.Text = "&Delete";
             this.btndelete.UseVisualStyleBackColor = false;
+            this.btndelete.Click += new System.EventHandler(this.btndelete_Click);
             // 
             // btnupdate
             // 
@@ -281,6 +346,7 @@
             this.btnupdate.TabIndex = 1;
             this.btnupdate.Text = "&Update";
             this.btnupdate.UseVisualStyleBackColor = false;
+            this.btnupdate.Click += new System.EventHandler(this.btnupdate_Click);
             // 
             // btnadd
             // 
@@ -300,6 +366,7 @@
             this.btnadd.TabIndex = 0;
             this.btnadd.Text = "&Add";
             this.btnadd.UseVisualStyleBackColor = false;
+            this.btnadd.Click += new System.EventHandler(this.btnadd_Click);
             // 
             // searchPanel
             // 
@@ -341,6 +408,7 @@
             this.txtsearch.Name = "txtsearch";
             this.txtsearch.Size = new System.Drawing.Size(700, 27);
             this.txtsearch.TabIndex = 1;
+            this.txtsearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtsearch_KeyPress);
             // 
             // lblSearch
             // 
@@ -383,44 +451,6 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Supplier Name";
             // 
-            // btnAddPO
-            // 
-            this.btnAddPO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnAddPO.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddPO.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAddPO.FlatAppearance.BorderSize = 0;
-            this.btnAddPO.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAddPO.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddPO.ForeColor = System.Drawing.Color.White;
-            this.btnAddPO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddPO.ImageIndex = 0;
-            this.btnAddPO.Location = new System.Drawing.Point(10, 188);
-            this.btnAddPO.Name = "btnAddPO";
-            this.btnAddPO.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnAddPO.Size = new System.Drawing.Size(140, 40);
-            this.btnAddPO.TabIndex = 4;
-            this.btnAddPO.Text = "R&ecieve";
-            this.btnAddPO.UseVisualStyleBackColor = false;
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.LimeGreen;
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.FlatAppearance.BorderSize = 0;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button1.ImageIndex = 1;
-            this.button1.Location = new System.Drawing.Point(10, 228);
-            this.button1.Name = "button1";
-            this.button1.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.button1.Size = new System.Drawing.Size(140, 40);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Re&cieve All";
-            this.button1.UseVisualStyleBackColor = false;
-            // 
             // frmPurchaseOrders
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -432,6 +462,7 @@
             this.Name = "frmPurchaseOrders";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Purchase Orders";
+            this.Load += new System.EventHandler(this.frmPurchaseOrders_Load);
             this.mainPanel.ResumeLayout(false);
             this.contentPanel.ResumeLayout(false);
             this.contentPanel.PerformLayout();
@@ -459,7 +490,7 @@
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.GroupBox actionGroupBox;
-        private System.Windows.Forms.Button btnrefresh;
+        private System.Windows.Forms.Button btndeleteall;
         private System.Windows.Forms.Button btndelete;
         private System.Windows.Forms.Button btnupdate;
         private System.Windows.Forms.Button btnadd;
@@ -470,9 +501,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txttotal;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button btnAddPO;
+        private System.Windows.Forms.Button btnreceive;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnrecieveall;
     }
 }

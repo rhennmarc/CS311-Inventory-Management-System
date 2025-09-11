@@ -1,6 +1,6 @@
 ﻿namespace Inventory_Management_System
 {
-    partial class frmAddPuchaseOrder
+    partial class frmAddPurchaseOrder
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.cardPanel = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.txttotalcost = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -46,15 +51,19 @@
             this.txtunitcost = new System.Windows.Forms.TextBox();
             this.btncancel = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -93,6 +102,8 @@
             // 
             this.cardPanel.BackColor = System.Drawing.Color.White;
             this.cardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPanel.Controls.Add(this.label1);
+            this.cardPanel.Controls.Add(this.panel3);
             this.cardPanel.Controls.Add(this.label2);
             this.cardPanel.Controls.Add(this.panel1);
             this.cardPanel.Controls.Add(this.label3);
@@ -102,8 +113,53 @@
             this.cardPanel.Location = new System.Drawing.Point(19, 131);
             this.cardPanel.Name = "cardPanel";
             this.cardPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.cardPanel.Size = new System.Drawing.Size(648, 271);
+            this.cardPanel.Size = new System.Drawing.Size(648, 331);
             this.cardPanel.TabIndex = 1008;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.label1.Location = new System.Drawing.Point(13, 242);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(75, 19);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Total Cost";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.pictureBox4);
+            this.panel3.Controls.Add(this.txttotalcost);
+            this.panel3.Location = new System.Drawing.Point(17, 264);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(600, 40);
+            this.panel3.TabIndex = 41;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Location = new System.Drawing.Point(10, 5);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(26, 26);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 10;
+            this.pictureBox4.TabStop = false;
+            // 
+            // txttotalcost
+            // 
+            this.txttotalcost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txttotalcost.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txttotalcost.Enabled = false;
+            this.txttotalcost.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txttotalcost.Location = new System.Drawing.Point(44, 9);
+            this.txttotalcost.MaxLength = 100;
+            this.txttotalcost.Name = "txttotalcost";
+            this.txttotalcost.Size = new System.Drawing.Size(533, 20);
+            this.txttotalcost.TabIndex = 0;
             // 
             // label2
             // 
@@ -147,6 +203,8 @@
             this.txtproduct.Name = "txtproduct";
             this.txtproduct.Size = new System.Drawing.Size(533, 20);
             this.txtproduct.TabIndex = 0;
+            this.txtproduct.TextChanged += new System.EventHandler(this.txtproduct_TextChanged);
+            this.txtproduct.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtproduct_KeyPress);
             // 
             // label3
             // 
@@ -191,6 +249,9 @@
             this.txtquantity.Name = "txtquantity";
             this.txtquantity.Size = new System.Drawing.Size(533, 20);
             this.txtquantity.TabIndex = 0;
+            this.txtquantity.TextChanged += new System.EventHandler(this.txtquantity_TextChanged);
+            this.txtquantity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtquantity_KeyPress);
+            this.txtquantity.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtquantity_KeyUp);
             // 
             // label8
             // 
@@ -235,6 +296,9 @@
             this.txtunitcost.Name = "txtunitcost";
             this.txtunitcost.Size = new System.Drawing.Size(533, 20);
             this.txtunitcost.TabIndex = 0;
+            this.txtunitcost.TextChanged += new System.EventHandler(this.txtunitcost_TextChanged);
+            this.txtunitcost.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtunitcost_KeyPress);
+            this.txtunitcost.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtunitcost_KeyUp);
             // 
             // btncancel
             // 
@@ -247,12 +311,13 @@
             this.btncancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btncancel.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btncancel.ForeColor = System.Drawing.Color.White;
-            this.btncancel.Location = new System.Drawing.Point(347, 419);
+            this.btncancel.Location = new System.Drawing.Point(347, 486);
             this.btncancel.Name = "btncancel";
             this.btncancel.Size = new System.Drawing.Size(305, 40);
             this.btncancel.TabIndex = 1007;
             this.btncancel.Text = "&Cancel";
             this.btncancel.UseVisualStyleBackColor = false;
+            this.btncancel.Click += new System.EventHandler(this.btncancel_Click);
             // 
             // btnsave
             // 
@@ -264,32 +329,41 @@
             this.btnsave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsave.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnsave.ForeColor = System.Drawing.Color.White;
-            this.btnsave.Location = new System.Drawing.Point(23, 419);
+            this.btnsave.Location = new System.Drawing.Point(23, 486);
             this.btnsave.Name = "btnsave";
             this.btnsave.Size = new System.Drawing.Size(305, 40);
             this.btnsave.TabIndex = 1006;
             this.btnsave.Text = "&Save";
             this.btnsave.UseVisualStyleBackColor = false;
+            this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
             // 
-            // frmAddPuchaseOrder
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // frmAddPurchaseOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(686, 480);
+            this.ClientSize = new System.Drawing.Size(686, 547);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.cardPanel);
             this.Controls.Add(this.btncancel);
             this.Controls.Add(this.btnsave);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "frmAddPuchaseOrder";
+            this.Name = "frmAddPurchaseOrder";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Puchase Order";
+            this.Load += new System.EventHandler(this.frmAddPurchaseOrder_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.cardPanel.ResumeLayout(false);
             this.cardPanel.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -299,6 +373,7 @@
             this.panel7.ResumeLayout(false);
             this.panel7.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -323,5 +398,10 @@
         private System.Windows.Forms.TextBox txtunitcost;
         private System.Windows.Forms.Button btncancel;
         private System.Windows.Forms.Button btnsave;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.TextBox txttotalcost;
     }
 }

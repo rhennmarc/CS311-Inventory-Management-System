@@ -63,7 +63,7 @@ namespace Inventory_Management_System
                     {
                         newaccount.executeSQL("INSERT INTO tblaccounts (username, password, usertype, status, createdby, datecreated) VALUES ('" + txtusername.Text
                             + "' , '" + txtpassword.Text + "' , '" + cmbusertype.Text.ToUpper() + "' , 'ACTIVE' , '"
-                            + username + "' , '" + DateTime.Now.ToShortDateString() + "')");
+                            + username + "' , '" + DateTime.Now.ToString("MM/dd/yyyy") + "')");
                         if (newaccount.rowAffected > 0)
                         {
                             MessageBox.Show("New account added.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
