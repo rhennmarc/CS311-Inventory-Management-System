@@ -631,17 +631,6 @@ namespace Inventory_Management_System
                     }
 
                     LoadPurchaseOrders();
-
-                    // After receiving, go to frmProducts (display product list)
-                    try
-                    {
-                        frmProducts productsForm = new frmProducts(username);
-                        productsForm.Show();
-                    }
-                    catch
-                    {
-                        // If frmProducts constructor differs or form not available, ignore to avoid crash.
-                    }
                 }
             }
             catch (Exception error)
