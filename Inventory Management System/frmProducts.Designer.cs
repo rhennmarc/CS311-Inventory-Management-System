@@ -70,7 +70,7 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.mainPanel.Size = new System.Drawing.Size(1045, 647);
+            this.mainPanel.Size = new System.Drawing.Size(1142, 647);
             this.mainPanel.TabIndex = 1;
             // 
             // contentPanel
@@ -81,13 +81,13 @@
             this.contentPanel.Location = new System.Drawing.Point(20, 160);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
-            this.contentPanel.Size = new System.Drawing.Size(805, 467);
+            this.contentPanel.Size = new System.Drawing.Size(902, 467);
             this.contentPanel.TabIndex = 2;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(670, 448);
+            this.lblPageInfo.Location = new System.Drawing.Point(834, 448);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -105,7 +105,7 @@
             this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dataGridView1.EnableHeadersVisualStyles = false;
             this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.dataGridView1.Location = new System.Drawing.Point(80, 20);
+            this.dataGridView1.Location = new System.Drawing.Point(3, 20);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
@@ -113,7 +113,7 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 35;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(652, 425);
+            this.dataGridView1.Size = new System.Drawing.Size(893, 425);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -122,7 +122,7 @@
             this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.actionPanel.Location = new System.Drawing.Point(825, 160);
+            this.actionPanel.Location = new System.Drawing.Point(922, 160);
             this.actionPanel.Name = "actionPanel";
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
@@ -292,7 +292,7 @@
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.searchPanel.Size = new System.Drawing.Size(1005, 80);
+            this.searchPanel.Size = new System.Drawing.Size(1102, 80);
             this.searchPanel.TabIndex = 1;
             // 
             // btnsearch
@@ -304,7 +304,7 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(865, 25);
+            this.btnsearch.Location = new System.Drawing.Point(962, 25);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(110, 35);
             this.btnsearch.TabIndex = 2;
@@ -319,7 +319,7 @@
             this.txtsearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtsearch.Location = new System.Drawing.Point(150, 28);
             this.txtsearch.Name = "txtsearch";
-            this.txtsearch.Size = new System.Drawing.Size(700, 27);
+            this.txtsearch.Size = new System.Drawing.Size(797, 27);
             this.txtsearch.TabIndex = 1;
             this.txtsearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtsearch_KeyPress);
             // 
@@ -350,7 +350,7 @@
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(20, 20);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(1005, 60);
+            this.headerPanel.Size = new System.Drawing.Size(1102, 60);
             this.headerPanel.TabIndex = 0;
             // 
             // lblTitle
@@ -368,7 +368,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1045, 647);
+            this.ClientSize = new System.Drawing.Size(1142, 647);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;

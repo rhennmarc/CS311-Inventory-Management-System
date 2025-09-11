@@ -44,7 +44,7 @@ namespace Inventory_Management_System
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
                 if (totalPages == 0) totalPages = 1;
 
-                // Apply paging manually
+                // Apply paging
                 DataTable dtPage = dtAll.Clone();
                 int startIndex = (currentPage - 1) * pageSize;
                 int endIndex = Math.Min(startIndex + pageSize, totalRecords);
@@ -55,18 +55,64 @@ namespace Inventory_Management_System
                 }
 
                 dataGridView1.DataSource = dtPage;
-                dateTimePicker1.Format = DateTimePickerFormat.Custom;
-                dateTimePicker1.CustomFormat = "dd/MM/yyyy";
-                dateTimePicker1.ShowCheckBox = true;
-                dateTimePicker1.Checked = false;
 
-                lblPageInfo.Text = $"Page {currentPage} of {totalPages} ({totalRecords} records)";
+                // === Table Styling ===
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dataGridView1.DefaultCellStyle.Padding = new Padding(4);
+                dataGridView1.RowTemplate.Height = 28;
+                dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+                // === Rename & Format Columns ===
+                if (dataGridView1.Columns.Contains("datelog"))
+                {
+                    dataGridView1.Columns["datelog"].HeaderText = "Date";
+                    dataGridView1.Columns["datelog"].DefaultCellStyle.Format = "MM-dd-yyyy";
+                    dataGridView1.Columns["datelog"].Width = 100;
+                }
+                if (dataGridView1.Columns.Contains("timelog"))
+                {
+                    dataGridView1.Columns["timelog"].HeaderText = "Time";
+                    dataGridView1.Columns["timelog"].Width = 80;
+                }
+                if (dataGridView1.Columns.Contains("module"))
+                {
+                    dataGridView1.Columns["module"].HeaderText = "Module";
+                    dataGridView1.Columns["module"].Width = 120;
+                }
+                if (dataGridView1.Columns.Contains("action"))
+                {
+                    dataGridView1.Columns["action"].HeaderText = "Action";
+                    dataGridView1.Columns["action"].Width = 120;
+                }
+                if (dataGridView1.Columns.Contains("performedto"))
+                {
+                    dataGridView1.Columns["performedto"].HeaderText = "Performed To";
+                    dataGridView1.Columns["performedto"].Width = 150;
+                }
+                if (dataGridView1.Columns.Contains("performedby"))
+                {
+                    dataGridView1.Columns["performedby"].HeaderText = "Performed By";
+                    dataGridView1.Columns["performedby"].Width = 150;
+                }
+
+                // === Page Info ===
+                if (totalRecords == 0)
+                {
+                    lblPageInfo.Text = "No records found";
+                    currentPage = 1;
+                }
+                else
+                {
+                    lblPageInfo.Text = $"Page {currentPage} of {totalPages} ({totalRecords} records)";
+                }
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on LoadLogs", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void btnsearch_Click(object sender, EventArgs e)
         {

@@ -144,16 +144,15 @@ namespace Inventory_Management_System
             this.Close();
         }
 
-        private void txtproducts_TextChanged(object sender, EventArgs e)
+        private void frmUpdateProduct_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = titleLabel;
+        }
+
+        private void txtproduct_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtproduct.Text))
                 errorProvider1.SetError(txtproduct, "");
-        }
-
-        private void txtdescription_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtdescription.Text))
-                errorProvider1.SetError(txtdescription, "");
         }
 
         private void txtunitprice_TextChanged(object sender, EventArgs e)
@@ -166,11 +165,6 @@ namespace Inventory_Management_System
         {
             if (!string.IsNullOrEmpty(txtcurrentstock.Text))
                 errorProvider1.SetError(txtcurrentstock, "");
-        }
-
-        private void frmUpdateProduct_Load(object sender, EventArgs e)
-        {
-            this.ActiveControl = titleLabel;
         }
     }
 }

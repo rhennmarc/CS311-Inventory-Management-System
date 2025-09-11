@@ -31,7 +31,8 @@ namespace Inventory_Management_System
         {
             try
             {
-                string query = "SELECT * FROM tblproducts ";
+                string query = @"SELECT products, description, unitprice, currentstock, createdby, datecreated 
+                         FROM tblproducts ";
                 if (!string.IsNullOrEmpty(search))
                 {
                     query += "WHERE products LIKE '%" + search + "%' OR description LIKE '%" + search + "%' ";
@@ -43,7 +44,7 @@ namespace Inventory_Management_System
                 totalRecords = dtAll.Rows.Count;
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
-                // Apply paging
+                // Paging
                 DataTable dtPage = dtAll.Clone();
                 int startIndex = (currentPage - 1) * pageSize;
                 int endIndex = Math.Min(startIndex + pageSize, totalRecords);
@@ -55,13 +56,67 @@ namespace Inventory_Management_System
 
                 dataGridView1.DataSource = dtPage;
 
-                lblPageInfo.Text = $"Page {currentPage} of {totalPages}";
+                // === Table Styling ===
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+                dataGridView1.DefaultCellStyle.Padding = new Padding(4);
+                dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                dataGridView1.RowTemplate.Height = 28;
+
+                // === Rename & Format Columns ===
+                if (dataGridView1.Columns.Contains("products"))
+                {
+                    dataGridView1.Columns["products"].HeaderText = "Product Name";
+                    dataGridView1.Columns["products"].Width = 180;
+                }
+                if (dataGridView1.Columns.Contains("description"))
+                {
+                    dataGridView1.Columns["description"].HeaderText = "Description";
+                    dataGridView1.Columns["description"].Width = 250;
+                }
+                if (dataGridView1.Columns.Contains("unitprice"))
+                {
+                    dataGridView1.Columns["unitprice"].HeaderText = "Unit Price";
+                    dataGridView1.Columns["unitprice"].DefaultCellStyle.Format = "C2"; // ₱1,500.00 style
+                    dataGridView1.Columns["unitprice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView1.Columns["unitprice"].Width = 120;
+                }
+                if (dataGridView1.Columns.Contains("currentstock"))
+                {
+                    dataGridView1.Columns["currentstock"].HeaderText = "Stock";
+                    dataGridView1.Columns["currentstock"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView1.Columns["currentstock"].Width = 100;
+                }
+                if (dataGridView1.Columns.Contains("createdby"))
+                {
+                    dataGridView1.Columns["createdby"].HeaderText = "Created By";
+                    dataGridView1.Columns["createdby"].Width = 120;
+                }
+                if (dataGridView1.Columns.Contains("datecreated"))
+                {
+                    dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
+                    dataGridView1.Columns["datecreated"].DefaultCellStyle.Format = "MM-dd-yyyy";
+                    dataGridView1.Columns["datecreated"].Width = 120;
+                }
+
+                // === Page Info ===
+                if (totalRecords == 0)
+                {
+                    lblPageInfo.Text = "No records found";
+                    currentPage = 1;
+                }
+                else
+                {
+                    lblPageInfo.Text = $"Page {currentPage} of {totalPages}";
+                }
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on LoadProducts", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         private void btnrefresh_Click(object sender, EventArgs e)
         {

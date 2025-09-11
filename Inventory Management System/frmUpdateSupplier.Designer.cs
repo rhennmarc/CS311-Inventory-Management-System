@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.titleLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -39,12 +40,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.txtcontact = new System.Windows.Forms.TextBox();
+            this.txtcontactinfo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.txtdescription = new System.Windows.Forms.TextBox();
             this.btncancel = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
@@ -53,6 +55,7 @@
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -145,6 +148,7 @@
             this.txtsupplier.Name = "txtsupplier";
             this.txtsupplier.Size = new System.Drawing.Size(533, 20);
             this.txtsupplier.TabIndex = 0;
+            this.txtsupplier.TextChanged += new System.EventHandler(this.txtsupplier_TextChanged);
             // 
             // label3
             // 
@@ -161,7 +165,7 @@
             this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.pictureBox3);
-            this.panel2.Controls.Add(this.txtcontact);
+            this.panel2.Controls.Add(this.txtcontactinfo);
             this.panel2.Location = new System.Drawing.Point(17, 118);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
@@ -178,17 +182,18 @@
             this.pictureBox3.TabIndex = 10;
             this.pictureBox3.TabStop = false;
             // 
-            // txtcontact
+            // txtcontactinfo
             // 
-            this.txtcontact.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtcontactinfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtcontact.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtcontact.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtcontact.Location = new System.Drawing.Point(44, 9);
-            this.txtcontact.MaxLength = 100;
-            this.txtcontact.Name = "txtcontact";
-            this.txtcontact.Size = new System.Drawing.Size(533, 20);
-            this.txtcontact.TabIndex = 0;
+            this.txtcontactinfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtcontactinfo.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtcontactinfo.Location = new System.Drawing.Point(44, 9);
+            this.txtcontactinfo.MaxLength = 100;
+            this.txtcontactinfo.Name = "txtcontactinfo";
+            this.txtcontactinfo.Size = new System.Drawing.Size(533, 20);
+            this.txtcontactinfo.TabIndex = 0;
+            this.txtcontactinfo.TextChanged += new System.EventHandler(this.txtcontactinfo_TextChanged);
             // 
             // label7
             // 
@@ -240,6 +245,7 @@
             this.btncancel.TabIndex = 1011;
             this.btncancel.Text = "&Cancel";
             this.btncancel.UseVisualStyleBackColor = false;
+            this.btncancel.Click += new System.EventHandler(this.btncancel_Click);
             // 
             // btnsave
             // 
@@ -257,6 +263,11 @@
             this.btnsave.TabIndex = 1010;
             this.btnsave.Text = "&Save";
             this.btnsave.UseVisualStyleBackColor = false;
+            this.btnsave.Click += new System.EventHandler(this.btnsave_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // frmUpdateSupplier
             // 
@@ -272,6 +283,7 @@
             this.Name = "frmUpdateSupplier";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmUpdateSupplier";
+            this.Load += new System.EventHandler(this.frmUpdateSupplier_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -285,6 +297,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -302,11 +315,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.TextBox txtcontact;
+        private System.Windows.Forms.TextBox txtcontactinfo;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.TextBox txtdescription;
         private System.Windows.Forms.Button btncancel;
         private System.Windows.Forms.Button btnsave;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

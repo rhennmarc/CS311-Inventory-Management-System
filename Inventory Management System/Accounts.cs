@@ -24,19 +24,42 @@ namespace Inventory_Management_System
         {
             try
             {
-                DataTable dt = accounts.GetData("SELECT * FROM tblaccounts ORDER BY username");
+                DataTable dt = accounts.GetData("SELECT username, usertype, status, createdby, datecreated FROM tblaccounts ORDER BY username");
                 dataGridView1.DataSource = dt;
 
-                if (dataGridView1.Columns.Count > 1)
-                {
-                    dataGridView1.Columns[1].Visible = false;
-                }
+                // === Table Styling ===
+                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                dataGridView1.RowTemplate.Height = 28;
+                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dataGridView1.MultiSelect = false;
+                dataGridView1.ReadOnly = true;
+
+                // === Rename headers ===
+                if (dataGridView1.Columns.Contains("username"))
+                    dataGridView1.Columns["username"].HeaderText = "Username";
+                if (dataGridView1.Columns.Contains("usertype"))
+                    dataGridView1.Columns["usertype"].HeaderText = "User Type";
+                if (dataGridView1.Columns.Contains("status"))
+                    dataGridView1.Columns["status"].HeaderText = "Status";
+                if (dataGridView1.Columns.Contains("createdby"))
+                    dataGridView1.Columns["createdby"].HeaderText = "Created By";
+                if (dataGridView1.Columns.Contains("datecreated"))
+                    dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
+
+                // Optional: minimum widths for cleaner spacing
+                dataGridView1.Columns["username"].MinimumWidth = 150;
+                dataGridView1.Columns["usertype"].MinimumWidth = 120;
+                dataGridView1.Columns["status"].MinimumWidth = 100;
+                dataGridView1.Columns["createdby"].MinimumWidth = 150;
+                dataGridView1.Columns["datecreated"].MinimumWidth = 150;
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on frmAccounts_Load", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
         private void btnrefresh_Click(object sender, EventArgs e)
         {

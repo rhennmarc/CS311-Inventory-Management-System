@@ -156,6 +156,7 @@
             this.txtproduct.Name = "txtproduct";
             this.txtproduct.Size = new System.Drawing.Size(533, 20);
             this.txtproduct.TabIndex = 0;
+            this.txtproduct.TextChanged += new System.EventHandler(this.txtproduct_TextChanged);
             // 
             // label3
             // 
@@ -200,6 +201,7 @@
             this.txtunitprice.Name = "txtunitprice";
             this.txtunitprice.Size = new System.Drawing.Size(533, 20);
             this.txtunitprice.TabIndex = 0;
+            this.txtunitprice.TextChanged += new System.EventHandler(this.txtunitprice_TextChanged);
             // 
             // label8
             // 
@@ -244,6 +246,7 @@
             this.txtcurrentstock.Name = "txtcurrentstock";
             this.txtcurrentstock.Size = new System.Drawing.Size(533, 20);
             this.txtcurrentstock.TabIndex = 0;
+            this.txtcurrentstock.TextChanged += new System.EventHandler(this.txtcurrentstock_TextChanged);
             // 
             // label7
             // 

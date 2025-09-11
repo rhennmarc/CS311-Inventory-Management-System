@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelHeader = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
@@ -37,7 +36,6 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.cmbaction = new System.Windows.Forms.ComboBox();
             this.btnsearch = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnreset = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btndeleteall = new System.Windows.Forms.Button();
@@ -45,12 +43,13 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnprev = new System.Windows.Forms.Button();
             this.btnnext = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -60,7 +59,7 @@
             this.panelHeader.Controls.Add(this.lblTitle);
             this.panelHeader.Location = new System.Drawing.Point(0, 0);
             this.panelHeader.Name = "panelHeader";
-            this.panelHeader.Size = new System.Drawing.Size(916, 80);
+            this.panelHeader.Size = new System.Drawing.Size(1008, 80);
             this.panelHeader.TabIndex = 2;
             // 
             // pictureBox1
@@ -87,22 +86,22 @@
             // 
             this.cardPanel.BackColor = System.Drawing.Color.White;
             this.cardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPanel.Controls.Add(this.dataGridView1);
             this.cardPanel.Controls.Add(this.lblPageInfo);
             this.cardPanel.Controls.Add(this.dateTimePicker1);
             this.cardPanel.Controls.Add(this.cmbaction);
             this.cardPanel.Controls.Add(this.btnsearch);
-            this.cardPanel.Controls.Add(this.dataGridView1);
             this.cardPanel.Controls.Add(this.btnreset);
             this.cardPanel.Location = new System.Drawing.Point(12, 109);
             this.cardPanel.Name = "cardPanel";
-            this.cardPanel.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
-            this.cardPanel.Size = new System.Drawing.Size(677, 328);
+            this.cardPanel.Padding = new System.Windows.Forms.Padding(12);
+            this.cardPanel.Size = new System.Drawing.Size(764, 328);
             this.cardPanel.TabIndex = 3;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(556, 303);
+            this.lblPageInfo.Location = new System.Drawing.Point(638, 303);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 4;
@@ -114,7 +113,7 @@
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTimePicker1.Location = new System.Drawing.Point(16, 16);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(160, 25);
+            this.dateTimePicker1.Size = new System.Drawing.Size(250, 25);
             this.dateTimePicker1.TabIndex = 0;
             // 
             // cmbaction
@@ -127,9 +126,9 @@
             "All",
             "Update",
             "Delete"});
-            this.cmbaction.Location = new System.Drawing.Point(192, 16);
+            this.cmbaction.Location = new System.Drawing.Point(272, 16);
             this.cmbaction.Name = "cmbaction";
-            this.cmbaction.Size = new System.Drawing.Size(220, 25);
+            this.cmbaction.Size = new System.Drawing.Size(267, 25);
             this.cmbaction.TabIndex = 1;
             // 
             // btnsearch
@@ -140,40 +139,13 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(428, 12);
+            this.btnsearch.Location = new System.Drawing.Point(545, 11);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(90, 30);
             this.btnsearch.TabIndex = 2;
             this.btnsearch.Text = "&Search";
             this.btnsearch.UseVisualStyleBackColor = false;
             this.btnsearch.Click += new System.EventHandler(this.btnsearch_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.ColumnHeadersHeight = 40;
-            this.dataGridView1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.Location = new System.Drawing.Point(16, 56);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(644, 244);
-            this.dataGridView1.TabIndex = 3;
             // 
             // btnreset
             // 
@@ -184,7 +156,7 @@
             this.btnreset.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnreset.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnreset.ForeColor = System.Drawing.Color.White;
-            this.btnreset.Location = new System.Drawing.Point(541, 12);
+            this.btnreset.Location = new System.Drawing.Point(641, 11);
             this.btnreset.Name = "btnreset";
             this.btnreset.Size = new System.Drawing.Size(103, 30);
             this.btnreset.TabIndex = 4;
@@ -198,7 +170,7 @@
             this.groupBox1.Controls.Add(this.btndelete);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(704, 144);
+            this.groupBox1.Location = new System.Drawing.Point(795, 165);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(200, 122);
             this.groupBox1.TabIndex = 4;
@@ -251,7 +223,7 @@
             this.groupBox2.Controls.Add(this.btnnext);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(704, 272);
+            this.groupBox2.Location = new System.Drawing.Point(795, 293);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 122);
             this.groupBox2.TabIndex = 5;
@@ -298,11 +270,35 @@
             this.btnnext.UseVisualStyleBackColor = false;
             this.btnnext.Click += new System.EventHandler(this.btnnext_Click);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridView1.ColumnHeadersHeight = 40;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridView1.EnableHeadersVisualStyles = false;
+            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.dataGridView1.Location = new System.Drawing.Point(16, 55);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 35;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(728, 245);
+            this.dataGridView1.TabIndex = 5;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            // 
             // frmLogs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(916, 450);
+            this.ClientSize = new System.Drawing.Size(1008, 450);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panelHeader);
@@ -318,9 +314,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.cardPanel.ResumeLayout(false);
             this.cardPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -334,7 +330,6 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.ComboBox cmbaction;
         private System.Windows.Forms.Button btnsearch;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnreset;
         private System.Windows.Forms.Label lblPageInfo;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -343,5 +338,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnprev;
         private System.Windows.Forms.Button btnnext;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
