@@ -62,6 +62,12 @@
     <Compile Include="frmAddAccount.Designer.cs">
       <DependentUpon>frmAddAccount.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmAddAdjustment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAddAdjustment.Designer.cs">
+      <DependentUpon>frmAddAdjustment.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmAddProduct.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,12 @@
     </Compile>
     <Compile Include="frmAddSupplier.Designer.cs">
       <DependentUpon>frmAddSupplier.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAdjustments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAdjustments.Designer.cs">
+      <DependentUpon>frmAdjustments.cs</DependentUpon>
     </Compile>
     <Compile Include="frmMain.cs">
       <SubType>Form</SubType>
@@ -109,6 +121,12 @@
     </Compile>
     <Compile Include="frmUpdateAccount.Designer.cs">
       <DependentUpon>frmUpdateAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmUpdateAdjustment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdateAdjustment.Designer.cs">
+      <DependentUpon>frmUpdateAdjustment.cs</DependentUpon>
     </Compile>
     <Compile Include="frmUpdateProduct.cs">
       <SubType>Form</SubType>
@@ -148,6 +166,9 @@
     <EmbeddedResource Include="frmAddAccount.resx">
       <DependentUpon>frmAddAccount.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmAddAdjustment.resx">
+      <DependentUpon>frmAddAdjustment.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmAddProduct.resx">
       <DependentUpon>frmAddProduct.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAddSupplier.resx">
       <DependentUpon>frmAddSupplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAdjustments.resx">
+      <DependentUpon>frmAdjustments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -171,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdateAccount.resx">
       <DependentUpon>frmUpdateAccount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUpdateAdjustment.resx">
+      <DependentUpon>frmUpdateAdjustment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdateProduct.resx">
       <DependentUpon>frmUpdateProduct.cs</DependentUpon>

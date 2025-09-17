@@ -88,7 +88,9 @@ namespace Inventory_Management_System
 
         private void adjustmentstoolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            // TODO: Adjustments form
+            frmAdjustments adjustmentForm = new frmAdjustments(username);
+            adjustmentForm.MdiParent = this;
+            adjustmentForm.Show();
         }
     }
 }
