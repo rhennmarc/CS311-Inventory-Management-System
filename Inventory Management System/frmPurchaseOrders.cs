@@ -464,76 +464,55 @@ namespace Inventory_Management_System
 
                 if (dr == DialogResult.Yes)
                 {
-                    // Get all pending orders first so we can update tblproducts for each.
                     string pendingQuery = "SELECT products, quantity, unitcost, supplier FROM tblpurchase_order WHERE status != 'Received'";
                     if (!string.IsNullOrEmpty(selectedSupplier))
-                    {
                         pendingQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
-                    }
+
                     DataTable dtPending = purchaseOrders.GetData(pendingQuery);
 
                     string updateQuery = "UPDATE tblpurchase_order SET status = 'Received', datereceived = '" + DateTime.Now.ToString("MM/dd/yyyy") + "' WHERE status != 'Received'";
                     if (!string.IsNullOrEmpty(selectedSupplier))
-                    {
                         updateQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
-                    }
 
                     purchaseOrders.executeSQL(updateQuery);
 
                     if (purchaseOrders.rowAffected > 0)
                     {
-                        // Update/add each product in tblproducts based on the pending results
                         foreach (DataRow drRow in dtPending.Rows)
                         {
-                            try
+                            string products = drRow["products"].ToString();
+                            string quantity = drRow["quantity"].ToString();
+                            string unitcost = drRow["unitcost"].ToString();
+
+                            int qtyToAdd = 0;
+                            int.TryParse(quantity, out qtyToAdd);
+
+                            string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
+                            DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
+
+                            if (dtProd.Rows.Count > 0)
                             {
-                                string products = drRow["products"].ToString();
-                                string quantity = drRow["quantity"].ToString();
-                                string unitcost = drRow.Table.Columns.Contains("unitcost") ? drRow["unitcost"].ToString() : "0";
-                                // All tblproducts columns are VARCHAR per your instruction
-                                string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE products = '" + products.Replace("'", "''") + "'";
-                                DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
+                                int currentStock = 0;
+                                int.TryParse(dtProd.Rows[0]["currentstock"].ToString(), out currentStock);
+                                int newStock = currentStock + qtyToAdd;
 
-                                int qtyToAdd = 0;
-                                int.TryParse(quantity, out qtyToAdd);
-
-                                if (dtProd.Rows.Count > 0)
-                                {
-                                    string currentStockStr = dtProd.Rows[0]["currentstock"].ToString();
-                                    int currentStock = 0;
-                                    int.TryParse(currentStockStr, out currentStock);
-
-                                    int newStock = currentStock + qtyToAdd;
-
-                                    string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock.ToString() + "' WHERE products = '" + products.Replace("'", "''") + "'";
-                                    purchaseOrders.executeSQL(updateProd);
-                                }
-                                else
-                                {
-                                    // Insert new product with empty description
-                                    string insertProd = "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
-                                        "VALUES ('" + products.Replace("'", "''") + "', '', '" + unitcost.Replace("'", "''") + "', '" + quantity.Replace("'", "''") + "', '" + username.Replace("'", "''") + "', '" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
-                                    purchaseOrders.executeSQL(insertProd);
-                                }
+                                string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock + "' WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
+                                purchaseOrders.executeSQL(updateProd);
                             }
-                            catch
+                            else
                             {
-                                // continue with next product on error
+                                string insertProd = "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
+                                    "VALUES ('" + products.Replace("'", "''") + "', '', '" + unitcost.Replace("'", "''") + "', '" + quantity.Replace("'", "''") + "', '" + username.Replace("'", "''") + "', '" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
+                                purchaseOrders.executeSQL(insertProd);
                             }
                         }
 
                         MessageBox.Show($"{purchaseOrders.rowAffected} purchase order(s) marked as received.", "Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Log the action
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'RECEIVE ALL', 'PURCHASE ORDER MANAGEMENT', 'ALL PENDING ORDERS', '" + username + "')");
-                    }
-                    else
-                    {
-                        MessageBox.Show("No pending purchase orders to receive.", "Message",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
                     LoadPurchaseOrders();
@@ -551,16 +530,12 @@ namespace Inventory_Management_System
             {
                 if (row < 0 || row >= dataGridView1.Rows.Count)
                 {
-                    MessageBox.Show("Please select a purchase order to receive.",
-                        "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select a purchase order to receive.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 string products = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string currentStatus = dataGridView1.Rows[row].Cells["status"].Value.ToString();
-                string supplier = dataGridView1.Columns.Contains("supplier") && dataGridView1.Columns["supplier"].Visible
-                    ? dataGridView1.Rows[row].Cells["supplier"].Value.ToString()
-                    : selectedSupplier;
 
                 if (currentStatus.ToUpper() == "RECEIVED")
                 {
@@ -576,55 +551,40 @@ namespace Inventory_Management_System
                 {
                     string updateQuery = "UPDATE tblpurchase_order SET status = 'Received', datereceived = '" + DateTime.Now.ToString("MM/dd/yyyy") + "' WHERE products = '" +
                         products.Replace("'", "''") + "'";
-                    if (!string.IsNullOrEmpty(supplier))
-                    {
-                        updateQuery += " AND supplier = '" + supplier.Replace("'", "''") + "'";
-                    }
+                    if (!string.IsNullOrEmpty(selectedSupplier))
+                        updateQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
 
                     purchaseOrders.executeSQL(updateQuery);
 
                     if (purchaseOrders.rowAffected > 0)
                     {
-                        // Update/add product in tblproducts
-                        try
+                        string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
+                        string unitcost = dataGridView1.Rows[row].Cells["unitcost"].Value.ToString();
+
+                        int qtyToAdd = 0;
+                        int.TryParse(quantity, out qtyToAdd);
+
+                        string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
+                        DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
+
+                        if (dtProd.Rows.Count > 0)
                         {
-                            string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
-                            string unitcost = dataGridView1.Columns.Contains("unitcost") ? dataGridView1.Rows[row].Cells["unitcost"].Value.ToString() : "0";
+                            int currentStock = 0;
+                            int.TryParse(dtProd.Rows[0]["currentstock"].ToString(), out currentStock);
+                            int newStock = currentStock + qtyToAdd;
 
-                            string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE products = '" + products.Replace("'", "''") + "'";
-                            DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
-
-                            int qtyToAdd = 0;
-                            int.TryParse(quantity, out qtyToAdd);
-
-                            if (dtProd.Rows.Count > 0)
-                            {
-                                string currentStockStr = dtProd.Rows[0]["currentstock"].ToString();
-                                int currentStock = 0;
-                                int.TryParse(currentStockStr, out currentStock);
-
-                                int newStock = currentStock + qtyToAdd;
-
-                                string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock.ToString() + "' WHERE products = '" + products.Replace("'", "''") + "'";
-                                purchaseOrders.executeSQL(updateProd);
-                            }
-                            else
-                            {
-                                // Insert new product with empty description
-                                string insertProd = "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
-                                    "VALUES ('" + products.Replace("'", "''") + "', '', '" + unitcost.Replace("'", "''") + "', '" + quantity.Replace("'", "''") + "', '" + username.Replace("'", "''") + "', '" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
-                                purchaseOrders.executeSQL(insertProd);
-                            }
+                            string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock + "' WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
+                            purchaseOrders.executeSQL(updateProd);
                         }
-                        catch
+                        else
                         {
-                            // ignore product update errors
+                            string insertProd = "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
+                                "VALUES ('" + products.Replace("'", "''") + "', '', '" + unitcost.Replace("'", "''") + "', '" + quantity.Replace("'", "''") + "', '" + username.Replace("'", "''") + "', '" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
+                            purchaseOrders.executeSQL(insertProd);
                         }
 
-                        MessageBox.Show("Purchase order marked as received.", "Message",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Purchase order marked as received.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // Log the action
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'RECEIVE', 'PURCHASE ORDER MANAGEMENT', '" + products + "', '" + username + "')");
@@ -635,7 +595,7 @@ namespace Inventory_Management_System
             }
             catch (Exception error)
             {
-                MessageBox.Show(error.Message, "ERROR on btnrecieve_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error.Message, "ERROR on btnreceive_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
