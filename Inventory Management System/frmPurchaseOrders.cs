@@ -1,6 +1,8 @@
 ﻿using inventory_management;
 using System;
 using System.Data;
+using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Inventory_Management_System
@@ -14,7 +16,6 @@ namespace Inventory_Management_System
         private int pageSize = 10;
         private int totalRecords = 0;
         private int totalPages = 0;
-
         Class1 purchaseOrders = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
         public frmPurchaseOrders(string username, string supplierName = "")
@@ -22,7 +23,6 @@ namespace Inventory_Management_System
             InitializeComponent();
             this.username = username;
             this.selectedSupplier = supplierName;
-
             // Set the title label to show selected supplier
             if (!string.IsNullOrEmpty(selectedSupplier))
             {
@@ -38,8 +38,6 @@ namespace Inventory_Management_System
         {
             // Enable/disable buttons based on whether a row is selected
             bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
-
-            // Assuming your View button is named btnView
             btnupdate.Enabled = hasSelection;
             btndelete.Enabled = hasSelection;
             btnreceive.Enabled = hasSelection;
@@ -49,7 +47,6 @@ namespace Inventory_Management_System
         {
             // Subscribe to selection changed to keep `row` in sync
             dataGridView1.SelectionChanged += dataGridView1_SelectionChanged;
-
             LoadPurchaseOrders();
             UpdateButtonStates();
         }
@@ -59,15 +56,12 @@ namespace Inventory_Management_System
             try
             {
                 string query = "SELECT products, quantity, unitcost, totalcost, status, createdby, datecreated, datereceived, supplier FROM tblpurchase_order ";
-
                 // Build WHERE clause
                 string whereClause = "";
-
                 if (!string.IsNullOrEmpty(selectedSupplier))
                 {
                     whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
                 }
-
                 if (!string.IsNullOrEmpty(search))
                 {
                     if (string.IsNullOrEmpty(whereClause))
@@ -78,26 +72,24 @@ namespace Inventory_Management_System
                     {
                         whereClause += "AND ";
                     }
-                    whereClause += "(products LIKE '%" + search + "%' OR status LIKE '%" + search + "%' OR createdby LIKE '%" + search + "%') ";
+                    whereClause += "(products LIKE '%" + search.Replace("'", "''") + "%' OR status LIKE '%" + search.Replace("'", "''") + "%' OR createdby LIKE '%" + search.Replace("'", "''") + "%') ";
                 }
-
                 query += whereClause + "ORDER BY datecreated DESC";
 
+                // Get all matching rows (this dtAll WILL be filtered by search)
                 DataTable dtAll = purchaseOrders.GetData(query);
-
                 totalRecords = dtAll.Rows.Count;
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+                if (totalPages == 0) totalPages = 1;
 
-                // Apply paging
+                // Apply paging to display only a page
                 DataTable dtPage = dtAll.Clone();
                 int startIndex = (currentPage - 1) * pageSize;
                 int endIndex = Math.Min(startIndex + pageSize, totalRecords);
-
                 for (int i = startIndex; i < endIndex; i++)
                 {
                     dtPage.ImportRow(dtAll.Rows[i]);
                 }
-
                 dataGridView1.DataSource = dtPage;
 
                 // Ensure no leftover selection and reset row
@@ -112,7 +104,6 @@ namespace Inventory_Management_System
                 dataGridView1.MultiSelect = false;
                 dataGridView1.ReadOnly = true;
                 dataGridView1.AllowUserToAddRows = false;
-
                 dataGridView1.DefaultCellStyle.Padding = new Padding(5);
                 dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -174,8 +165,8 @@ namespace Inventory_Management_System
                     }
                 }
 
-                // Calculate and display total
-                CalculateTotal();
+                // Calculate and display grand total (IGNORES search & paging)
+                CalculateGrandTotal();
 
                 // === Page info ===
                 if (totalRecords == 0)
@@ -194,30 +185,46 @@ namespace Inventory_Management_System
             }
         }
 
-        private void CalculateTotal()
+        /// <summary>
+        /// Calculates the grand total (sum of totalcost) for the currently selected supplier
+        /// (or for all suppliers when selectedSupplier is empty). This intentionally ignores
+        /// any search text or paging so the total remains constant across searches/pages.
+        /// </summary>
+        private void CalculateGrandTotal()
         {
             try
             {
-                decimal total = 0;
-
-                // Calculate total from the current DataTable instead of running a separate query
-                foreach (DataGridViewRow row in dataGridView1.Rows)
+                decimal grandTotal = 0m;
+                // Build a query that fetches all totalcost values for the supplier (no search)
+                string totalQuery = "SELECT totalcost FROM tblpurchase_order ";
+                if (!string.IsNullOrEmpty(selectedSupplier))
                 {
-                    if (row.Cells["totalcost"].Value != null && row.Cells["totalcost"].Value != DBNull.Value)
+                    totalQuery += "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "'";
+                }
+                DataTable dtTotals = purchaseOrders.GetData(totalQuery);
+                foreach (DataRow dr in dtTotals.Rows)
+                {
+                    if (dr["totalcost"] != null && dr["totalcost"] != DBNull.Value)
                     {
-                        decimal rowTotal = 0;
-                        if (decimal.TryParse(row.Cells["totalcost"].Value.ToString(), out rowTotal))
+                        string raw = dr["totalcost"].ToString();
+                        // Clean the string: remove currency symbol, commas, spaces, etc.
+                        string cleaned = Regex.Replace(raw, @"[^\d\.\-]", "");
+                        if (!string.IsNullOrWhiteSpace(cleaned))
                         {
-                            total += rowTotal;
+                            decimal value = 0m;
+                            if (decimal.TryParse(cleaned, NumberStyles.Number | NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out value))
+                            {
+                                grandTotal += value;
+                            }
                         }
                     }
                 }
-
-                txttotal.Text = "₱" + total.ToString("N2");
+                // Format using your local display (prefix ₱ as you used previously)
+                txttotal.Text = "₱" + grandTotal.ToString("N2");
             }
             catch (Exception error)
             {
-                MessageBox.Show(error.Message, "ERROR on CalculateTotal", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error.Message, "ERROR on CalculateGrandTotal", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txttotal.Text = "₱0.00";
             }
         }
@@ -245,13 +252,10 @@ namespace Inventory_Management_System
                     MessageBox.Show("Please select a purchase order to update.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
                 int selectedRow = dataGridView1.SelectedRows[0].Index;
-
                 string products = dataGridView1.Rows[selectedRow].Cells["products"].Value.ToString();
                 string quantity = dataGridView1.Rows[selectedRow].Cells["quantity"].Value.ToString();
                 string unitcost = dataGridView1.Rows[selectedRow].Cells["unitcost"].Value.ToString();
-
                 frmUpdatePurchaseOrder updatePOForm = new frmUpdatePurchaseOrder(products, quantity, unitcost, username);
                 updatePOForm.FormClosed += (s, args) => { LoadPurchaseOrders(); };
                 updatePOForm.Show();
@@ -272,15 +276,12 @@ namespace Inventory_Management_System
                         "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
                 string products = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string supplier = dataGridView1.Columns.Contains("supplier") && dataGridView1.Columns["supplier"].Visible
                     ? dataGridView1.Rows[row].Cells["supplier"].Value.ToString()
                     : selectedSupplier;
-
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete this purchase order?", "Confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
                 if (dr == DialogResult.Yes)
                 {
                     string deleteQuery = "DELETE FROM tblpurchase_order WHERE products = '" + products.Replace("'", "''") + "'";
@@ -288,19 +289,15 @@ namespace Inventory_Management_System
                     {
                         deleteQuery += " AND supplier = '" + supplier.Replace("'", "''") + "'";
                     }
-
                     purchaseOrders.executeSQL(deleteQuery);
-
                     if (purchaseOrders.rowAffected > 0)
                     {
                         MessageBox.Show("Purchase order deleted.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                         // Log deletion
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'DELETE', 'PURCHASE ORDER MANAGEMENT', '" + products + "', '" + username + "')");
                     }
-
                     LoadPurchaseOrders();
                 }
             }
@@ -316,7 +313,6 @@ namespace Inventory_Management_System
             {
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete ALL purchase orders? This action cannot be undone.",
                     "Delete All Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
                 if (dr == DialogResult.Yes)
                 {
                     string deleteQuery = "DELETE FROM tblpurchase_order";
@@ -324,14 +320,11 @@ namespace Inventory_Management_System
                     {
                         deleteQuery += " WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "'";
                     }
-
                     purchaseOrders.executeSQL(deleteQuery);
-
                     if (purchaseOrders.rowAffected > 0)
                     {
                         MessageBox.Show($"{purchaseOrders.rowAffected} purchase order(s) deleted.", "Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                         // Log deletion
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
@@ -341,7 +334,6 @@ namespace Inventory_Management_System
                     {
                         MessageBox.Show("No records to delete.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
                     LoadPurchaseOrders();
                 }
             }
@@ -358,7 +350,6 @@ namespace Inventory_Management_System
             LoadPurchaseOrders();
         }
 
-
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -367,11 +358,9 @@ namespace Inventory_Management_System
                 if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
                 {
                     row = e.RowIndex;
-
                     // Make sure the clicked row is selected visually and set current cell
                     dataGridView1.ClearSelection();
                     dataGridView1.Rows[row].Selected = true;
-
                     if (dataGridView1.Columns.Count > 0 && dataGridView1.Rows[row].Cells.Count > 0)
                     {
                         dataGridView1.CurrentCell = dataGridView1.Rows[row].Cells[0];
@@ -381,7 +370,6 @@ namespace Inventory_Management_System
                 {
                     row = -1;
                 }
-
                 UpdateButtonStates();
             }
             catch (Exception error)
@@ -430,12 +418,6 @@ namespace Inventory_Management_System
             }
         }
 
-        private void btnsearch_Click(object sender, EventArgs e)
-        {
-            currentPage = 1;
-            LoadPurchaseOrders(txtsearch.Text.Trim());
-        }
-
         // Pagination methods
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -461,21 +443,16 @@ namespace Inventory_Management_System
             {
                 DialogResult dr = MessageBox.Show("Mark ALL purchase orders as received?", "Receive All Confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
                 if (dr == DialogResult.Yes)
                 {
                     string pendingQuery = "SELECT products, quantity, unitcost, supplier FROM tblpurchase_order WHERE status != 'Received'";
                     if (!string.IsNullOrEmpty(selectedSupplier))
                         pendingQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
-
                     DataTable dtPending = purchaseOrders.GetData(pendingQuery);
-
                     string updateQuery = "UPDATE tblpurchase_order SET status = 'Received', datereceived = '" + DateTime.Now.ToString("MM/dd/yyyy") + "' WHERE status != 'Received'";
                     if (!string.IsNullOrEmpty(selectedSupplier))
                         updateQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
-
                     purchaseOrders.executeSQL(updateQuery);
-
                     if (purchaseOrders.rowAffected > 0)
                     {
                         foreach (DataRow drRow in dtPending.Rows)
@@ -483,19 +460,15 @@ namespace Inventory_Management_System
                             string products = drRow["products"].ToString();
                             string quantity = drRow["quantity"].ToString();
                             string unitcost = drRow["unitcost"].ToString();
-
                             int qtyToAdd = 0;
                             int.TryParse(quantity, out qtyToAdd);
-
                             string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
                             DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
-
                             if (dtProd.Rows.Count > 0)
                             {
                                 int currentStock = 0;
                                 int.TryParse(dtProd.Rows[0]["currentstock"].ToString(), out currentStock);
                                 int newStock = currentStock + qtyToAdd;
-
                                 string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock + "' WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
                                 purchaseOrders.executeSQL(updateProd);
                             }
@@ -506,15 +479,12 @@ namespace Inventory_Management_System
                                 purchaseOrders.executeSQL(insertProd);
                             }
                         }
-
                         MessageBox.Show($"{purchaseOrders.rowAffected} purchase order(s) marked as received.", "Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'RECEIVE ALL', 'PURCHASE ORDER MANAGEMENT', 'ALL PENDING ORDERS', '" + username + "')");
                     }
-
                     LoadPurchaseOrders();
                 }
             }
@@ -533,46 +503,36 @@ namespace Inventory_Management_System
                     MessageBox.Show("Please select a purchase order to receive.", "No Selection", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
                 string products = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string currentStatus = dataGridView1.Rows[row].Cells["status"].Value.ToString();
-
                 if (currentStatus.ToUpper() == "RECEIVED")
                 {
                     MessageBox.Show("This purchase order has already been received.", "Already Received",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
-
                 DialogResult dr = MessageBox.Show($"Mark purchase order for '{products}' as received?", "Receive Confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
                 if (dr == DialogResult.Yes)
                 {
                     string updateQuery = "UPDATE tblpurchase_order SET status = 'Received', datereceived = '" + DateTime.Now.ToString("MM/dd/yyyy") + "' WHERE products = '" +
                         products.Replace("'", "''") + "'";
                     if (!string.IsNullOrEmpty(selectedSupplier))
                         updateQuery += " AND supplier = '" + selectedSupplier.Replace("'", "''") + "'";
-
                     purchaseOrders.executeSQL(updateQuery);
-
                     if (purchaseOrders.rowAffected > 0)
                     {
                         string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
                         string unitcost = dataGridView1.Rows[row].Cells["unitcost"].Value.ToString();
-
                         int qtyToAdd = 0;
                         int.TryParse(quantity, out qtyToAdd);
-
                         string selectProductQuery = "SELECT currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
                         DataTable dtProd = purchaseOrders.GetData(selectProductQuery);
-
                         if (dtProd.Rows.Count > 0)
                         {
                             int currentStock = 0;
                             int.TryParse(dtProd.Rows[0]["currentstock"].ToString(), out currentStock);
                             int newStock = currentStock + qtyToAdd;
-
                             string updateProd = "UPDATE tblproducts SET currentstock = '" + newStock + "' WHERE LOWER(products) = LOWER('" + products.Replace("'", "''") + "')";
                             purchaseOrders.executeSQL(updateProd);
                         }
@@ -582,14 +542,11 @@ namespace Inventory_Management_System
                                 "VALUES ('" + products.Replace("'", "''") + "', '', '" + unitcost.Replace("'", "''") + "', '" + quantity.Replace("'", "''") + "', '" + username.Replace("'", "''") + "', '" + DateTime.Now.ToString("MM/dd/yyyy") + "')";
                             purchaseOrders.executeSQL(insertProd);
                         }
-
                         MessageBox.Show("Purchase order marked as received.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                             "', 'RECEIVE', 'PURCHASE ORDER MANAGEMENT', '" + products + "', '" + username + "')");
                     }
-
                     LoadPurchaseOrders();
                 }
             }
@@ -597,6 +554,12 @@ namespace Inventory_Management_System
             {
                 MessageBox.Show(error.Message, "ERROR on btnreceive_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnsearch_Click(object sender, EventArgs e)
+        {
+            currentPage = 1;
+            LoadPurchaseOrders(txtsearch.Text.Trim());
         }
     }
 }

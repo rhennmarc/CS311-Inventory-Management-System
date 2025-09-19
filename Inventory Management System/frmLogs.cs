@@ -127,7 +127,7 @@ namespace Inventory_Management_System
 
                 if (dateTimePicker1.Checked)
                 {
-                    string dmy = dateTimePicker1.Value.ToString("dd/MM/yyyy");
+                    string dmy = dateTimePicker1.Value.ToString("MM/dd/yyyy");
                     if (string.IsNullOrEmpty(where))
                         where = "WHERE datelog = '" + dmy + "' ";
                     else

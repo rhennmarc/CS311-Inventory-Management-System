@@ -57,7 +57,9 @@ namespace Inventory_Management_System
 
         private void posToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: POS form
+            frmPOS POSform = new frmPOS(username);
+            POSform.MdiParent = this;
+            POSform.Show();
         }
 
         private void suppliersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -69,7 +71,9 @@ namespace Inventory_Management_System
 
         private void salesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Sales form
+            frmSalesReport SalesForm = new frmSalesReport(username, usertype);
+            SalesForm.MdiParent = this;
+            SalesForm.Show();
         }
 
         private void viewLogsToolStripMenuItem_Click(object sender, EventArgs e)

@@ -26,16 +26,14 @@ namespace Inventory_Management_System
             errorProvider1.Clear();
             errorcount = 0;
 
-            // --- VALIDATIONS ---
-
-            // Product name (required)
-            if (string.IsNullOrEmpty(txtproduct.Text.Trim()))
+            // Product required
+            if (cmbproduct.SelectedIndex == -1 || string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
-                errorProvider1.SetError(txtproduct, "Product name is required.");
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
-            // Quantity (required, > 0, numeric)
+            // Quantity required
             if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
             {
                 errorProvider1.SetError(txtquantity, "Quantity is required.");
@@ -51,7 +49,7 @@ namespace Inventory_Management_System
                 }
             }
 
-            // Unit cost (required, > 0, numeric)
+            // Unit cost required
             if (string.IsNullOrEmpty(txtunitcost.Text.Trim()))
             {
                 errorProvider1.SetError(txtunitcost, "Unit cost is required.");
@@ -67,7 +65,7 @@ namespace Inventory_Management_System
                 }
             }
 
-            // Total cost validation (should be calculated automatically)
+            // Total cost validation
             if (string.IsNullOrEmpty(txttotalcost.Text.Trim()))
             {
                 errorProvider1.SetError(txttotalcost, "Total cost is required.");
@@ -83,7 +81,7 @@ namespace Inventory_Management_System
                 }
             }
 
-            // --- SAVE TO DATABASE ---
+            // Save if valid
             if (errorcount == 0)
             {
                 try
@@ -93,14 +91,14 @@ namespace Inventory_Management_System
 
                     if (dr == DialogResult.Yes)
                     {
-                        string product = txtproduct.Text.Trim().Replace("'", "''");
+                        string product = cmbproduct.Text.Trim().Replace("'", "''");
                         string quantity = txtquantity.Text.Trim().Replace("'", "''");
                         string unitcost = txtunitcost.Text.Trim().Replace("'", "''");
                         string totalcost = txttotalcost.Text.Trim().Replace("'", "''");
                         string supplier = supplierName.Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
-                        string status = "Pending"; // Default status
+                        string status = "Pending";
 
                         string insertPurchaseOrder =
                             "INSERT INTO tblpurchase_order (products, quantity, unitcost, totalcost, status, createdby, datecreated, supplier) " +
@@ -112,7 +110,6 @@ namespace Inventory_Management_System
                         {
                             MessageBox.Show("New purchase order added successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                            // Log the action
                             newPurchaseOrder.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                                 "VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
                                 "', 'ADD', 'PURCHASE ORDER MANAGEMENT', '" + product + "', '" + username + "')");
@@ -133,17 +130,13 @@ namespace Inventory_Management_System
             this.Close();
         }
 
-        // Auto-calculate total cost when quantity or unit cost changes
+        // --- Auto calculation ---
         private void CalculateTotalCost()
         {
             try
             {
-                // Clear error on total cost field when recalculating
                 errorProvider1.SetError(txttotalcost, "");
-
                 decimal quantity, unitcost;
-
-                // Check if both fields have valid numeric values
                 if (decimal.TryParse(txtquantity.Text.Trim(), out quantity) &&
                     decimal.TryParse(txtunitcost.Text.Trim(), out unitcost) &&
                     quantity > 0 && unitcost > 0)
@@ -153,7 +146,6 @@ namespace Inventory_Management_System
                 }
                 else
                 {
-                    // Clear total cost if either quantity or unit cost is invalid
                     txttotalcost.Text = "";
                 }
             }
@@ -163,125 +155,59 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- Remove error when user starts typing ---
-
-        private void txttotalcost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Allow numbers, decimal point, and control keys for total cost
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
-
-            // Only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            {
-                e.Handled = true;
-            }
-
-            if (!string.IsNullOrEmpty(txttotalcost.Text))
-                errorProvider1.SetError(txttotalcost, "");
-        }
-
-        private void txtquantity_Leave(object sender, EventArgs e)
-        {
-            // Validate quantity when leaving the field
-            if (!string.IsNullOrEmpty(txtquantity.Text.Trim()))
-            {
-                int quantity;
-                if (!int.TryParse(txtquantity.Text.Trim(), out quantity) || quantity <= 0)
-                {
-                    MessageBox.Show("Please enter a valid positive number for quantity.", "Invalid Quantity",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtquantity.Focus();
-                    txtquantity.SelectAll();
-                    return;
-                }
-            }
-
-            // Recalculate after validation
-            CalculateTotalCost();
-        }
-
         private void frmAddPurchaseOrder_Load(object sender, EventArgs e)
         {
-            // Set default values and focus
-            txtproduct.Focus();
-
-            // Initialize total cost field
+            cmbproduct.Focus();
             txttotalcost.Text = "";
+
+            try
+            {
+                DataTable dt = newPurchaseOrder.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                cmbproduct.Items.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    cmbproduct.Items.Add(row["products"].ToString());
+                }
+
+                cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
+                cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading products: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void txtquantity_KeyUp(object sender, KeyEventArgs e)
-        {
-            CalculateTotalCost();
-        }
+        // --- EVENTS ---
+        private void txtquantity_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
+        private void txtunitcost_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
+        private void txtquantity_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtquantity.Text)) errorProvider1.SetError(txtquantity, ""); CalculateTotalCost(); }
+        private void txtunitcost_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtunitcost.Text)) errorProvider1.SetError(txtunitcost, ""); CalculateTotalCost(); }
 
-        private void txtunitcost_KeyUp(object sender, KeyEventArgs e)
-        {
-            CalculateTotalCost();
-        }
-
-        private void txtproduct_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtproduct.Text))
-                errorProvider1.SetError(txtproduct, "");
-        }
-
-        private void txtproduct_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtproduct.Text))
-                errorProvider1.SetError(txtproduct, "");
-        }
-
+        // --- KEYPRESS VALIDATION ---
         private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Allow only numbers and control keys for quantity
+            // Only allow digits, backspace
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
-
-            if (!string.IsNullOrEmpty(txtquantity.Text))
-                errorProvider1.SetError(txtquantity, "");
         }
 
         private void txtunitcost_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Allow numbers, decimal point, and control keys for unit cost
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            // Allow digits, backspace, and one decimal point
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
             {
                 e.Handled = true;
             }
 
             // Only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
             {
                 e.Handled = true;
             }
-
-            if (!string.IsNullOrEmpty(txtunitcost.Text))
-                errorProvider1.SetError(txtunitcost, "");
-        }
-
-        private void txtquantity_TextChanged(object sender, EventArgs e)
-        {
-            // Clear error when user starts typing
-            if (!string.IsNullOrEmpty(txtquantity.Text))
-                errorProvider1.SetError(txtquantity, "");
-
-            // Calculate total cost
-            CalculateTotalCost();
-        }
-
-        private void txtunitcost_TextChanged(object sender, EventArgs e)
-        {
-            // Clear error when user starts typing
-            if (!string.IsNullOrEmpty(txtunitcost.Text))
-                errorProvider1.SetError(txtunitcost, "");
-
-            // Calculate total cost
-            CalculateTotalCost();
         }
     }
 }

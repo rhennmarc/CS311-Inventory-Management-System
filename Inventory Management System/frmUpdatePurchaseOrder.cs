@@ -1,7 +1,7 @@
-﻿using inventory_management;
-using System;
+﻿using System;
 using System.Data;
 using System.Windows.Forms;
+using inventory_management;
 
 namespace Inventory_Management_System
 {
@@ -15,10 +15,10 @@ namespace Inventory_Management_System
             InitializeComponent();
 
             // Populate fields with provided values
-            txtproduct.Text = products;
+            cmbproduct.Text = products; // ✅ combo instead of textbox
             txtquantity.Text = quantity;
             txtunitcost.Text = unitcost;
-            txttotalcost.Text = CalculateTotalFromFields(quantity, unitcost); // keep total consistent
+            txttotalcost.Text = CalculateTotalFromFields(quantity, unitcost);
 
             originalProduct = products;
             this.username = username;
@@ -34,12 +34,12 @@ namespace Inventory_Management_System
             if (dt.Rows.Count > 0)
             {
                 DataRow row = dt.Rows[0];
-                txtproduct.Text = row["products"].ToString();
+                cmbproduct.Text = row["products"].ToString();
                 txtquantity.Text = row["quantity"].ToString();
                 txtunitcost.Text = row["unitcost"].ToString();
                 txttotalcost.Text = row["totalcost"].ToString();
 
-                originalProduct = txtproduct.Text;
+                originalProduct = cmbproduct.Text;
             }
         }
 
@@ -51,10 +51,9 @@ namespace Inventory_Management_System
             errorcount = 0;
 
             // --- VALIDATIONS ---
-
-            if (string.IsNullOrEmpty(txtproduct.Text.Trim()))
+            if (cmbproduct.SelectedIndex == -1 || string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
-                errorProvider1.SetError(txtproduct, "Product name is required.");
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
@@ -104,13 +103,13 @@ namespace Inventory_Management_System
             }
 
             // Check duplicate if product changed
-            if (!string.IsNullOrEmpty(txtproduct.Text) && txtproduct.Text != originalProduct)
+            if (!string.IsNullOrEmpty(cmbproduct.Text) && cmbproduct.Text != originalProduct)
             {
-                string dupQuery = "SELECT * FROM tblpurchase_order WHERE products = '" + txtproduct.Text.Replace("'", "''") + "'";
+                string dupQuery = "SELECT * FROM tblpurchase_order WHERE products = '" + cmbproduct.Text.Replace("'", "''") + "'";
                 DataTable dtDup = updatePO.GetData(dupQuery);
                 if (dtDup.Rows.Count > 0)
                 {
-                    errorProvider1.SetError(txtproduct, "A purchase order for this product already exists.");
+                    errorProvider1.SetError(cmbproduct, "A purchase order for this product already exists.");
                     errorcount++;
                 }
             }
@@ -124,7 +123,7 @@ namespace Inventory_Management_System
 
                     if (dr == DialogResult.Yes)
                     {
-                        string product = txtproduct.Text.Trim().Replace("'", "''");
+                        string product = cmbproduct.Text.Trim().Replace("'", "''");
                         string quantity = txtquantity.Text.Trim().Replace("'", "''");
                         string unitcost = txtunitcost.Text.Trim().Replace("'", "''");
                         string totalcost = txttotalcost.Text.Trim().Replace("'", "''");
@@ -170,9 +169,28 @@ namespace Inventory_Management_System
         private void frmUpdatePurchaseOrder_Load(object sender, EventArgs e)
         {
             this.ActiveControl = titleLabel;
+
+            // Load products to combo
+            try
+            {
+                DataTable dt = updatePO.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                cmbproduct.Items.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    cmbproduct.Items.Add(row["products"].ToString());
+                }
+
+                cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
+                cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading products: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        // Utility to calculate total cost from quantity and unitcost (returns empty if invalid)
+        // Utility to calculate total cost
         private string CalculateTotalFromFields(string quantityStr, string unitcostStr)
         {
             try
@@ -188,10 +206,10 @@ namespace Inventory_Management_System
             return "";
         }
 
-        private void txtproduct_TextChanged(object sender, EventArgs e)
+        private void cmbproduct_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtproduct.Text))
-                errorProvider1.SetError(txtproduct, "");
+            if (!string.IsNullOrEmpty(cmbproduct.Text))
+                errorProvider1.SetError(cmbproduct, "");
         }
 
         private void txtquantity_TextChanged(object sender, EventArgs e)
@@ -199,7 +217,6 @@ namespace Inventory_Management_System
             if (!string.IsNullOrEmpty(txtquantity.Text))
                 errorProvider1.SetError(txtquantity, "");
 
-            // Recalculate total
             txttotalcost.Text = CalculateTotalFromFields(txtquantity.Text, txtunitcost.Text);
         }
 
@@ -208,7 +225,6 @@ namespace Inventory_Management_System
             if (!string.IsNullOrEmpty(txtunitcost.Text))
                 errorProvider1.SetError(txtunitcost, "");
 
-            // Recalculate total
             txttotalcost.Text = CalculateTotalFromFields(txtquantity.Text, txtunitcost.Text);
         }
 
@@ -216,6 +232,28 @@ namespace Inventory_Management_System
         {
             if (!string.IsNullOrEmpty(txttotalcost.Text))
                 errorProvider1.SetError(txttotalcost, "");
+        }
+
+        // --- KEYPRESS VALIDATION ---
+        private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtunitcost_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            if (e.KeyChar == '.' && (sender as TextBox).Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
         }
     }
 }
