@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2025 at 05:51 AM
+-- Generation Time: Sep 24, 2025 at 09:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -93,7 +93,58 @@ INSERT INTO `tbllogs` (`datelog`, `timelog`, `module`, `action`, `performedto`, 
 ('18/09/2025', '6:15 pm', 'PURCHASE ORDER MANAGEMENT', 'ADD', 'Mucotuss Forte', 'admin'),
 ('09/18/2025', '6:15 pm', 'PURCHASE ORDER MANAGEMENT', 'RECEIVE', 'Mucotuss Forte', 'admin'),
 ('09/18/2025', '6:16 pm', 'PURCHASE ORDER MANAGEMENT', 'RECEIVE ALL', 'ALL PENDING ORDERS', 'admin'),
-('09/19/2025', '11:35:14', 'POS', 'PURCHASE', 'TOTAL: 37.00', 'admin');
+('09/19/2025', '11:35:14', 'POS', 'PURCHASE', 'TOTAL: 37.00', 'admin'),
+('09/19/2025', '5:19 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Neozep Forte Tablet', 'admin'),
+('09/19/2025', '5:20 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Biogesic 500mg Tablet', 'admin'),
+('09/19/2025', '5:20 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Bioflu Tablet', 'admin'),
+('09/19/2025', '5:21 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Alaxan FR Capsule', 'admin'),
+('09/19/2025', '5:21 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Decolgen Forte Tablet', 'admin'),
+('09/19/2025', '5:22 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Paracetamol 500mg Tablet (Generic)', 'admin'),
+('09/19/2025', '5:23 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Ibuprofen 400mg Tablet', 'admin'),
+('09/19/2025', '5:23 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Kremil-S Tablet', 'admin'),
+('09/19/2025', '5:23 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Tuseran Forte Capsule', 'admin'),
+('09/19/2025', '5:24 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Ascof Lagundi Syrup 60ml', 'admin'),
+('09/19/2025', '5:25 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Ventolin Inhaler 100mcg', 'admin'),
+('09/19/2025', '5:25 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Cetirizine 10mg Tablet', 'admin'),
+('09/19/2025', '5:25 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Claritin 10mg Tablet', 'admin'),
+('09/19/2025', '5:25 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Myra-E 400IU Capsule', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Enervon Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Alaxan FR Capsule', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Ascof Lagundi Syrup 60ml', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Bioflu Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Biogesic 500mg Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Cetirizine 10mg Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Claritin 10mg Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Kremil-S Tablet', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Mucotuss Forte', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Myra-E 400IU Capsule', 'admin'),
+('09/19/2025', '5:26 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Neozep Forte Tablet', 'admin'),
+('09/19/2025', '5:27 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Paracetamol 500mg Tablet (Generic)', 'admin'),
+('09/19/2025', '5:33 pm', 'PRODUCT MANAGEMENT', 'UPDATE', 'Ventolin Inhaler 100mcg', 'admin'),
+('09/19/2025', '5:34 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Stresstabs Capsule', 'admin'),
+('09/19/2025', '5:34 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Centrum Advance Tablet', 'admin'),
+('09/19/2025', '5:35 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Ascorbic Acid 500mg Tablet (Generic)', 'admin'),
+('09/19/2025', '5:35 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Fern-C 500mg Capsule', 'admin'),
+('09/19/2025', '5:35 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Ceelin Syrup 120ml', 'admin'),
+('09/19/2025', '5:36 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Diatabs Capsule', 'admin'),
+('09/19/2025', '5:36 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Dulcolax 5mg Tablet', 'admin'),
+('09/19/2025', '5:36 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Gaviscon Liquid 120ml', 'admin'),
+('09/19/2025', '5:36 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Hydrite Oral Rehydration Salt Sachet', 'admin'),
+('09/19/2025', '5:36 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Imodium Capsule', 'admin'),
+('09/19/2025', '5:37 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Mefenamic Acid 500mg Tablet', 'admin'),
+('09/19/2025', '5:37 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Buscopan Tablet', 'admin'),
+('09/19/2025', '5:38 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Robitussin DM Syrup 60ml', 'admin'),
+('09/19/2025', '5:38 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Tempra Forte 60ml (Paracetamol)', 'admin'),
+('09/19/2025', '5:38 pm', 'PRODUCTS MANAGEMENT', 'ADD', 'Biogesic Syrup 60ml', 'admin'),
+('09/19/2025', '5:39 pm', 'PURCHASE ORDER MANAGEMENT', 'DELETE ALL', 'ALL RECORDS', 'admin'),
+('19/09/2025', '5:40 pm', 'PURCHASE ORDER MANAGEMENT', 'ADD', 'Biogesic 500mg Tablet', 'admin'),
+('19/09/2025', '5:41 pm', 'PURCHASE ORDER MANAGEMENT', 'ADD', 'Neozep Forte Tablet', 'admin'),
+('09/19/2025', '17:44:28', 'POS', 'PURCHASE', 'TOTAL: 219.00', 'admin'),
+('09/24/2025', '14:48:05', 'POS', 'PURCHASE', 'TOTAL: 84.00', 'admin'),
+('09/24/2025', '2:49 pm', 'SALES REPORT', 'DELETE ALL', 'ALL SALES ON 09/24/2025', 'admin'),
+('09/24/2025', '15:01:56', 'POS', 'PURCHASE', 'TOTAL: 9.60 | DISCOUNTED: Yes', 'admin'),
+('09/24/2025', '15:03:54', 'POS', 'PURCHASE', 'TOTAL: 114.00 | DISCOUNTED: No', 'admin'),
+('09/24/2025', '15:31:16', 'POS', 'PURCHASE', 'TOTAL: 272.00 | DISCOUNTED: Yes', 'admin');
 
 -- --------------------------------------------------------
 
@@ -115,9 +166,37 @@ CREATE TABLE `tblproducts` (
 --
 
 INSERT INTO `tblproducts` (`products`, `description`, `unitprice`, `currentstock`, `createdby`, `datecreated`) VALUES
-('Mucotuss Forte', '', '7', '224', 'admin', '11/09/2025'),
-('Neozep', '', '5', '244', 'admin', '09/18/2025'),
-('Tuseran', '', '7', '60', 'admin', '09/18/2025');
+('Mucotuss Forte', '', '7.00', '224', 'admin', '11/09/2025'),
+('Neozep Forte Tablet', '', '8.00', '100', 'admin', '09/18/2025'),
+('Tuseran Forte Capsule', '', '14.00', '100', 'admin', '09/18/2025'),
+('Biogesic 500mg Tablet', '', '7.00', '200', 'admin', '09/19/2025'),
+('Bioflu Tablet', '', '9.00', '150', 'admin', '09/19/2025'),
+('Alaxan FR Capsule', '', '12.00', '113', 'admin', '09/19/2025'),
+('Decolgen Forte Tablet', '', '8.50', '180', 'admin', '09/19/2025'),
+('Paracetamol 500mg Tablet (Generic)', '', '2.00', '500', 'admin', '09/19/2025'),
+('Ibuprofen 400mg Tablet', '', '4.50', '300', 'admin', '09/19/2025'),
+('Kremil-S Tablet', '', '10.00', '100', 'admin', '09/19/2025'),
+('Ascof Lagundi Syrup 60ml', '', '90.00', '45', 'admin', '09/19/2025'),
+('Ventolin Inhaler 100mcg', '', '350.00', '30', 'admin', '09/19/2025'),
+('Cetirizine 10mg Tablet', '', '6.00', '200', 'admin', '09/19/2025'),
+('Claritin 10mg Tablet', '', '35.00', '80', 'admin', '09/19/2025'),
+('Myra-E 400IU Capsule', '', '12.00', '150', 'admin', '09/19/2025'),
+('Enervon Tablet', '', '10.00', '100', 'admin', '09/19/2025'),
+('Stresstabs Capsule', '', '18.00', '100', 'admin', '09/19/2025'),
+('Centrum Advance Tablet', '', '22.00', '60', 'admin', '09/19/2025'),
+('Ascorbic Acid 500mg Tablet (Generic)', '', '3.00', '298', 'admin', '09/19/2025'),
+('Fern-C 500mg Capsule', '', '13.00', '80', 'admin', '09/19/2025'),
+('Ceelin Syrup 120ml', '', '140.00', '39', 'admin', '09/19/2025'),
+('Diatabs Capsule', '', '9.00', '100', 'admin', '09/19/2025'),
+('Dulcolax 5mg Tablet', '', '12.00', '50', 'admin', '09/19/2025'),
+('Gaviscon Liquid 120ml', '', '180.00', '20', 'admin', '09/19/2025'),
+('Hydrite Oral Rehydration Salt Sachet', '', '8.00', '150', 'admin', '09/19/2025'),
+('Imodium Capsule', '', '22.00', '70', 'admin', '09/19/2025'),
+('Mefenamic Acid 500mg Tablet', '', '4.00', '250', 'admin', '09/19/2025'),
+('Buscopan Tablet', '', '16.00', '120', 'admin', '09/19/2025'),
+('Robitussin DM Syrup 60ml', '', '95.00', '30', 'admin', '09/19/2025'),
+('Tempra Forte 60ml (Paracetamol)', '', '120.00', '40', 'admin', '09/19/2025'),
+('Biogesic Syrup 60ml', '', '110.00', '34', 'admin', '09/19/2025');
 
 -- --------------------------------------------------------
 
@@ -142,11 +221,8 @@ CREATE TABLE `tblpurchase_order` (
 --
 
 INSERT INTO `tblpurchase_order` (`products`, `quantity`, `unitcost`, `totalcost`, `status`, `createdby`, `datecreated`, `supplier`, `datereceived`) VALUES
-('Mucotuss Forte', '100', '3', '300.00', 'Received', 'admin', '09/15/2025', 'Test', '09/18/2025'),
-('Neozep', '150', '5', '750.00', 'Received', 'admin', '09/18/2025', 'Test', '09/18/2025'),
-('Tuseran', '60', '7', '420.00', 'Received', 'admin', '09/18/2025', 'Test', '09/18/2025'),
-('neozep', '100', '5', '500.00', 'Received', 'admin', '09/18/2025', 'Test', '09/18/2025'),
-('Mucotuss Forte', '20', '5', '100.00', 'Received', 'admin', '09/18/2025', 'Test', '09/18/2025');
+('Biogesic 500mg Tablet', '100', '5', '500.00', 'Pending', 'admin', '09/19/2025', 'Test', ''),
+('Neozep Forte Tablet', '150', '6', '900.00', 'Pending', 'admin', '09/19/2025', 'Test', '');
 
 -- --------------------------------------------------------
 
@@ -158,6 +234,7 @@ CREATE TABLE `tblsales` (
   `products` varchar(50) NOT NULL,
   `quantity` varchar(50) NOT NULL,
   `totalcost` varchar(50) NOT NULL,
+  `discounted` varchar(20) NOT NULL,
   `datecreated` varchar(20) NOT NULL,
   `timecreated` varchar(20) NOT NULL,
   `createdby` varchar(50) NOT NULL
@@ -167,14 +244,23 @@ CREATE TABLE `tblsales` (
 -- Dumping data for table `tblsales`
 --
 
-INSERT INTO `tblsales` (`products`, `quantity`, `totalcost`, `datecreated`, `timecreated`, `createdby`) VALUES
-('Mucotuss Forte', '20', '140', '09/18/2025', '', 'admin'),
-('Neozep', '20', '100', '09/18/2025', '10:47 am', 'admin'),
-('Mucotuss Forte', '20', '140', '09/18/2025', '10:46 am', 'admin'),
-('Tuseran', '20', '140', '09/19/2025', '10:46 am', 'admin'),
-('Neozep', '20', '100', '09/19/2025', '10:47 am', 'admin'),
-('Mucotuss Forte', '1', '7.00', '09/19/2025', '11:35:14', 'admin'),
-('Neozep', '6', '30.00', '09/19/2025', '11:35:14', 'admin');
+INSERT INTO `tblsales` (`products`, `quantity`, `totalcost`, `discounted`, `datecreated`, `timecreated`, `createdby`) VALUES
+('Mucotuss Forte', '20', '140', '', '09/18/2025', '', 'admin'),
+('Neozep', '20', '100', '', '09/18/2025', '10:47 am', 'admin'),
+('Mucotuss Forte', '20', '140', '', '09/18/2025', '10:46 am', 'admin'),
+('Tuseran', '20', '140', '', '09/19/2025', '10:46 am', 'admin'),
+('Neozep', '20', '100', '', '09/19/2025', '10:47 am', 'admin'),
+('Mucotuss Forte', '1', '7.00', '', '09/19/2025', '11:35:14', 'admin'),
+('Neozep', '6', '30.00', '', '09/19/2025', '11:35:14', 'admin'),
+('Ascof Lagundi Syrup 60ml', '2', '180.00', '', '09/19/2025', '17:44:28', 'admin'),
+('Ascorbic Acid 500mg Tablet (Generic)', '1', '3.00', '', '09/19/2025', '17:44:28', 'admin'),
+('Alaxan FR Capsule', '3', '36.00', '', '09/19/2025', '17:44:28', 'admin'),
+('Alaxan FR Capsule', '1', '9.60', 'Yes', '09/24/2025', '15:01:56', 'admin'),
+('Ascof Lagundi Syrup 60ml', '1', '90.00', 'No', '09/24/2025', '15:03:54', 'admin'),
+('Alaxan FR Capsule', '2', '24.00', 'No', '09/24/2025', '15:03:54', 'admin'),
+('Ascof Lagundi Syrup 60ml', '1', '72.00', 'Yes', '09/24/2025', '15:31:16', 'admin'),
+('Biogesic Syrup 60ml', '1', '88.00', 'Yes', '09/24/2025', '15:31:16', 'admin'),
+('Ceelin Syrup 120ml', '1', '112.00', 'Yes', '09/24/2025', '15:31:16', 'admin');
 
 -- --------------------------------------------------------
 
