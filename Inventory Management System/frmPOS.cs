@@ -28,6 +28,9 @@ namespace Inventory_Management_System
         // Cart data storage
         private DataTable cartData;
 
+        // Track discount
+        private bool discountApplied = false;
+
         Class1 pos = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
         public frmPOS(string username)
@@ -75,6 +78,7 @@ namespace Inventory_Management_System
             btndelete.Enabled = hasCartSelection;
             btndeleteall.Enabled = hasCartItems;
             btnpurchase.Enabled = hasCartItems;
+            btndiscount.Enabled = hasCartItems; // Discount button enabled only if cart has items
 
             // Pagination buttons
             btnprodNext.Enabled = currentProductPage < totalProductPages;
@@ -111,11 +115,8 @@ namespace Inventory_Management_System
                 }
 
                 dgvproducts.DataSource = dtPage;
-
-                // Styling
                 StyleDataGridView(dgvproducts);
 
-                // Column formatting for products
                 if (dgvproducts.Columns.Contains("products"))
                 {
                     dgvproducts.Columns["products"].HeaderText = "Product Name";
@@ -138,7 +139,6 @@ namespace Inventory_Management_System
                 dgvproducts.ClearSelection();
                 selectedProductRow = -1;
 
-                // Update page info
                 if (totalProductRecords == 0)
                 {
                     lblPageInfoProd.Text = "No products found";
@@ -164,7 +164,6 @@ namespace Inventory_Management_System
                 totalCartPages = (int)Math.Ceiling(totalCartRecords / (double)cartPageSize);
                 if (totalCartPages == 0) totalCartPages = 1;
 
-                // Paging for cart
                 DataTable dtCartPage = cartData.Clone();
                 int startIndex = (currentCartPage - 1) * cartPageSize;
                 int endIndex = Math.Min(startIndex + cartPageSize, totalCartRecords);
@@ -175,11 +174,8 @@ namespace Inventory_Management_System
                 }
 
                 dgvcart.DataSource = dtCartPage;
-
-                // Styling
                 StyleDataGridView(dgvcart);
 
-                // Column formatting for cart
                 if (dgvcart.Columns.Contains("products"))
                 {
                     dgvcart.Columns["products"].HeaderText = "Product";
@@ -209,7 +205,6 @@ namespace Inventory_Management_System
                 dgvcart.ClearSelection();
                 selectedCartRow = -1;
 
-                // Update page info
                 if (totalCartRecords == 0)
                 {
                     lblPageInfoCart.Text = "Cart is empty";
@@ -252,7 +247,15 @@ namespace Inventory_Management_System
                         total += Convert.ToDecimal(row["subtotal"]);
                     }
                 }
+
+                // Apply discount if active
+                if (discountApplied && total > 0)
+                {
+                    total = total * 0.8m;
+                }
+
                 txttotal.Text = total.ToString("₱#,##0.00");
+                UpdateButtonStates();
             }
             catch (Exception ex)
             {
@@ -389,7 +392,6 @@ namespace Inventory_Management_System
 
                 if (result == DialogResult.Yes)
                 {
-                    // Find and remove from cart data
                     for (int i = cartData.Rows.Count - 1; i >= 0; i--)
                     {
                         if (cartData.Rows[i]["products"].ToString() == productName)
@@ -401,6 +403,12 @@ namespace Inventory_Management_System
 
                     LoadCart();
                     UpdateTotal();
+
+                    if (cartData.Rows.Count == 0)
+                    {
+                        discountApplied = false; // reset if empty
+                    }
+
                     MessageBox.Show("Item removed from cart.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -426,6 +434,7 @@ namespace Inventory_Management_System
                 if (result == DialogResult.Yes)
                 {
                     cartData.Clear();
+                    discountApplied = false; // reset
                     LoadCart();
                     UpdateTotal();
                     MessageBox.Show("Cart cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -437,72 +446,6 @@ namespace Inventory_Management_System
             }
         }
 
-        private void btnpurchase_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (cartData.Rows.Count == 0)
-                {
-                    MessageBox.Show("Cart is empty. Add products before purchasing.", "Empty Cart", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                decimal total = 0;
-                foreach (DataRow row in cartData.Rows)
-                {
-                    total += Convert.ToDecimal(row["subtotal"]);
-                }
-
-                DialogResult result = MessageBox.Show($"Confirm purchase?\nTotal Amount: {total:₱#,##0.00}",
-                    "Purchase Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    string currentDate = DateTime.Now.ToString("MM/dd/yyyy");
-                    string currentTime = DateTime.Now.ToString("HH:mm:ss");
-
-                    // Process each cart item
-                    foreach (DataRow row in cartData.Rows)
-                    {
-                        string productName = row["products"].ToString();
-                        int quantity = Convert.ToInt32(row["quantity"]);
-                        decimal subtotal = Convert.ToDecimal(row["subtotal"]);
-
-                        // Insert into sales table
-                        string insertSale = "INSERT INTO tblsales (products, quantity, totalcost, datecreated, timecreated, createdby) " +
-                            "VALUES ('" + productName.Replace("'", "''") + "', '" + quantity + "', '" + subtotal.ToString("F2") + "', '" +
-                            currentDate + "', '" + currentTime + "', '" + username.Replace("'", "''") + "')";
-
-                        pos.executeSQL(insertSale);
-
-                        // Update product stock
-                        string updateStock = "UPDATE tblproducts SET currentstock = CAST(currentstock AS UNSIGNED) - " + quantity +
-                            " WHERE products = '" + productName.Replace("'", "''") + "'";
-                        pos.executeSQL(updateStock);
-                    }
-
-                    // Log the transaction
-                    pos.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                        "VALUES ('" + currentDate + "', '" + currentTime + "', 'PURCHASE', 'POS', 'TOTAL: " +
-                        total.ToString("F2") + "', '" + username.Replace("'", "''") + "')");
-
-                    MessageBox.Show($"Purchase completed successfully!\nTotal: {total:₱#,##0.00}",
-                        "Purchase Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Clear cart and refresh
-                    cartData.Clear();
-                    LoadProducts(); // Refresh to show updated stock
-                    LoadCart();
-                    UpdateTotal();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "ERROR on btnpurchase_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        // Pagination handlers
         private void btnprodNext_Click(object sender, EventArgs e)
         {
             if (currentProductPage < totalProductPages)
@@ -539,7 +482,6 @@ namespace Inventory_Management_System
             }
         }
 
-        // Event handlers
         private void dgvproducts_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -616,6 +558,119 @@ namespace Inventory_Management_System
         private void txtquantity_TextChanged(object sender, EventArgs e)
         {
             UpdateButtonStates();
+        }
+
+        private void btndiscount_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cartData.Rows.Count == 0)
+                {
+                    MessageBox.Show("Cart is empty. Add products before applying discount.",
+                        "No Items", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (discountApplied)
+                {
+                    MessageBox.Show("Discount already applied.", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                decimal total = 0;
+                foreach (DataRow row in cartData.Rows)
+                {
+                    if (row["subtotal"] != null && row["subtotal"] != DBNull.Value)
+                    {
+                        total += Convert.ToDecimal(row["subtotal"]);
+                    }
+                }
+
+                DialogResult result = MessageBox.Show(
+                    $"Are you sure you want to give a 20% discount?\n\nOriginal Total: {total:₱#,##0.00}\nDiscounted Total: {(total * 0.8m):₱#,##0.00}",
+                    "Discount Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    discountApplied = true;
+                    UpdateTotal();
+                    MessageBox.Show("Discount applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR on btndiscount_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnpurchase_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cartData.Rows.Count == 0)
+                {
+                    MessageBox.Show("Cart is empty. Add products before purchasing.", "Empty Cart", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Calculate grand total (sum of subtotals), then apply discount if active for display/confirmation
+                decimal grandTotal = 0;
+                foreach (DataRow row in cartData.Rows)
+                {
+                    grandTotal += Convert.ToDecimal(row["subtotal"]);
+                }
+
+                decimal finalGrandTotal = discountApplied ? grandTotal * 0.8m : grandTotal;
+
+                DialogResult result = MessageBox.Show($"Confirm purchase?\nTotal Amount: {finalGrandTotal:₱#,##0.00}",
+                    "Purchase Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    string currentDate = DateTime.Now.ToString("MM/dd/yyyy");
+                    string currentTime = DateTime.Now.ToString("HH:mm:ss");
+                    string discountedFlag = discountApplied ? "Yes" : "No";
+
+                    // Insert each cart item. If discounted, store the discounted subtotal for that item.
+                    foreach (DataRow row in cartData.Rows)
+                    {
+                        string productName = row["products"].ToString();
+                        int quantity = Convert.ToInt32(row["quantity"]);
+                        decimal subtotal = Convert.ToDecimal(row["subtotal"]);
+                        decimal savedSubtotal = discountApplied ? Math.Round(subtotal * 0.8m, 2) : subtotal;
+
+                        // Insert into tblsales with discounted flag and the (possibly discounted) totalcost
+                        string insertSale = "INSERT INTO tblsales (products, quantity, totalcost, discounted, datecreated, timecreated, createdby) " +
+                            "VALUES ('" + productName.Replace("'", "''") + "', '" + quantity + "', '" + savedSubtotal.ToString("F2") + "', '" +
+                            discountedFlag + "', '" + currentDate + "', '" + currentTime + "', '" + username.Replace("'", "''") + "')";
+                        pos.executeSQL(insertSale);
+
+                        // Update product stock
+                        string updateStock = "UPDATE tblproducts SET currentstock = CAST(currentstock AS UNSIGNED) - " + quantity +
+                            " WHERE products = '" + productName.Replace("'", "''") + "'";
+                        pos.executeSQL(updateStock);
+                    }
+
+                    // Log the transaction; include discounted flag
+                    pos.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                        "VALUES ('" + currentDate + "', '" + currentTime + "', 'PURCHASE', 'POS', 'TOTAL: " +
+                        finalGrandTotal.ToString("F2") + " | DISCOUNTED: " + (discountApplied ? "Yes" : "No") + "', '" + username.Replace("'", "''") + "')");
+
+                    MessageBox.Show($"Purchase completed successfully!\nTotal: {finalGrandTotal:₱#,##0.00}",
+                        "Purchase Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Clear cart and reset discount
+                    cartData.Clear();
+                    discountApplied = false;
+                    LoadProducts(); // Refresh to show updated stock
+                    LoadCart();
+                    UpdateTotal();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR on btnpurchase_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

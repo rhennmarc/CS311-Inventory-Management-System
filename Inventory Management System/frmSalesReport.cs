@@ -77,14 +77,14 @@ namespace Inventory_Management_System
             {
                 string selectedDate = dateTimePicker1.Value.ToString("MM/dd/yyyy");
 
-                // Query for display (date + optional search)
+                // Query for display (date + optional search) — include discounted column
                 string where = "WHERE datecreated = '" + selectedDate.Replace("'", "''") + "' ";
                 if (!string.IsNullOrEmpty(search))
                 {
                     string s = search.Replace("'", "''");
-                    where += "AND (products LIKE '%" + s + "%' OR createdby LIKE '%" + s + "%') ";
+                    where += "AND (products LIKE '%" + s + "%' OR createdby LIKE '%" + s + "%' OR discounted LIKE '%" + s + "%') ";
                 }
-                string query = "SELECT products, quantity, totalcost, datecreated, timecreated, createdby FROM tblsales " +
+                string query = "SELECT products, quantity, totalcost, discounted, datecreated, timecreated, createdby FROM tblsales " +
                                where + " ORDER BY timecreated DESC";
 
                 DataTable dtAll = sales.GetData(query);
@@ -130,10 +130,15 @@ namespace Inventory_Management_System
                 if (dataGridView1.Columns.Contains("totalcost"))
                 {
                     dataGridView1.Columns["totalcost"].HeaderText = "Total";
-                    dataGridView1.Columns["totalcost"].Width = 100;
+                    dataGridView1.Columns["totalcost"].Width = 110;
                     dataGridView1.Columns["totalcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    // Some rows may store plain numeric strings — keep as string but format display if possible
-                    // We'll not change cell values here, just keep alignment
+                }
+                // NEW: discounted column
+                if (dataGridView1.Columns.Contains("discounted"))
+                {
+                    dataGridView1.Columns["discounted"].HeaderText = "Discounted";
+                    dataGridView1.Columns["discounted"].Width = 90;
+                    dataGridView1.Columns["discounted"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 }
                 if (dataGridView1.Columns.Contains("datecreated"))
                 {
@@ -206,7 +211,7 @@ namespace Inventory_Management_System
                         }
                     }
                 }
-                // Format with currency symbol (₱) just like your other forms
+                // Format with currency symbol (₱)
                 txttotal.Text = "₱" + grandTotal.ToString("N2");
             }
             catch (Exception ex)
