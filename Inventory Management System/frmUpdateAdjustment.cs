@@ -14,7 +14,7 @@ namespace Inventory_Management_System
         {
             InitializeComponent();
 
-            txtproduct.Text = product;
+            cmbproduct.Text = product; // ✅ combo instead of textbox
             txtquantity.Text = quantity;
             txtreason.Text = reason;
 
@@ -30,11 +30,11 @@ namespace Inventory_Management_System
             if (dt.Rows.Count > 0)
             {
                 DataRow row = dt.Rows[0];
-                txtproduct.Text = row["products"].ToString();
+                cmbproduct.Text = row["products"].ToString();
                 txtquantity.Text = row["quantity"].ToString();
                 txtreason.Text = row["reason"].ToString();
 
-                originalProduct = txtproduct.Text;
+                originalProduct = cmbproduct.Text;
             }
         }
 
@@ -46,14 +46,14 @@ namespace Inventory_Management_System
             errorcount = 0;
 
             // Validate product
-            if (string.IsNullOrEmpty(txtproduct.Text))
+            if (cmbproduct.SelectedIndex == -1 || string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
-                errorProvider1.SetError(txtproduct, "Product name is required.");
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
             // Validate quantity
-            if (string.IsNullOrEmpty(txtquantity.Text))
+            if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
             {
                 errorProvider1.SetError(txtquantity, "Quantity is required.");
                 errorcount++;
@@ -69,7 +69,7 @@ namespace Inventory_Management_System
             }
 
             // Validate reason
-            if (string.IsNullOrEmpty(txtreason.Text))
+            if (string.IsNullOrEmpty(txtreason.Text.Trim()))
             {
                 errorProvider1.SetError(txtreason, "Reason is required.");
                 errorcount++;
@@ -83,7 +83,7 @@ namespace Inventory_Management_System
                         "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dr == DialogResult.Yes)
                     {
-                        string product = txtproduct.Text.Replace("'", "''");
+                        string product = cmbproduct.Text.Replace("'", "''");
                         string quantity = txtquantity.Text.Replace("'", "''");
                         string reason = txtreason.Text.Replace("'", "''");
                         string user = string.IsNullOrEmpty(username) ? "" : username.Replace("'", "''");
@@ -129,12 +129,31 @@ namespace Inventory_Management_System
         private void frmUpdateAdjustment_Load(object sender, EventArgs e)
         {
             this.ActiveControl = titleLabel;
+
+            // Load products into combo
+            try
+            {
+                DataTable dt = updateadjustment.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                cmbproduct.Items.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    cmbproduct.Items.Add(row["products"].ToString());
+                }
+
+                cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
+                cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading products: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void txtproduct_TextChanged(object sender, EventArgs e)
+        private void cmbproduct_TextChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtproduct.Text))
-                errorProvider1.SetError(txtproduct, "");
+            if (!string.IsNullOrEmpty(cmbproduct.Text))
+                errorProvider1.SetError(cmbproduct, "");
         }
 
         private void txtquantity_TextChanged(object sender, EventArgs e)

@@ -36,7 +36,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.txtproduct = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -47,6 +46,7 @@
             this.btncancel = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.cmbproduct = new System.Windows.Forms.ComboBox();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
@@ -120,8 +120,8 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.cmbproduct);
             this.panel1.Controls.Add(this.pictureBox2);
-            this.panel1.Controls.Add(this.txtproduct);
             this.panel1.Location = new System.Drawing.Point(17, 46);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
@@ -137,18 +137,6 @@
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 10;
             this.pictureBox2.TabStop = false;
-            // 
-            // txtproduct
-            // 
-            this.txtproduct.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtproduct.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtproduct.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.txtproduct.Location = new System.Drawing.Point(44, 9);
-            this.txtproduct.Name = "txtproduct";
-            this.txtproduct.Size = new System.Drawing.Size(533, 20);
-            this.txtproduct.TabIndex = 0;
-            this.txtproduct.TextChanged += new System.EventHandler(this.txtproduct_TextChanged);
             // 
             // label3
             // 
@@ -270,6 +258,17 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // cmbproduct
+            // 
+            this.cmbproduct.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbproduct.FormattingEnabled = true;
+            this.cmbproduct.Location = new System.Drawing.Point(40, 5);
+            this.cmbproduct.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbproduct.Name = "cmbproduct";
+            this.cmbproduct.Size = new System.Drawing.Size(537, 28);
+            this.cmbproduct.TabIndex = 1012;
+            this.cmbproduct.TextChanged += new System.EventHandler(this.cmbproduct_TextChanged);
+            // 
             // frmUpdateAdjustment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -291,7 +290,6 @@
             this.cardPanel.ResumeLayout(false);
             this.cardPanel.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -312,7 +310,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.TextBox txtproduct;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.PictureBox pictureBox3;
@@ -323,5 +320,6 @@
         private System.Windows.Forms.Button btncancel;
         private System.Windows.Forms.Button btnsave;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ComboBox cmbproduct;
     }
 }

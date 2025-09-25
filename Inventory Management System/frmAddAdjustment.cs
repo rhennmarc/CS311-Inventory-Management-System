@@ -26,9 +26,9 @@ namespace Inventory_Management_System
             // --- VALIDATIONS ---
 
             // Product (required)
-            if (string.IsNullOrEmpty(txtproduct.Text.Trim()))
+            if (cmbproduct.SelectedIndex == -1 || string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
-                errorProvider1.SetError(txtproduct, "Product name is required.");
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
@@ -65,7 +65,7 @@ namespace Inventory_Management_System
 
                     if (dr == DialogResult.Yes)
                     {
-                        string product = txtproduct.Text.Trim().Replace("'", "''");
+                        string product = cmbproduct.Text.Trim().Replace("'", "''");
                         string quantity = txtquantity.Text.Trim().Replace("'", "''");
                         string reason = txtreason.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
@@ -102,17 +102,44 @@ namespace Inventory_Management_System
             this.Close();
         }
 
-        // --- Remove error when user starts typing ---
-        private void txtproduct_KeyPress(object sender, KeyPressEventArgs e)
+        // --- LOAD COMBOBOX ---
+        private void frmAddAdjustment_Load(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(txtproduct.Text))
-                errorProvider1.SetError(txtproduct, "");
+            try
+            {
+                DataTable dt = newAdjustment.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                cmbproduct.Items.Clear();
+                foreach (DataRow row in dt.Rows)
+                {
+                    cmbproduct.Items.Add(row["products"].ToString());
+                }
+
+                cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
+                cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
+                cmbproduct.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading products: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // --- Remove error when user starts typing/selecting ---
+        private void cmbproduct_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cmbproduct.Text))
+                errorProvider1.SetError(cmbproduct, "");
         }
 
         private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!string.IsNullOrEmpty(txtquantity.Text))
                 errorProvider1.SetError(txtquantity, "");
+
+            // Only allow digits
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
         }
 
         private void txtreason_KeyPress(object sender, KeyPressEventArgs e)
