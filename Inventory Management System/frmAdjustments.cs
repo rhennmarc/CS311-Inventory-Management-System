@@ -24,6 +24,28 @@ namespace Inventory_Management_System
 
         private void frmAdjustments_Load(object sender, EventArgs e)
         {
+            // Initialize duration combobox
+            cmbduration.Items.AddRange(new string[] { "Daily", "Weekly", "Monthly", "Yearly", "All Records" });
+            cmbduration.SelectedIndex = 0;
+
+            // DatePicker setup: default to today, format MM/dd/yyyy
+            dateTimePicker1.Format = DateTimePickerFormat.Custom;
+            dateTimePicker1.CustomFormat = "MM/dd/yyyy";
+            dateTimePicker1.Value = DateTime.Today;
+
+            // Event handlers for filtering
+            dateTimePicker1.ValueChanged += (s, ev) =>
+            {
+                currentPage = 1;
+                LoadAdjustments();
+            };
+
+            cmbduration.SelectedIndexChanged += (s, ev) =>
+            {
+                currentPage = 1;
+                LoadAdjustments();
+            };
+
             LoadAdjustments();
             UpdateButtonStates();
         }
@@ -40,18 +62,25 @@ namespace Inventory_Management_System
         {
             try
             {
-                string query = @"SELECT products, quantity, reason, createdby, dateadjusted 
-                                 FROM tbladjustment ";
+                string duration = cmbduration.SelectedItem?.ToString() ?? "Daily";
+                DateTime selectedDate = dateTimePicker1.Value;
+
+                string query = @"SELECT products, quantity, unitprice, reason, createdby, dateadjusted, timeadjusted 
+                                 FROM tbladjustment 
+                                 WHERE " + GetDurationWhereClause(duration, selectedDate);
+
                 if (!string.IsNullOrEmpty(search))
                 {
-                    query += "WHERE products LIKE '%" + search + "%' OR reason LIKE '%" + search + "%' ";
+                    query += " AND (products LIKE '%" + search.Replace("'", "''") + "%' OR reason LIKE '%" + search.Replace("'", "''") + "%') ";
                 }
-                query += "ORDER BY dateadjusted DESC";
+                query += " ORDER BY dateadjusted DESC, timeadjusted DESC";
 
                 DataTable dtAll = adjustments.GetData(query);
 
                 totalRecords = dtAll.Rows.Count;
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+                if (totalPages == 0) totalPages = 1;
+                if (currentPage > totalPages) currentPage = totalPages;
 
                 // Paging
                 DataTable dtPage = dtAll.Clone();
@@ -83,6 +112,16 @@ namespace Inventory_Management_System
                     dataGridView1.Columns["quantity"].HeaderText = "Quantity";
                     dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dataGridView1.Columns["quantity"].Width = 100;
+
+                    // Format quantity to show + sign for positive values
+                    dataGridView1.Columns["quantity"].DefaultCellStyle.Format = "+0;-#";
+                }
+                if (dataGridView1.Columns.Contains("unitprice"))
+                {
+                    dataGridView1.Columns["unitprice"].HeaderText = "Unit Price";
+                    dataGridView1.Columns["unitprice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                    dataGridView1.Columns["unitprice"].DefaultCellStyle.Format = "₱#,##0.00";
+                    dataGridView1.Columns["unitprice"].Width = 120;
                 }
                 if (dataGridView1.Columns.Contains("reason"))
                 {
@@ -100,6 +139,10 @@ namespace Inventory_Management_System
                     dataGridView1.Columns["dateadjusted"].DefaultCellStyle.Format = "MM/dd/yyyy";
                     dataGridView1.Columns["dateadjusted"].Width = 120;
                 }
+                if (dataGridView1.Columns.Contains("timeadjusted"))
+                {
+                    dataGridView1.Columns["timeadjusted"].Visible = false; // Hide time column
+                }
 
                 dataGridView1.ClearSelection();
                 row = -1;
@@ -112,7 +155,7 @@ namespace Inventory_Management_System
                 }
                 else
                 {
-                    lblPageInfo.Text = $"Page {currentPage} of {totalPages}";
+                    lblPageInfo.Text = $"Page {currentPage} of {totalPages} ({totalRecords} adjustments)";
                 }
 
                 UpdateButtonStates();
@@ -123,9 +166,43 @@ namespace Inventory_Management_System
             }
         }
 
+        private string GetDurationWhereClause(string duration, DateTime selectedDate)
+        {
+            switch (duration)
+            {
+                case "Daily":
+                    string dailyDate = selectedDate.ToString("MM/dd/yyyy");
+                    return "dateadjusted = '" + dailyDate.Replace("'", "''") + "'";
+
+                case "Weekly":
+                    DateTime startOfWeek = selectedDate.AddDays(-(int)selectedDate.DayOfWeek);
+                    DateTime endOfWeek = startOfWeek.AddDays(6);
+                    return "STR_TO_DATE(dateadjusted, '%m/%d/%Y') BETWEEN '" + startOfWeek.ToString("yyyy-MM-dd") + "' AND '" + endOfWeek.ToString("yyyy-MM-dd") + "'";
+
+                case "Monthly":
+                    DateTime startOfMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
+                    DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
+                    return "STR_TO_DATE(dateadjusted, '%m/%d/%Y') BETWEEN '" + startOfMonth.ToString("yyyy-MM-dd") + "' AND '" + endOfMonth.ToString("yyyy-MM-dd") + "'";
+
+                case "Yearly":
+                    DateTime startOfYear = new DateTime(selectedDate.Year, 1, 1);
+                    DateTime endOfYear = new DateTime(selectedDate.Year, 12, 31);
+                    return "STR_TO_DATE(dateadjusted, '%m/%d/%Y') BETWEEN '" + startOfYear.ToString("yyyy-MM-dd") + "' AND '" + endOfYear.ToString("yyyy-MM-dd") + "'";
+
+                case "All Records":
+                    return "1=1"; // Return all records
+
+                default:
+                    return "1=1";
+            }
+        }
+
         private void btnrefresh_Click(object sender, EventArgs e)
         {
             currentPage = 1;
+            txtsearch.Text = "";
+            dateTimePicker1.Value = DateTime.Today;
+            cmbduration.SelectedIndex = 0;
             LoadAdjustments();
         }
 
@@ -147,11 +224,15 @@ namespace Inventory_Management_System
                 }
 
                 string product = dataGridView1.Rows[row].Cells["products"].Value.ToString();
-                string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
+                string quantity = dataGridView1.Rows[row].Cells["quantity"].Value?.ToString() ?? "";
+                string unitprice = dataGridView1.Rows[row].Cells["unitprice"].Value?.ToString() ?? "";
                 string reason = dataGridView1.Rows[row].Cells["reason"].Value.ToString();
                 string createdby = dataGridView1.Rows[row].Cells["createdby"].Value.ToString();
+                string dateadjusted = dataGridView1.Rows[row].Cells["dateadjusted"].Value.ToString();
+                string timeadjusted = dataGridView1.Rows[row].Cells["timeadjusted"].Value.ToString();
 
-                frmUpdateAdjustment updateForm = new frmUpdateAdjustment(product, quantity, reason, createdby, username);
+                frmUpdateAdjustment updateForm = new frmUpdateAdjustment(
+                    product, quantity, unitprice, reason, createdby, username, dateadjusted, timeadjusted);
                 updateForm.FormClosed += (s, args) => { LoadAdjustments(); };
                 updateForm.Show();
             }
@@ -174,13 +255,22 @@ namespace Inventory_Management_System
 
                 string product = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string reason = dataGridView1.Rows[row].Cells["reason"].Value.ToString();
+                string quantity = dataGridView1.Rows[row].Cells["quantity"].Value?.ToString() ?? "";
+                string unitprice = dataGridView1.Rows[row].Cells["unitprice"].Value?.ToString() ?? "";
+                string dateadjusted = dataGridView1.Rows[row].Cells["dateadjusted"].Value.ToString();
+                string timeadjusted = dataGridView1.Rows[row].Cells["timeadjusted"].Value.ToString();
 
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete this adjustment?", "Confirmation",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (dr == DialogResult.Yes)
                 {
-                    adjustments.executeSQL("DELETE FROM tbladjustment WHERE products = '" + product + "' AND reason = '" + reason + "'");
+                    // Use dateadjusted and timeadjusted to uniquely identify the record
+                    string deleteQuery = "DELETE FROM tbladjustment WHERE products = '" + product.Replace("'", "''") +
+                                         "' AND dateadjusted = '" + dateadjusted.Replace("'", "''") +
+                                         "' AND timeadjusted = '" + timeadjusted.Replace("'", "''") + "'";
+
+                    adjustments.executeSQL(deleteQuery);
 
                     if (adjustments.rowAffected > 0)
                     {
@@ -189,7 +279,12 @@ namespace Inventory_Management_System
                         // Log deletion
                         adjustments.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
-                            "', 'DELETE', 'ADJUSTMENT MANAGEMENT', '" + product + "', '" + username + "')");
+                            "', 'DELETE', 'ADJUSTMENT MANAGEMENT', 'Product: " + product + "', '" + username + "')");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No adjustment record was deleted. The record may have been modified or deleted by another user.",
+                            "Deletion Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
                     LoadAdjustments();
@@ -244,9 +339,64 @@ namespace Inventory_Management_System
 
         private void txtsearch_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == 13)
+            if (e.KeyChar == 13) // Enter key
             {
                 btnsearch_Click(sender, e);
+            }
+        }
+
+        // Handle cell formatting to color code positive/negative quantities
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "quantity" && e.Value != null)
+            {
+                try
+                {
+                    // Parse the quantity value
+                    if (int.TryParse(e.Value.ToString(), out int quantity))
+                    {
+                        if (quantity > 0)
+                        {
+                            e.CellStyle.ForeColor = System.Drawing.Color.Green;
+                            e.CellStyle.Font = new System.Drawing.Font(dataGridView1.Font, System.Drawing.FontStyle.Bold);
+                        }
+                        else if (quantity < 0)
+                        {
+                            e.CellStyle.ForeColor = System.Drawing.Color.Red;
+                            e.CellStyle.Font = new System.Drawing.Font(dataGridView1.Font, System.Drawing.FontStyle.Bold);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore formatting errors
+                }
+            }
+        }
+
+        // New method to handle selection change in data grid
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.CurrentCell != null)
+                {
+                    int idx = dataGridView1.CurrentCell.RowIndex;
+                    if (idx >= 0 && idx < dataGridView1.Rows.Count)
+                        row = idx;
+                    else
+                        row = -1;
+                }
+                else
+                {
+                    row = -1;
+                }
+                UpdateButtonStates();
+            }
+            catch
+            {
+                row = -1;
+                UpdateButtonStates();
             }
         }
     }

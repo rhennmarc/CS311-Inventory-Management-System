@@ -33,7 +33,6 @@
             this.lblPageInfoProd = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtquantity = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvcart = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,6 +47,8 @@
             this.btnprodPrev = new System.Windows.Forms.Button();
             this.btnprodNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
+            this.btnpurchase = new System.Windows.Forms.Button();
+            this.btndiscount = new System.Windows.Forms.Button();
             this.btndeleteall = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
             this.btnadd = new System.Windows.Forms.Button();
@@ -58,8 +59,11 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.btndiscount = new System.Windows.Forms.Button();
-            this.btnpurchase = new System.Windows.Forms.Button();
+            this.numquantity = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtpayment = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtchange = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvcart)).BeginInit();
@@ -71,6 +75,7 @@
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.headerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).BeginInit();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -89,10 +94,14 @@
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.label6);
+            this.contentPanel.Controls.Add(this.txtchange);
+            this.contentPanel.Controls.Add(this.label5);
+            this.contentPanel.Controls.Add(this.txtpayment);
+            this.contentPanel.Controls.Add(this.numquantity);
             this.contentPanel.Controls.Add(this.lblPageInfoProd);
             this.contentPanel.Controls.Add(this.label4);
             this.contentPanel.Controls.Add(this.label3);
-            this.contentPanel.Controls.Add(this.txtquantity);
             this.contentPanel.Controls.Add(this.label2);
             this.contentPanel.Controls.Add(this.dgvcart);
             this.contentPanel.Controls.Add(this.label1);
@@ -137,16 +146,6 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Quantity";
             // 
-            // txtquantity
-            // 
-            this.txtquantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtquantity.Location = new System.Drawing.Point(966, 86);
-            this.txtquantity.Name = "txtquantity";
-            this.txtquantity.Size = new System.Drawing.Size(115, 31);
-            this.txtquantity.TabIndex = 7;
-            this.txtquantity.TextChanged += new System.EventHandler(this.txtquantity_TextChanged);
-            this.txtquantity.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtquantity_KeyPress);
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -187,7 +186,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(999, 410);
+            this.label1.Location = new System.Drawing.Point(999, 421);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 19);
             this.label1.TabIndex = 4;
@@ -197,7 +196,7 @@
             // 
             this.txttotal.Enabled = false;
             this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttotal.Location = new System.Drawing.Point(966, 438);
+            this.txttotal.Location = new System.Drawing.Point(966, 443);
             this.txttotal.Name = "txttotal";
             this.txttotal.Size = new System.Drawing.Size(115, 31);
             this.txttotal.TabIndex = 2;
@@ -375,6 +374,46 @@
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
             // 
+            // btnpurchase
+            // 
+            this.btnpurchase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.btnpurchase.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnpurchase.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnpurchase.FlatAppearance.BorderSize = 0;
+            this.btnpurchase.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnpurchase.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnpurchase.ForeColor = System.Drawing.Color.White;
+            this.btnpurchase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnpurchase.ImageIndex = 0;
+            this.btnpurchase.Location = new System.Drawing.Point(10, 188);
+            this.btnpurchase.Name = "btnpurchase";
+            this.btnpurchase.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnpurchase.Size = new System.Drawing.Size(140, 40);
+            this.btnpurchase.TabIndex = 7;
+            this.btnpurchase.Text = "&Purchase";
+            this.btnpurchase.UseVisualStyleBackColor = false;
+            this.btnpurchase.Click += new System.EventHandler(this.btnpurchase_Click);
+            // 
+            // btndiscount
+            // 
+            this.btndiscount.BackColor = System.Drawing.Color.Green;
+            this.btndiscount.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btndiscount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btndiscount.FlatAppearance.BorderSize = 0;
+            this.btndiscount.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btndiscount.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btndiscount.ForeColor = System.Drawing.Color.White;
+            this.btndiscount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btndiscount.ImageIndex = 0;
+            this.btndiscount.Location = new System.Drawing.Point(10, 148);
+            this.btndiscount.Name = "btndiscount";
+            this.btndiscount.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btndiscount.Size = new System.Drawing.Size(140, 40);
+            this.btndiscount.TabIndex = 6;
+            this.btndiscount.Text = "&Discount (20%)";
+            this.btndiscount.UseVisualStyleBackColor = false;
+            this.btndiscount.Click += new System.EventHandler(this.btndiscount_Click);
+            // 
             // btndeleteall
             // 
             this.btndeleteall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
@@ -519,45 +558,53 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "POS";
             // 
-            // btndiscount
+            // numquantity
             // 
-            this.btndiscount.BackColor = System.Drawing.Color.Green;
-            this.btndiscount.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btndiscount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btndiscount.FlatAppearance.BorderSize = 0;
-            this.btndiscount.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btndiscount.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btndiscount.ForeColor = System.Drawing.Color.White;
-            this.btndiscount.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btndiscount.ImageIndex = 0;
-            this.btndiscount.Location = new System.Drawing.Point(10, 148);
-            this.btndiscount.Name = "btndiscount";
-            this.btndiscount.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btndiscount.Size = new System.Drawing.Size(140, 40);
-            this.btndiscount.TabIndex = 6;
-            this.btndiscount.Text = "&Discount (20%)";
-            this.btndiscount.UseVisualStyleBackColor = false;
-            this.btndiscount.Click += new System.EventHandler(this.btndiscount_Click);
+            this.numquantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numquantity.Location = new System.Drawing.Point(966, 86);
+            this.numquantity.Name = "numquantity";
+            this.numquantity.Size = new System.Drawing.Size(115, 31);
+            this.numquantity.TabIndex = 11;
+            this.numquantity.ValueChanged += new System.EventHandler(this.numquantity_ValueChanged);
             // 
-            // btnpurchase
+            // label5
             // 
-            this.btnpurchase.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btnpurchase.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnpurchase.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnpurchase.FlatAppearance.BorderSize = 0;
-            this.btnpurchase.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnpurchase.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnpurchase.ForeColor = System.Drawing.Color.White;
-            this.btnpurchase.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnpurchase.ImageIndex = 0;
-            this.btnpurchase.Location = new System.Drawing.Point(10, 188);
-            this.btnpurchase.Name = "btnpurchase";
-            this.btnpurchase.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnpurchase.Size = new System.Drawing.Size(140, 40);
-            this.btnpurchase.TabIndex = 7;
-            this.btnpurchase.Text = "&Purchase";
-            this.btnpurchase.UseVisualStyleBackColor = false;
-            this.btnpurchase.Click += new System.EventHandler(this.btnpurchase_Click);
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label5.Location = new System.Drawing.Point(991, 271);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(68, 19);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Payment";
+            // 
+            // txtpayment
+            // 
+            this.txtpayment.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtpayment.Location = new System.Drawing.Point(967, 293);
+            this.txtpayment.Name = "txtpayment";
+            this.txtpayment.Size = new System.Drawing.Size(115, 31);
+            this.txtpayment.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label6.Location = new System.Drawing.Point(997, 341);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(59, 19);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Change";
+            // 
+            // txtchange
+            // 
+            this.txtchange.Enabled = false;
+            this.txtchange.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtchange.Location = new System.Drawing.Point(966, 363);
+            this.txtchange.Name = "txtchange";
+            this.txtchange.Size = new System.Drawing.Size(115, 31);
+            this.txtchange.TabIndex = 14;
             // 
             // frmPOS
             // 
@@ -585,6 +632,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -594,7 +642,6 @@
         private System.Windows.Forms.Panel mainPanel;
         private System.Windows.Forms.Panel contentPanel;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtquantity;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvcart;
         private System.Windows.Forms.Label label1;
@@ -623,5 +670,10 @@
         private System.Windows.Forms.Button btndeleteall;
         private System.Windows.Forms.Button btndiscount;
         private System.Windows.Forms.Button btnpurchase;
+        private System.Windows.Forms.NumericUpDown numquantity;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtchange;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtpayment;
     }
 }

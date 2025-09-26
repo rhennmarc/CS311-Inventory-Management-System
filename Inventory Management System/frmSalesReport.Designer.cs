@@ -39,10 +39,14 @@
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
+            this.btnexport = new System.Windows.Forms.Button();
+            this.btnview = new System.Windows.Forms.Button();
             this.btnrefresh = new System.Windows.Forms.Button();
             this.btndeleteall = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
             this.searchPanel = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cmbduration = new System.Windows.Forms.ComboBox();
             this.btnsearch = new System.Windows.Forms.Button();
             this.txtsearch = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -72,7 +76,7 @@
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
+            this.mainPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
             this.mainPanel.Size = new System.Drawing.Size(1211, 647);
             this.mainPanel.TabIndex = 3;
             // 
@@ -94,7 +98,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(868, 35);
+            this.label1.Location = new System.Drawing.Point(808, 36);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 19);
             this.label1.TabIndex = 6;
@@ -104,15 +108,15 @@
             // 
             this.txttotal.Enabled = false;
             this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttotal.Location = new System.Drawing.Point(823, 57);
+            this.txttotal.Location = new System.Drawing.Point(724, 58);
             this.txttotal.Name = "txttotal";
-            this.txttotal.Size = new System.Drawing.Size(142, 31);
+            this.txttotal.Size = new System.Drawing.Size(223, 31);
             this.txttotal.TabIndex = 5;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(688, 448);
+            this.lblPageInfo.Location = new System.Drawing.Point(577, 448);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -138,8 +142,9 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 35;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(796, 425);
+            this.dataGridView1.Size = new System.Drawing.Size(676, 425);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
             // actionPanel
             // 
@@ -148,7 +153,7 @@
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(991, 160);
             this.actionPanel.Name = "actionPanel";
-            this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
+            this.actionPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
             this.actionPanel.TabIndex = 3;
             // 
@@ -159,9 +164,9 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 183);
+            this.groupBox1.Location = new System.Drawing.Point(20, 269);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.groupBox1.Size = new System.Drawing.Size(160, 125);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
@@ -209,6 +214,8 @@
             // 
             // actionGroupBox
             // 
+            this.actionGroupBox.Controls.Add(this.btnexport);
+            this.actionGroupBox.Controls.Add(this.btnview);
             this.actionGroupBox.Controls.Add(this.btnrefresh);
             this.actionGroupBox.Controls.Add(this.btndeleteall);
             this.actionGroupBox.Controls.Add(this.btndelete);
@@ -217,11 +224,51 @@
             this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
-            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 163);
+            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 249);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
+            // 
+            // btnexport
+            // 
+            this.btnexport.BackColor = System.Drawing.Color.Green;
+            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnexport.FlatAppearance.BorderSize = 0;
+            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnexport.ForeColor = System.Drawing.Color.White;
+            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnexport.ImageIndex = 0;
+            this.btnexport.Location = new System.Drawing.Point(10, 188);
+            this.btnexport.Name = "btnexport";
+            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnexport.Size = new System.Drawing.Size(140, 40);
+            this.btnexport.TabIndex = 5;
+            this.btnexport.Text = "&Export";
+            this.btnexport.UseVisualStyleBackColor = false;
+            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
+            // 
+            // btnview
+            // 
+            this.btnview.BackColor = System.Drawing.Color.DimGray;
+            this.btnview.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnview.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnview.FlatAppearance.BorderSize = 0;
+            this.btnview.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnview.ForeColor = System.Drawing.Color.White;
+            this.btnview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnview.ImageIndex = 0;
+            this.btnview.Location = new System.Drawing.Point(10, 148);
+            this.btnview.Name = "btnview";
+            this.btnview.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnview.Size = new System.Drawing.Size(140, 40);
+            this.btnview.TabIndex = 4;
+            this.btnview.Text = "&View";
+            this.btnview.UseVisualStyleBackColor = false;
+            this.btnview.Click += new System.EventHandler(this.btnview_Click);
             // 
             // btnrefresh
             // 
@@ -287,6 +334,8 @@
             // 
             this.searchPanel.BackColor = System.Drawing.Color.White;
             this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.searchPanel.Controls.Add(this.label3);
+            this.searchPanel.Controls.Add(this.cmbduration);
             this.searchPanel.Controls.Add(this.btnsearch);
             this.searchPanel.Controls.Add(this.txtsearch);
             this.searchPanel.Controls.Add(this.label2);
@@ -296,9 +345,29 @@
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
-            this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
+            this.searchPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
             this.searchPanel.Size = new System.Drawing.Size(1171, 80);
             this.searchPanel.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label3.Location = new System.Drawing.Point(549, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 19);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Duration:";
+            // 
+            // cmbduration
+            // 
+            this.cmbduration.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbduration.FormattingEnabled = true;
+            this.cmbduration.Location = new System.Drawing.Point(626, 26);
+            this.cmbduration.Name = "cmbduration";
+            this.cmbduration.Size = new System.Drawing.Size(181, 28);
+            this.cmbduration.TabIndex = 8;
             // 
             // btnsearch
             // 
@@ -309,7 +378,7 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(690, 25);
+            this.btnsearch.Location = new System.Drawing.Point(426, 25);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(110, 35);
             this.btnsearch.TabIndex = 7;
@@ -324,7 +393,7 @@
             this.txtsearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtsearch.Location = new System.Drawing.Point(135, 29);
             this.txtsearch.Name = "txtsearch";
-            this.txtsearch.Size = new System.Drawing.Size(534, 27);
+            this.txtsearch.Size = new System.Drawing.Size(285, 27);
             this.txtsearch.TabIndex = 6;
             // 
             // label2
@@ -341,7 +410,7 @@
             // dateTimePicker1
             // 
             this.dateTimePicker1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(890, 27);
+            this.dateTimePicker1.Location = new System.Drawing.Point(872, 27);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(250, 27);
             this.dateTimePicker1.TabIndex = 4;
@@ -351,7 +420,7 @@
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.lblSearch.Location = new System.Drawing.Point(840, 31);
+            this.lblSearch.Location = new System.Drawing.Point(822, 31);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(44, 19);
             this.lblSearch.TabIndex = 0;
@@ -440,5 +509,9 @@
         private System.Windows.Forms.Button btnsearch;
         private System.Windows.Forms.TextBox txtsearch;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnview;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cmbduration;
+        private System.Windows.Forms.Button btnexport;
     }
 }

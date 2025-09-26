@@ -35,6 +35,7 @@
             this.cardPanel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cmbproduct = new System.Windows.Forms.ComboBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -46,7 +47,14 @@
             this.btncancel = new System.Windows.Forms.Button();
             this.btnsave = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.cmbproduct = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.txtprice = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.cmbaction = new System.Windows.Forms.ComboBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
@@ -56,6 +64,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.panel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.panel4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -94,6 +106,10 @@
             // 
             this.cardPanel.BackColor = System.Drawing.Color.White;
             this.cardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cardPanel.Controls.Add(this.label4);
+            this.cardPanel.Controls.Add(this.panel4);
+            this.cardPanel.Controls.Add(this.label1);
+            this.cardPanel.Controls.Add(this.panel3);
             this.cardPanel.Controls.Add(this.label2);
             this.cardPanel.Controls.Add(this.panel1);
             this.cardPanel.Controls.Add(this.label3);
@@ -103,7 +119,7 @@
             this.cardPanel.Location = new System.Drawing.Point(24, 146);
             this.cardPanel.Name = "cardPanel";
             this.cardPanel.Padding = new System.Windows.Forms.Padding(8);
-            this.cardPanel.Size = new System.Drawing.Size(648, 402);
+            this.cardPanel.Size = new System.Drawing.Size(648, 567);
             this.cardPanel.TabIndex = 1012;
             // 
             // label2
@@ -127,6 +143,17 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(599, 40);
             this.panel1.TabIndex = 3;
+            // 
+            // cmbproduct
+            // 
+            this.cmbproduct.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbproduct.FormattingEnabled = true;
+            this.cmbproduct.Location = new System.Drawing.Point(40, 5);
+            this.cmbproduct.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbproduct.Name = "cmbproduct";
+            this.cmbproduct.Size = new System.Drawing.Size(537, 28);
+            this.cmbproduct.TabIndex = 1012;
+            this.cmbproduct.TextChanged += new System.EventHandler(this.cmbproduct_TextChanged);
             // 
             // pictureBox2
             // 
@@ -187,7 +214,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.label7.Location = new System.Drawing.Point(13, 170);
+            this.label7.Location = new System.Drawing.Point(13, 320);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(57, 19);
             this.label7.TabIndex = 38;
@@ -198,7 +225,7 @@
             this.panel6.BackColor = System.Drawing.Color.White;
             this.panel6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel6.Controls.Add(this.txtreason);
-            this.panel6.Location = new System.Drawing.Point(17, 191);
+            this.panel6.Location = new System.Drawing.Point(17, 341);
             this.panel6.Margin = new System.Windows.Forms.Padding(2);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(599, 199);
@@ -228,7 +255,7 @@
             this.btncancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btncancel.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btncancel.ForeColor = System.Drawing.Color.White;
-            this.btncancel.Location = new System.Drawing.Point(352, 562);
+            this.btncancel.Location = new System.Drawing.Point(352, 725);
             this.btncancel.Name = "btncancel";
             this.btncancel.Size = new System.Drawing.Size(305, 40);
             this.btncancel.TabIndex = 1011;
@@ -246,7 +273,7 @@
             this.btnsave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsave.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnsave.ForeColor = System.Drawing.Color.White;
-            this.btnsave.Location = new System.Drawing.Point(28, 562);
+            this.btnsave.Location = new System.Drawing.Point(28, 725);
             this.btnsave.Name = "btnsave";
             this.btnsave.Size = new System.Drawing.Size(305, 40);
             this.btnsave.TabIndex = 1010;
@@ -258,22 +285,99 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // cmbproduct
+            // label1
             // 
-            this.cmbproduct.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbproduct.FormattingEnabled = true;
-            this.cmbproduct.Location = new System.Drawing.Point(40, 5);
-            this.cmbproduct.Margin = new System.Windows.Forms.Padding(2);
-            this.cmbproduct.Name = "cmbproduct";
-            this.cmbproduct.Size = new System.Drawing.Size(537, 28);
-            this.cmbproduct.TabIndex = 1012;
-            this.cmbproduct.TextChanged += new System.EventHandler(this.cmbproduct_TextChanged);
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.label1.Location = new System.Drawing.Point(13, 248);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(43, 19);
+            this.label1.TabIndex = 42;
+            this.label1.Text = "Price";
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.White;
+            this.panel3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel3.Controls.Add(this.pictureBox4);
+            this.panel3.Controls.Add(this.txtprice);
+            this.panel3.Location = new System.Drawing.Point(17, 270);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(600, 40);
+            this.panel3.TabIndex = 41;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Location = new System.Drawing.Point(10, 5);
+            this.pictureBox4.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(26, 26);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 10;
+            this.pictureBox4.TabStop = false;
+            // 
+            // txtprice
+            // 
+            this.txtprice.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtprice.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtprice.Font = new System.Drawing.Font("Segoe UI", 11F);
+            this.txtprice.Location = new System.Drawing.Point(44, 9);
+            this.txtprice.MaxLength = 100;
+            this.txtprice.Name = "txtprice";
+            this.txtprice.Size = new System.Drawing.Size(533, 20);
+            this.txtprice.TabIndex = 0;
+            this.txtprice.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtprice_KeyPress);
+            this.txtprice.Leave += new System.EventHandler(this.txtprice_Leave);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.label4.Location = new System.Drawing.Point(13, 172);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(137, 19);
+            this.label4.TabIndex = 44;
+            this.label4.Text = "Action for Quantity";
+            // 
+            // panel4
+            // 
+            this.panel4.BackColor = System.Drawing.Color.White;
+            this.panel4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel4.Controls.Add(this.cmbaction);
+            this.panel4.Controls.Add(this.pictureBox5);
+            this.panel4.Location = new System.Drawing.Point(17, 194);
+            this.panel4.Margin = new System.Windows.Forms.Padding(2);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(599, 40);
+            this.panel4.TabIndex = 43;
+            // 
+            // cmbaction
+            // 
+            this.cmbaction.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbaction.FormattingEnabled = true;
+            this.cmbaction.Location = new System.Drawing.Point(40, 5);
+            this.cmbaction.Margin = new System.Windows.Forms.Padding(2);
+            this.cmbaction.Name = "cmbaction";
+            this.cmbaction.Size = new System.Drawing.Size(537, 28);
+            this.cmbaction.TabIndex = 1011;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Location = new System.Drawing.Point(10, 5);
+            this.pictureBox5.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(26, 26);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 10;
+            this.pictureBox5.TabStop = false;
             // 
             // frmUpdateAdjustment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(686, 608);
+            this.ClientSize = new System.Drawing.Size(686, 777);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.cardPanel);
             this.Controls.Add(this.btncancel);
@@ -297,6 +401,11 @@
             this.panel6.ResumeLayout(false);
             this.panel6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.panel4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -321,5 +430,13 @@
         private System.Windows.Forms.Button btnsave;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ComboBox cmbproduct;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.TextBox txtprice;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.ComboBox cmbaction;
+        private System.Windows.Forms.PictureBox pictureBox5;
     }
 }

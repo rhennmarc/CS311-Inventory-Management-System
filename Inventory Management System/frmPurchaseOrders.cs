@@ -1,7 +1,10 @@
 ﻿using inventory_management;
 using System;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -23,6 +26,10 @@ namespace Inventory_Management_System
             InitializeComponent();
             this.username = username;
             this.selectedSupplier = supplierName;
+
+            // Initialize status filter combobox
+            InitializeStatusFilter();
+
             // Set the title label to show selected supplier
             if (!string.IsNullOrEmpty(selectedSupplier))
             {
@@ -34,6 +41,24 @@ namespace Inventory_Management_System
             }
         }
 
+        private void InitializeStatusFilter()
+        {
+            // Initialize status filter combobox
+            if (cmbstatus != null)
+            {
+                cmbstatus.Items.Clear();
+                cmbstatus.Items.AddRange(new string[] { "All", "Pending", "Received" });
+                cmbstatus.SelectedIndex = 0; // Default to "All"
+
+                // Add event handler for status filter changes
+                cmbstatus.SelectedIndexChanged += (s, e) =>
+                {
+                    currentPage = 1;
+                    LoadPurchaseOrders(txtsearch.Text.Trim());
+                };
+            }
+        }
+
         private void UpdateButtonStates()
         {
             // Enable/disable buttons based on whether a row is selected
@@ -41,6 +66,13 @@ namespace Inventory_Management_System
             btnupdate.Enabled = hasSelection;
             btndelete.Enabled = hasSelection;
             btnreceive.Enabled = hasSelection;
+
+            // Enable receive button only for pending orders
+            if (hasSelection && dataGridView1.Rows[row].Cells["status"].Value != null)
+            {
+                string status = dataGridView1.Rows[row].Cells["status"].Value.ToString();
+                btnreceive.Enabled = status.ToUpper() != "RECEIVED";
+            }
         }
 
         private void frmPurchaseOrders_Load(object sender, EventArgs e)
@@ -56,12 +88,32 @@ namespace Inventory_Management_System
             try
             {
                 string query = "SELECT products, quantity, unitcost, totalcost, status, createdby, datecreated, datereceived, supplier FROM tblpurchase_order ";
+
                 // Build WHERE clause
                 string whereClause = "";
+
+                // Supplier filter
                 if (!string.IsNullOrEmpty(selectedSupplier))
                 {
                     whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
                 }
+
+                // Status filter
+                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
+                if (statusFilter != "All")
+                {
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        whereClause = "WHERE ";
+                    }
+                    else
+                    {
+                        whereClause += "AND ";
+                    }
+                    whereClause += "status = '" + statusFilter + "' ";
+                }
+
+                // Search filter
                 if (!string.IsNullOrEmpty(search))
                 {
                     if (string.IsNullOrEmpty(whereClause))
@@ -74,9 +126,10 @@ namespace Inventory_Management_System
                     }
                     whereClause += "(products LIKE '%" + search.Replace("'", "''") + "%' OR status LIKE '%" + search.Replace("'", "''") + "%' OR createdby LIKE '%" + search.Replace("'", "''") + "%') ";
                 }
+
                 query += whereClause + "ORDER BY datecreated DESC";
 
-                // Get all matching rows (this dtAll WILL be filtered by search)
+                // Get all matching rows (this dtAll WILL be filtered by search and status)
                 DataTable dtAll = purchaseOrders.GetData(query);
                 totalRecords = dtAll.Rows.Count;
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
@@ -98,75 +151,13 @@ namespace Inventory_Management_System
                 UpdateButtonStates();
 
                 // === Table Formatting ===
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dataGridView1.RowTemplate.Height = 28;
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
-                dataGridView1.ReadOnly = true;
-                dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.DefaultCellStyle.Padding = new Padding(5);
-                dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                StyleDataGridView();
 
-                // === Column headers + widths ===
-                if (dataGridView1.Columns.Contains("products"))
-                {
-                    dataGridView1.Columns["products"].HeaderText = "Products";
-                    dataGridView1.Columns["products"].Width = 150;
-                }
-                if (dataGridView1.Columns.Contains("quantity"))
-                {
-                    dataGridView1.Columns["quantity"].HeaderText = "Quantity";
-                    dataGridView1.Columns["quantity"].Width = 80;
-                    dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                }
-                if (dataGridView1.Columns.Contains("unitcost"))
-                {
-                    dataGridView1.Columns["unitcost"].HeaderText = "Unit Cost";
-                    dataGridView1.Columns["unitcost"].Width = 100;
-                    dataGridView1.Columns["unitcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dataGridView1.Columns["unitcost"].DefaultCellStyle.Format = "C2";
-                }
-                if (dataGridView1.Columns.Contains("totalcost"))
-                {
-                    dataGridView1.Columns["totalcost"].HeaderText = "Total Cost";
-                    dataGridView1.Columns["totalcost"].Width = 100;
-                    dataGridView1.Columns["totalcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dataGridView1.Columns["totalcost"].DefaultCellStyle.Format = "C2";
-                }
-                if (dataGridView1.Columns.Contains("status"))
-                {
-                    dataGridView1.Columns["status"].HeaderText = "Status";
-                    dataGridView1.Columns["status"].Width = 100;
-                }
-                if (dataGridView1.Columns.Contains("createdby"))
-                {
-                    dataGridView1.Columns["createdby"].HeaderText = "Created By";
-                    dataGridView1.Columns["createdby"].Width = 120;
-                }
-                if (dataGridView1.Columns.Contains("datecreated"))
-                {
-                    dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
-                    dataGridView1.Columns["datecreated"].Width = 130;
-                }
-                if (dataGridView1.Columns.Contains("datereceived"))
-                {
-                    dataGridView1.Columns["datereceived"].HeaderText = "Date Received";
-                    dataGridView1.Columns["datereceived"].Width = 130;
-                }
-                if (dataGridView1.Columns.Contains("supplier"))
-                {
-                    dataGridView1.Columns["supplier"].HeaderText = "Supplier";
-                    dataGridView1.Columns["supplier"].Width = 120;
-                    // Hide supplier column if we're viewing orders for a specific supplier
-                    if (!string.IsNullOrEmpty(selectedSupplier))
-                    {
-                        dataGridView1.Columns["supplier"].Visible = false;
-                    }
-                }
+                // Apply row coloring based on status
+                ApplyRowColoring();
 
-                // Calculate and display grand total (IGNORES search & paging)
-                CalculateGrandTotal();
+                // Calculate and display grand total (based on current filters)
+                CalculateGrandTotal(statusFilter);
 
                 // === Page info ===
                 if (totalRecords == 0)
@@ -176,7 +167,7 @@ namespace Inventory_Management_System
                 }
                 else
                 {
-                    lblPageInfo.Text = $"Page {currentPage} of {totalPages}";
+                    lblPageInfo.Text = $"Page {currentPage} of {totalPages} ({totalRecords} orders)";
                 }
             }
             catch (Exception error)
@@ -185,22 +176,144 @@ namespace Inventory_Management_System
             }
         }
 
+        private void StyleDataGridView()
+        {
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dataGridView1.RowTemplate.Height = 28;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DefaultCellStyle.Padding = new Padding(5);
+            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            // === Column headers + widths ===
+            if (dataGridView1.Columns.Contains("products"))
+            {
+                dataGridView1.Columns["products"].HeaderText = "Products";
+                dataGridView1.Columns["products"].Width = 150;
+            }
+            if (dataGridView1.Columns.Contains("quantity"))
+            {
+                dataGridView1.Columns["quantity"].HeaderText = "Quantity";
+                dataGridView1.Columns["quantity"].Width = 80;
+                dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+            if (dataGridView1.Columns.Contains("unitcost"))
+            {
+                dataGridView1.Columns["unitcost"].HeaderText = "Unit Cost";
+                dataGridView1.Columns["unitcost"].Width = 100;
+                dataGridView1.Columns["unitcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["unitcost"].DefaultCellStyle.Format = "C2";
+            }
+            if (dataGridView1.Columns.Contains("totalcost"))
+            {
+                dataGridView1.Columns["totalcost"].HeaderText = "Total Cost";
+                dataGridView1.Columns["totalcost"].Width = 100;
+                dataGridView1.Columns["totalcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["totalcost"].DefaultCellStyle.Format = "C2";
+            }
+            if (dataGridView1.Columns.Contains("status"))
+            {
+                dataGridView1.Columns["status"].HeaderText = "Status";
+                dataGridView1.Columns["status"].Width = 100;
+            }
+            if (dataGridView1.Columns.Contains("createdby"))
+            {
+                dataGridView1.Columns["createdby"].HeaderText = "Created By";
+                dataGridView1.Columns["createdby"].Width = 120;
+            }
+            if (dataGridView1.Columns.Contains("datecreated"))
+            {
+                dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
+                dataGridView1.Columns["datecreated"].Width = 130;
+            }
+            if (dataGridView1.Columns.Contains("datereceived"))
+            {
+                dataGridView1.Columns["datereceived"].HeaderText = "Date Received";
+                dataGridView1.Columns["datereceived"].Width = 130;
+            }
+            if (dataGridView1.Columns.Contains("supplier"))
+            {
+                dataGridView1.Columns["supplier"].HeaderText = "Supplier";
+                dataGridView1.Columns["supplier"].Width = 120;
+                // Hide supplier column if we're viewing orders for a specific supplier
+                if (!string.IsNullOrEmpty(selectedSupplier))
+                {
+                    dataGridView1.Columns["supplier"].Visible = false;
+                }
+            }
+        }
+
+        private void ApplyRowColoring()
+        {
+            try
+            {
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.Cells["status"].Value != null)
+                    {
+                        string status = row.Cells["status"].Value.ToString().ToUpper();
+                        switch (status)
+                        {
+                            case "PENDING":
+                                row.DefaultCellStyle.BackColor = Color.LightYellow;
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                                break;
+                            case "RECEIVED":
+                                row.DefaultCellStyle.BackColor = Color.LightGreen;
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                                break;
+                            default:
+                                row.DefaultCellStyle.BackColor = Color.White;
+                                row.DefaultCellStyle.ForeColor = Color.Black;
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Don't show error for coloring issues, just log or ignore
+                System.Diagnostics.Debug.WriteLine("Row coloring error: " + ex.Message);
+            }
+        }
+
         /// <summary>
-        /// Calculates the grand total (sum of totalcost) for the currently selected supplier
-        /// (or for all suppliers when selectedSupplier is empty). This intentionally ignores
-        /// any search text or paging so the total remains constant across searches/pages.
+        /// Calculates the grand total (sum of totalcost) for the currently selected supplier and status filter
         /// </summary>
-        private void CalculateGrandTotal()
+        private void CalculateGrandTotal(string statusFilter = "All")
         {
             try
             {
                 decimal grandTotal = 0m;
-                // Build a query that fetches all totalcost values for the supplier (no search)
+                // Build a query that fetches all totalcost values for the current filters
                 string totalQuery = "SELECT totalcost FROM tblpurchase_order ";
+                string whereClause = "";
+
+                // Supplier filter
                 if (!string.IsNullOrEmpty(selectedSupplier))
                 {
-                    totalQuery += "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "'";
+                    whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
                 }
+
+                // Status filter
+                if (statusFilter != "All")
+                {
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        whereClause = "WHERE ";
+                    }
+                    else
+                    {
+                        whereClause += "AND ";
+                    }
+                    whereClause += "status = '" + statusFilter + "' ";
+                }
+
+                totalQuery += whereClause;
+
                 DataTable dtTotals = purchaseOrders.GetData(totalQuery);
                 foreach (DataRow dr in dtTotals.Rows)
                 {
@@ -229,6 +342,145 @@ namespace Inventory_Management_System
             }
         }
 
+        private void btnexport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.Rows.Count == 0)
+                {
+                    MessageBox.Show("No data to export.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "CSV Files|*.csv|Excel Files|*.xlsx";
+                saveDialog.Title = "Export Purchase Orders";
+
+                string supplierText = string.IsNullOrEmpty(selectedSupplier) ? "AllSuppliers" : selectedSupplier.Replace(" ", "_");
+                string statusText = cmbstatus?.SelectedItem?.ToString() ?? "All";
+                string dateText = DateTime.Now.ToString("yyyy-MM-dd");
+                saveDialog.FileName = $"PurchaseOrders_{supplierText}_{statusText}_{dateText}";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string extension = Path.GetExtension(saveDialog.FileName).ToLower();
+                    if (extension == ".csv")
+                    {
+                        ExportToCSV(saveDialog.FileName);
+                    }
+                    else
+                    {
+                        // For .xlsx, we'll export as CSV but suggest they can open it in Excel
+                        string csvFileName = Path.ChangeExtension(saveDialog.FileName, ".csv");
+                        ExportToCSV(csvFileName);
+                        MessageBox.Show($"Data exported as CSV: {csvFileName}\n\nYou can open this file in Excel and save it as .xlsx format if needed.",
+                            "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error exporting data: " + ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ExportToCSV(string fileName)
+        {
+            try
+            {
+                StringBuilder csvContent = new StringBuilder();
+
+                // Add title and header information
+                csvContent.AppendLine("AMGC PHARMACY - PURCHASE ORDERS REPORT");
+                string supplierInfo = string.IsNullOrEmpty(selectedSupplier) ? "All Suppliers" : selectedSupplier;
+                string statusInfo = cmbstatus?.SelectedItem?.ToString() ?? "All";
+                csvContent.AppendLine($"Supplier: {supplierInfo}, Status: {statusInfo}, Generated: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}");
+                csvContent.AppendLine(); // Empty line
+
+                // Add column headers based on visible columns
+                StringBuilder headerRow = new StringBuilder();
+                foreach (DataGridViewColumn column in dataGridView1.Columns)
+                {
+                    if (column.Visible)
+                    {
+                        if (headerRow.Length > 0) headerRow.Append(",");
+                        headerRow.Append(EscapeCSVField(column.HeaderText));
+                    }
+                }
+                csvContent.AppendLine(headerRow.ToString());
+
+                // Add data rows from the current DataGridView (what user sees)
+                decimal totalValue = 0;
+                foreach (DataGridViewRow row in dataGridView1.Rows)
+                {
+                    if (row.IsNewRow) continue;
+
+                    StringBuilder dataRow = new StringBuilder();
+                    foreach (DataGridViewColumn column in dataGridView1.Columns)
+                    {
+                        if (column.Visible)
+                        {
+                            if (dataRow.Length > 0) dataRow.Append(",");
+
+                            object cellValue = row.Cells[column.Index].Value;
+                            string cellText = cellValue?.ToString() ?? "";
+
+                            // Handle currency formatting for cost columns
+                            if (column.Name == "unitcost" || column.Name == "totalcost")
+                            {
+                                if (decimal.TryParse(cellText.Replace("₱", "").Replace(",", ""), out decimal value))
+                                {
+                                    cellText = value.ToString("F2");
+                                    if (column.Name == "totalcost")
+                                    {
+                                        totalValue += value;
+                                    }
+                                }
+                            }
+
+                            dataRow.Append(EscapeCSVField(cellText));
+                        }
+                    }
+                    csvContent.AppendLine(dataRow.ToString());
+                }
+
+                // Add totals row
+                csvContent.AppendLine(); // Empty line
+                csvContent.AppendLine($",,,,TOTAL VALUE:,{totalValue:F2},,,,");
+
+                // Write to file
+                File.WriteAllText(fileName, csvContent.ToString(), Encoding.UTF8);
+
+                MessageBox.Show($"Purchase Orders exported successfully!\nLocation: {fileName}\nTotal Records: {dataGridView1.Rows.Count - 1}\nTotal Value: ₱{totalValue:N2}",
+                    "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Log the export action
+                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
+                string supplierFilter = string.IsNullOrEmpty(selectedSupplier) ? "All Suppliers" : selectedSupplier;
+                purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                    "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
+                    "', 'EXPORT', 'PURCHASE ORDER MANAGEMENT', 'CSV Export: " + supplierFilter + " - " + statusFilter + "', '" + username.Replace("'", "''") + "')");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error creating CSV file: " + ex.Message, "CSV Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string EscapeCSVField(string field)
+        {
+            if (string.IsNullOrEmpty(field))
+                return "";
+
+            // If field contains comma, newline, or quote, wrap in quotes and escape internal quotes
+            if (field.Contains(",") || field.Contains("\n") || field.Contains("\r") || field.Contains("\""))
+            {
+                return "\"" + field.Replace("\"", "\"\"") + "\"";
+            }
+            return field;
+        }
+
+        // Existing methods remain the same...
         private void btnadd_Click(object sender, EventArgs e)
         {
             try
@@ -347,6 +599,7 @@ namespace Inventory_Management_System
         {
             currentPage = 1;
             txtsearch.Text = "";
+            if (cmbstatus != null) cmbstatus.SelectedIndex = 0; // Reset to "All"
             LoadPurchaseOrders();
         }
 

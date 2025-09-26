@@ -53,6 +53,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.cmbstatus = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnexport = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -76,7 +79,7 @@
             this.mainPanel.Margin = new System.Windows.Forms.Padding(4);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(27, 25, 27, 25);
-            this.mainPanel.Size = new System.Drawing.Size(1771, 806);
+            this.mainPanel.Size = new System.Drawing.Size(1844, 853);
             this.mainPanel.TabIndex = 3;
             // 
             // contentPanel
@@ -90,7 +93,7 @@
             this.contentPanel.Margin = new System.Windows.Forms.Padding(4);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 25, 267, 25);
-            this.contentPanel.Size = new System.Drawing.Size(1450, 584);
+            this.contentPanel.Size = new System.Drawing.Size(1523, 631);
             this.contentPanel.TabIndex = 2;
             // 
             // label1
@@ -98,10 +101,10 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(1331, 36);
+            this.label1.Location = new System.Drawing.Point(1380, 43);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(42, 19);
+            this.label1.Size = new System.Drawing.Size(49, 23);
             this.label1.TabIndex = 4;
             this.label1.Text = "Total";
             // 
@@ -112,13 +115,13 @@
             this.txttotal.Location = new System.Drawing.Point(1287, 70);
             this.txttotal.Margin = new System.Windows.Forms.Padding(4);
             this.txttotal.Name = "txttotal";
-            this.txttotal.Size = new System.Drawing.Size(152, 31);
+            this.txttotal.Size = new System.Drawing.Size(228, 37);
             this.txttotal.TabIndex = 2;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(1195, 551);
+            this.lblPageInfo.Location = new System.Drawing.Point(1128, 589);
             this.lblPageInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(74, 16);
@@ -146,7 +149,7 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 35;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(1243, 523);
+            this.dataGridView1.Size = new System.Drawing.Size(1243, 560);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -155,11 +158,11 @@
             this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.actionPanel.Location = new System.Drawing.Point(1477, 197);
+            this.actionPanel.Location = new System.Drawing.Point(1550, 197);
             this.actionPanel.Margin = new System.Windows.Forms.Padding(4);
             this.actionPanel.Name = "actionPanel";
             this.actionPanel.Padding = new System.Windows.Forms.Padding(27, 25, 27, 25);
-            this.actionPanel.Size = new System.Drawing.Size(267, 584);
+            this.actionPanel.Size = new System.Drawing.Size(267, 631);
             this.actionPanel.TabIndex = 3;
             // 
             // groupBox2
@@ -169,7 +172,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(27, 418);
+            this.groupBox2.Location = new System.Drawing.Point(27, 473);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
@@ -189,7 +192,7 @@
             this.btnPrev.ForeColor = System.Drawing.Color.White;
             this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrev.ImageIndex = 1;
-            this.btnPrev.Location = new System.Drawing.Point(13, 79);
+            this.btnPrev.Location = new System.Drawing.Point(13, 83);
             this.btnPrev.Margin = new System.Windows.Forms.Padding(4);
             this.btnPrev.Name = "btnPrev";
             this.btnPrev.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -209,7 +212,7 @@
             this.btnNext.ForeColor = System.Drawing.Color.White;
             this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNext.ImageIndex = 0;
-            this.btnNext.Location = new System.Drawing.Point(13, 30);
+            this.btnNext.Location = new System.Drawing.Point(13, 34);
             this.btnNext.Margin = new System.Windows.Forms.Padding(4);
             this.btnNext.Name = "btnNext";
             this.btnNext.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -220,6 +223,7 @@
             // 
             // actionGroupBox
             // 
+            this.actionGroupBox.Controls.Add(this.btnexport);
             this.actionGroupBox.Controls.Add(this.btnrecieveall);
             this.actionGroupBox.Controls.Add(this.btnreceive);
             this.actionGroupBox.Controls.Add(this.btnRefresh);
@@ -234,7 +238,7 @@
             this.actionGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.actionGroupBox.Size = new System.Drawing.Size(213, 393);
+            this.actionGroupBox.Size = new System.Drawing.Size(213, 448);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
@@ -250,7 +254,7 @@
             this.btnrecieveall.ForeColor = System.Drawing.Color.White;
             this.btnrecieveall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnrecieveall.ImageIndex = 5;
-            this.btnrecieveall.Location = new System.Drawing.Point(13, 324);
+            this.btnrecieveall.Location = new System.Drawing.Point(13, 328);
             this.btnrecieveall.Margin = new System.Windows.Forms.Padding(4);
             this.btnrecieveall.Name = "btnrecieveall";
             this.btnrecieveall.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -271,7 +275,7 @@
             this.btnreceive.ForeColor = System.Drawing.Color.White;
             this.btnreceive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnreceive.ImageIndex = 1;
-            this.btnreceive.Location = new System.Drawing.Point(13, 275);
+            this.btnreceive.Location = new System.Drawing.Point(13, 279);
             this.btnreceive.Margin = new System.Windows.Forms.Padding(4);
             this.btnreceive.Name = "btnreceive";
             this.btnreceive.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -292,7 +296,7 @@
             this.btnRefresh.ForeColor = System.Drawing.Color.White;
             this.btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnRefresh.ImageIndex = 0;
-            this.btnRefresh.Location = new System.Drawing.Point(13, 226);
+            this.btnRefresh.Location = new System.Drawing.Point(13, 230);
             this.btnRefresh.Margin = new System.Windows.Forms.Padding(4);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -313,7 +317,7 @@
             this.btndeleteall.ForeColor = System.Drawing.Color.White;
             this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndeleteall.ImageIndex = 6;
-            this.btndeleteall.Location = new System.Drawing.Point(13, 177);
+            this.btndeleteall.Location = new System.Drawing.Point(13, 181);
             this.btndeleteall.Margin = new System.Windows.Forms.Padding(4);
             this.btndeleteall.Name = "btndeleteall";
             this.btndeleteall.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -334,7 +338,7 @@
             this.btndelete.ForeColor = System.Drawing.Color.White;
             this.btndelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndelete.ImageIndex = 5;
-            this.btndelete.Location = new System.Drawing.Point(13, 128);
+            this.btndelete.Location = new System.Drawing.Point(13, 132);
             this.btndelete.Margin = new System.Windows.Forms.Padding(4);
             this.btndelete.Name = "btndelete";
             this.btndelete.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -355,7 +359,7 @@
             this.btnupdate.ForeColor = System.Drawing.Color.White;
             this.btnupdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnupdate.ImageIndex = 1;
-            this.btnupdate.Location = new System.Drawing.Point(13, 79);
+            this.btnupdate.Location = new System.Drawing.Point(13, 83);
             this.btnupdate.Margin = new System.Windows.Forms.Padding(4);
             this.btnupdate.Name = "btnupdate";
             this.btnupdate.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -376,7 +380,7 @@
             this.btnadd.ForeColor = System.Drawing.Color.White;
             this.btnadd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnadd.ImageIndex = 0;
-            this.btnadd.Location = new System.Drawing.Point(13, 30);
+            this.btnadd.Location = new System.Drawing.Point(13, 34);
             this.btnadd.Margin = new System.Windows.Forms.Padding(4);
             this.btnadd.Name = "btnadd";
             this.btnadd.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
@@ -390,6 +394,8 @@
             // 
             this.searchPanel.BackColor = System.Drawing.Color.White;
             this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.searchPanel.Controls.Add(this.label2);
+            this.searchPanel.Controls.Add(this.cmbstatus);
             this.searchPanel.Controls.Add(this.btnsearch);
             this.searchPanel.Controls.Add(this.txtsearch);
             this.searchPanel.Controls.Add(this.lblSearch);
@@ -399,7 +405,7 @@
             this.searchPanel.Margin = new System.Windows.Forms.Padding(4);
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Padding = new System.Windows.Forms.Padding(27, 25, 27, 25);
-            this.searchPanel.Size = new System.Drawing.Size(1717, 98);
+            this.searchPanel.Size = new System.Drawing.Size(1790, 98);
             this.searchPanel.TabIndex = 1;
             // 
             // btnsearch
@@ -411,7 +417,7 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(1531, 31);
+            this.btnsearch.Location = new System.Drawing.Point(1130, 29);
             this.btnsearch.Margin = new System.Windows.Forms.Padding(4);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(147, 43);
@@ -428,7 +434,7 @@
             this.txtsearch.Location = new System.Drawing.Point(200, 34);
             this.txtsearch.Margin = new System.Windows.Forms.Padding(4);
             this.txtsearch.Name = "txtsearch";
-            this.txtsearch.Size = new System.Drawing.Size(1309, 27);
+            this.txtsearch.Size = new System.Drawing.Size(922, 32);
             this.txtsearch.TabIndex = 1;
             this.txtsearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtsearch_KeyPress);
             // 
@@ -440,7 +446,7 @@
             this.lblSearch.Location = new System.Drawing.Point(100, 39);
             this.lblSearch.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(58, 19);
+            this.lblSearch.Size = new System.Drawing.Size(68, 23);
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Search:";
             // 
@@ -462,7 +468,7 @@
             this.headerPanel.Location = new System.Drawing.Point(27, 25);
             this.headerPanel.Margin = new System.Windows.Forms.Padding(4);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(1717, 74);
+            this.headerPanel.Size = new System.Drawing.Size(1790, 74);
             this.headerPanel.TabIndex = 0;
             // 
             // lblTitle
@@ -473,15 +479,58 @@
             this.lblTitle.Location = new System.Drawing.Point(27, 18);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(183, 32);
+            this.lblTitle.Size = new System.Drawing.Size(228, 41);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Supplier Name";
+            // 
+            // cmbstatus
+            // 
+            this.cmbstatus.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbstatus.FormattingEnabled = true;
+            this.cmbstatus.Location = new System.Drawing.Point(1509, 33);
+            this.cmbstatus.Margin = new System.Windows.Forms.Padding(4);
+            this.cmbstatus.Name = "cmbstatus";
+            this.cmbstatus.Size = new System.Drawing.Size(240, 33);
+            this.cmbstatus.TabIndex = 9;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label2.Location = new System.Drawing.Point(1436, 38);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 23);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Status:";
+            // 
+            // btnexport
+            // 
+            this.btnexport.BackColor = System.Drawing.Color.Green;
+            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnexport.FlatAppearance.BorderSize = 0;
+            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnexport.ForeColor = System.Drawing.Color.White;
+            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnexport.ImageIndex = 5;
+            this.btnexport.Location = new System.Drawing.Point(13, 377);
+            this.btnexport.Margin = new System.Windows.Forms.Padding(4);
+            this.btnexport.Name = "btnexport";
+            this.btnexport.Padding = new System.Windows.Forms.Padding(13, 0, 0, 0);
+            this.btnexport.Size = new System.Drawing.Size(187, 49);
+            this.btnexport.TabIndex = 7;
+            this.btnexport.Text = "E&xport";
+            this.btnexport.UseVisualStyleBackColor = false;
+            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
             // 
             // frmPurchaseOrders
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1771, 806);
+            this.ClientSize = new System.Drawing.Size(1844, 853);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -533,5 +582,8 @@
         private System.Windows.Forms.Button btnreceive;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.Button btnrecieveall;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbstatus;
+        private System.Windows.Forms.Button btnexport;
     }
 }
