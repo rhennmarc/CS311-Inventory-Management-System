@@ -24,6 +24,29 @@ namespace Inventory_Management_System
 
         Class1 accounts = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
+        private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
+        {
+            // Check if a form of type T is already open
+            var existingForm = Application.OpenForms.OfType<T>().FirstOrDefault();
+            if (existingForm != null)
+            {
+                // Form is open, bring it to the front
+                existingForm.BringToFront();
+                existingForm.WindowState = FormWindowState.Normal; // Ensure it's not minimized
+                existingForm.Focus();
+            }
+            else
+            {
+                // Create new instance if not open
+                var newForm = createForm();
+                newForm.FormClosed += (s, args) => {
+                    // Refresh the accounts data when the child form is closed
+                    frmAccounts_Load(this, EventArgs.Empty);
+                };
+                newForm.Show();
+            }
+        }
+
         private void frmAccounts_Load(object sender, EventArgs e)
         {
             try
@@ -84,11 +107,7 @@ namespace Inventory_Management_System
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            frmAddAccount addAccountForm = new frmAddAccount(username);
-            addAccountForm.FormClosed += (s, args) => {
-                frmAccounts_Load(sender, e);
-            };
-            addAccountForm.Show();
+            ShowOrActivateForm(() => new frmAddAccount(username));
         }
 
         private void btnsearch_Click(object sender, EventArgs e)
@@ -129,13 +148,8 @@ namespace Inventory_Management_System
             string editpassword = dataGridView1.Rows[row].Cells[1].Value.ToString();
             string editusertype = dataGridView1.Rows[row].Cells[2].Value.ToString();
             string editstatus = dataGridView1.Rows[row].Cells[3].Value.ToString();
-            frmUpdateAccount updateaccountForm = new frmUpdateAccount(editusername, editpassword, editusertype, editstatus, username);
 
-            updateaccountForm.FormClosed += (s, args) => {
-                frmAccounts_Load(sender, e);
-            };
-
-            updateaccountForm.Show();
+            ShowOrActivateForm(() => new frmUpdateAccount(editusername, editpassword, editusertype, editstatus, username));
         }
 
         private void btndelete_Click(object sender, EventArgs e)

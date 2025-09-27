@@ -335,7 +335,7 @@
             this.MaximizeBox = false;
             this.Name = "frmUpdateProduct";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmUpdateProduct";
+            this.Text = "Update Product";
             this.Load += new System.EventHandler(this.frmUpdateProduct_Load);
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();

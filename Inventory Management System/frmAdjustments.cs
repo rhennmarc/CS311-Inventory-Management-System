@@ -1,6 +1,7 @@
 ﻿using inventory_management;
 using System;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Inventory_Management_System
@@ -20,6 +21,26 @@ namespace Inventory_Management_System
         {
             InitializeComponent();
             this.username = username;
+        }
+
+        private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
+        {
+            // Check if a form of type T is already open
+            var existingForm = Application.OpenForms.OfType<T>().FirstOrDefault();
+            if (existingForm != null)
+            {
+                // Form is open, bring it to the front
+                existingForm.BringToFront();
+                existingForm.WindowState = FormWindowState.Normal; // Ensure it's not minimized
+                existingForm.Focus();
+            }
+            else
+            {
+                // Create new instance if not open
+                var newForm = createForm();
+                newForm.FormClosed += (s, args) => { LoadAdjustments(); };
+                newForm.Show();
+            }
         }
 
         private void frmAdjustments_Load(object sender, EventArgs e)
@@ -208,9 +229,7 @@ namespace Inventory_Management_System
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            frmAddAdjustment addForm = new frmAddAdjustment(username);
-            addForm.FormClosed += (s, args) => { LoadAdjustments(); };
-            addForm.Show();
+            ShowOrActivateForm(() => new frmAddAdjustment(username));
         }
 
         private void btnupdate_Click(object sender, EventArgs e)
@@ -231,10 +250,8 @@ namespace Inventory_Management_System
                 string dateadjusted = dataGridView1.Rows[row].Cells["dateadjusted"].Value.ToString();
                 string timeadjusted = dataGridView1.Rows[row].Cells["timeadjusted"].Value.ToString();
 
-                frmUpdateAdjustment updateForm = new frmUpdateAdjustment(
-                    product, quantity, unitprice, reason, createdby, username, dateadjusted, timeadjusted);
-                updateForm.FormClosed += (s, args) => { LoadAdjustments(); };
-                updateForm.Show();
+                ShowOrActivateForm(() => new frmUpdateAdjustment(
+                    product, quantity, unitprice, reason, createdby, username, dateadjusted, timeadjusted));
             }
             catch (Exception error)
             {

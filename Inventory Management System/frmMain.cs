@@ -14,7 +14,7 @@ namespace Inventory_Management_System
     public partial class frmMain : Form
     {
         private string username;
-        private string usertype; // ✅ store usertype
+        private string usertype;
 
         public frmMain(string username, string usertype)
         {
@@ -24,16 +24,35 @@ namespace Inventory_Management_System
             this.username = username;
             this.usertype = usertype;
 
-            // ✅ Control visibility based on usertype
             if (usertype.ToUpper() == "PHARMACIST")
             {
-                accountToolStripMenuItem.Visible = false;   // hide Accounts
-                viewLogsToolStripMenuItem.Visible = false;  // hide Logs
+                accountToolStripMenuItem.Visible = false;
+                viewLogsToolStripMenuItem.Visible = false;
             }
             else if (usertype.ToUpper() == "ADMINISTRATOR")
             {
                 accountToolStripMenuItem.Visible = true;
                 viewLogsToolStripMenuItem.Visible = true;
+            }
+        }
+
+        private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
+        {
+            // Check if a form of type T is already open
+            var existingForm = this.MdiChildren.FirstOrDefault(f => f is T);
+            if (existingForm != null)
+            {
+                // Form is open, bring it to the front
+                existingForm.BringToFront();
+                existingForm.WindowState = FormWindowState.Normal; // Ensure it's not minimized
+                existingForm.Focus();
+            }
+            else
+            {
+                // Create new instance if not open
+                var newForm = createForm();
+                newForm.MdiParent = this;
+                newForm.Show();
             }
         }
 
@@ -50,51 +69,37 @@ namespace Inventory_Management_System
 
         private void accountToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmAccounts accountsForm = new frmAccounts(username);
-            accountsForm.MdiParent = this;
-            accountsForm.Show();
+            ShowOrActivateForm(() => new frmAccounts(username));
         }
 
         private void posToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmPOS POSform = new frmPOS(username);
-            POSform.MdiParent = this;
-            POSform.Show();
+            ShowOrActivateForm(() => new frmPOS(username));
         }
 
         private void suppliersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmSuppliers suppliersForm = new frmSuppliers(username);
-            suppliersForm.MdiParent = this;
-            suppliersForm.Show();
+            ShowOrActivateForm(() => new frmSuppliers(username));
         }
 
         private void salesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmSalesReport SalesForm = new frmSalesReport(username, usertype);
-            SalesForm.MdiParent = this;
-            SalesForm.Show();
+            ShowOrActivateForm(() => new frmSalesReport(username, usertype));
         }
 
         private void viewLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmLogs LogsForm = new frmLogs(username);
-            LogsForm.MdiParent = this;
-            LogsForm.Show();
+            ShowOrActivateForm(() => new frmLogs(username));
         }
 
         private void productsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            frmProducts productsForm = new frmProducts(username);
-            productsForm.MdiParent = this;
-            productsForm.Show();
+            ShowOrActivateForm(() => new frmProducts(username));
         }
 
         private void adjustmentstoolStripMenuItem2_Click(object sender, EventArgs e)
         {
-            frmAdjustments adjustmentForm = new frmAdjustments(username);
-            adjustmentForm.MdiParent = this;
-            adjustmentForm.Show();
+            ShowOrActivateForm(() => new frmAdjustments(username));
         }
     }
 }

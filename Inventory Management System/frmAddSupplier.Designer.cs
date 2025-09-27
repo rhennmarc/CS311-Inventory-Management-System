@@ -280,7 +280,7 @@
             this.MaximizeBox = false;
             this.Name = "frmAddSupplier";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmAddSupplier";
+            this.Text = "Add Supplier";
             this.panelHeader.ResumeLayout(false);
             this.panelHeader.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

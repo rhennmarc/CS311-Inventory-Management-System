@@ -1,6 +1,7 @@
 ﻿using inventory_management;
 using System;
 using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Inventory_Management_System
@@ -20,6 +21,26 @@ namespace Inventory_Management_System
         {
             InitializeComponent();
             this.username = username;
+        }
+
+        private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
+        {
+            // Check if a form of type T is already open
+            var existingForm = Application.OpenForms.OfType<T>().FirstOrDefault();
+            if (existingForm != null)
+            {
+                // Form is open, bring it to the front
+                existingForm.BringToFront();
+                existingForm.WindowState = FormWindowState.Normal; // Ensure it's not minimized
+                existingForm.Focus();
+            }
+            else
+            {
+                // Create new instance if not open
+                var newForm = createForm();
+                newForm.FormClosed += (s, args) => { LoadSuppliers(); };
+                newForm.Show();
+            }
         }
 
         private void frmSuppliers_Load(object sender, EventArgs e)
@@ -136,30 +157,24 @@ namespace Inventory_Management_System
 
         private void btnadd_Click(object sender, EventArgs e)
         {
-            frmAddSupplier addSupplierForm = new frmAddSupplier(username);
-            addSupplierForm.FormClosed += (s, args) => { LoadSuppliers(); };
-            addSupplierForm.Show();
+            ShowOrActivateForm(() => new frmAddSupplier(username));
         }
 
         private void btnupdate_Click(object sender, EventArgs e)
         {
             try
             {
-                if (dataGridView1.SelectedRows.Count == 0)
+                if (row < 0 || row >= dataGridView1.Rows.Count)
                 {
                     MessageBox.Show("Please select a supplier to update.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                int selectedRow = dataGridView1.SelectedRows[0].Index;
+                string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
+                string description = dataGridView1.Rows[row].Cells["description"].Value.ToString();
+                string contactinfo = dataGridView1.Rows[row].Cells["contactinfo"].Value.ToString();
 
-                string suppliername = dataGridView1.Rows[selectedRow].Cells["supplier"].Value.ToString();
-                string description = dataGridView1.Rows[selectedRow].Cells["description"].Value.ToString();
-                string contactinfo = dataGridView1.Rows[selectedRow].Cells["contactinfo"].Value.ToString();
-
-                frmUpdateSupplier updateSupplierForm = new frmUpdateSupplier(suppliername, description, contactinfo, username);
-                updateSupplierForm.FormClosed += (s, args) => { LoadSuppliers(); };
-                updateSupplierForm.Show();
+                ShowOrActivateForm(() => new frmUpdateSupplier(suppliername, description, contactinfo, username));
             }
             catch (Exception error)
             {
@@ -218,9 +233,7 @@ namespace Inventory_Management_System
 
                 string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
 
-                frmAddPurchaseOrder addPOForm = new frmAddPurchaseOrder(username, suppliername);
-                addPOForm.FormClosed += (s, args) => { LoadSuppliers(); };
-                addPOForm.Show();
+                ShowOrActivateForm(() => new frmAddPurchaseOrder(username, suppliername));
             }
             catch (Exception error)
             {
@@ -240,8 +253,7 @@ namespace Inventory_Management_System
 
                 string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
 
-                frmPurchaseOrders viewPOForm = new frmPurchaseOrders(username, suppliername);
-                viewPOForm.Show();
+                ShowOrActivateForm(() => new frmPurchaseOrders(username, suppliername));
             }
             catch (Exception error)
             {

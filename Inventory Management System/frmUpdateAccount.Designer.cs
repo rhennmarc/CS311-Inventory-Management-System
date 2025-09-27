@@ -309,7 +309,7 @@
             this.MaximizeBox = false;
             this.Name = "frmUpdateAccount";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmUpdateAccount";
+            this.Text = "Update Account";
             this.Load += new System.EventHandler(this.frmUpdateAccount_Load);
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();

@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -38,6 +39,26 @@ namespace Inventory_Management_System
             else
             {
                 lblTitle.Text = "Purchase Orders - All Suppliers";
+            }
+        }
+
+        private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
+        {
+            // Check if a form of type T is already open
+            var existingForm = Application.OpenForms.OfType<T>().FirstOrDefault();
+            if (existingForm != null)
+            {
+                // Form is open, bring it to the front
+                existingForm.BringToFront();
+                existingForm.WindowState = FormWindowState.Normal; // Ensure it's not minimized
+                existingForm.Focus();
+            }
+            else
+            {
+                // Create new instance if not open
+                var newForm = createForm();
+                newForm.FormClosed += (s, args) => { LoadPurchaseOrders(); };
+                newForm.Show();
             }
         }
 
@@ -480,37 +501,26 @@ namespace Inventory_Management_System
             return field;
         }
 
-        // Existing methods remain the same...
         private void btnadd_Click(object sender, EventArgs e)
         {
-            try
-            {
-                frmAddPurchaseOrder addPOForm = new frmAddPurchaseOrder(username, selectedSupplier);
-                addPOForm.FormClosed += (s, args) => { LoadPurchaseOrders(); };
-                addPOForm.Show();
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message, "ERROR on btnadd_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            ShowOrActivateForm(() => new frmAddPurchaseOrder(username, selectedSupplier));
         }
 
         private void btnupdate_Click(object sender, EventArgs e)
         {
             try
             {
-                if (dataGridView1.SelectedRows.Count == 0)
+                if (row < 0 || row >= dataGridView1.Rows.Count)
                 {
                     MessageBox.Show("Please select a purchase order to update.", "Update", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                int selectedRow = dataGridView1.SelectedRows[0].Index;
-                string products = dataGridView1.Rows[selectedRow].Cells["products"].Value.ToString();
-                string quantity = dataGridView1.Rows[selectedRow].Cells["quantity"].Value.ToString();
-                string unitcost = dataGridView1.Rows[selectedRow].Cells["unitcost"].Value.ToString();
-                frmUpdatePurchaseOrder updatePOForm = new frmUpdatePurchaseOrder(products, quantity, unitcost, username);
-                updatePOForm.FormClosed += (s, args) => { LoadPurchaseOrders(); };
-                updatePOForm.Show();
+
+                string products = dataGridView1.Rows[row].Cells["products"].Value.ToString();
+                string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
+                string unitcost = dataGridView1.Rows[row].Cells["unitcost"].Value.ToString();
+
+                ShowOrActivateForm(() => new frmUpdatePurchaseOrder(products, quantity, unitcost, username));
             }
             catch (Exception error)
             {
