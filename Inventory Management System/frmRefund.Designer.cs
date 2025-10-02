@@ -22,9 +22,6 @@
             this.dgvOrderItems = new System.Windows.Forms.DataGridView();
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.numQuantity = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtTotalRefund = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -36,6 +33,9 @@
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
             this.btnRefundAll = new System.Windows.Forms.Button();
             this.btnRefund = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.numQuantity = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.searchPanel = new System.Windows.Forms.Panel();
             this.btnSearch = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -49,11 +49,11 @@
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderItems)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).BeginInit();
             this.searchPanel.SuspendLayout();
             this.headerPanel.SuspendLayout();
             this.SuspendLayout();
@@ -117,9 +117,9 @@
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
+            this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.groupBox3);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(780, 160);
@@ -127,44 +127,6 @@
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 489);
             this.actionPanel.TabIndex = 2;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.numQuantity);
-            this.groupBox3.Controls.Add(this.label7);
-            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox3.Location = new System.Drawing.Point(20, 20);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox3.Size = new System.Drawing.Size(160, 94);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Quick Adjust";
-            // 
-            // numQuantity
-            // 
-            this.numQuantity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.numQuantity.Enabled = false;
-            this.numQuantity.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numQuantity.Location = new System.Drawing.Point(10, 43);
-            this.numQuantity.Name = "numQuantity";
-            this.numQuantity.Size = new System.Drawing.Size(140, 29);
-            this.numQuantity.TabIndex = 1;
-            this.numQuantity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.numQuantity.ValueChanged += new System.EventHandler(this.numQuantity_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(10, 28);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(74, 15);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Refund Qty:";
             // 
             // groupBox2
             // 
@@ -175,7 +137,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 304);
+            this.groupBox2.Location = new System.Drawing.Point(20, 114);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox2.Size = new System.Drawing.Size(160, 180);
@@ -233,7 +195,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 188);
+            this.groupBox1.Location = new System.Drawing.Point(20, 368);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(160, 116);
@@ -284,7 +246,7 @@
             this.actionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.actionGroupBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.actionGroupBox.Location = new System.Drawing.Point(20, 114);
+            this.actionGroupBox.Location = new System.Drawing.Point(20, 294);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
             this.actionGroupBox.Size = new System.Drawing.Size(160, 74);
@@ -325,6 +287,44 @@
             this.btnRefund.Text = "&Refund";
             this.btnRefund.UseVisualStyleBackColor = false;
             this.btnRefund.Click += new System.EventHandler(this.btnRefund_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.numQuantity);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.groupBox3.Location = new System.Drawing.Point(20, 20);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox3.Size = new System.Drawing.Size(160, 94);
+            this.groupBox3.TabIndex = 3;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Quick Adjust";
+            // 
+            // numQuantity
+            // 
+            this.numQuantity.Dock = System.Windows.Forms.DockStyle.Top;
+            this.numQuantity.Enabled = false;
+            this.numQuantity.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numQuantity.Location = new System.Drawing.Point(10, 43);
+            this.numQuantity.Name = "numQuantity";
+            this.numQuantity.Size = new System.Drawing.Size(140, 29);
+            this.numQuantity.TabIndex = 1;
+            this.numQuantity.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numQuantity.ValueChanged += new System.EventHandler(this.numQuantity_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(10, 28);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(74, 15);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Refund Qty:";
             // 
             // searchPanel
             // 
@@ -448,13 +448,13 @@
             this.contentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderItems)).EndInit();
             this.actionPanel.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).EndInit();
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
             this.headerPanel.ResumeLayout(false);
