@@ -116,6 +116,12 @@
     <Compile Include="frmPurchaseOrders.Designer.cs">
       <DependentUpon>frmPurchaseOrders.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRefund.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRefund.Designer.cs">
+      <DependentUpon>frmRefund.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSalesReport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +170,12 @@
     <Compile Include="frmUpdateSupplier.Designer.cs">
       <DependentUpon>frmUpdateSupplier.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmViewRefunds.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmViewRefunds.Designer.cs">
+      <DependentUpon>frmViewRefunds.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="frmLogs.cs">
@@ -205,6 +217,9 @@
     <EmbeddedResource Include="frmPurchaseOrders.resx">
       <DependentUpon>frmPurchaseOrders.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmRefund.resx">
+      <DependentUpon>frmRefund.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmSalesReport.resx">
       <DependentUpon>frmSalesReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -228,6 +243,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmUpdateSupplier.resx">
       <DependentUpon>frmUpdateSupplier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmViewRefunds.resx">
+      <DependentUpon>frmViewRefunds.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

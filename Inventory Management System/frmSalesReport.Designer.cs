@@ -39,11 +39,11 @@
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
-            this.btnexport = new System.Windows.Forms.Button();
-            this.btnview = new System.Windows.Forms.Button();
             this.btnrefresh = new System.Windows.Forms.Button();
             this.btndeleteall = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
+            this.btnexport = new System.Windows.Forms.Button();
+            this.btnview = new System.Windows.Forms.Button();
             this.searchPanel = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbduration = new System.Windows.Forms.ComboBox();
@@ -55,6 +55,8 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.btnrefund = new System.Windows.Forms.Button();
+            this.btnviewrefunds = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -76,7 +78,7 @@
             this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
             this.mainPanel.Size = new System.Drawing.Size(1211, 647);
             this.mainPanel.TabIndex = 3;
             // 
@@ -153,7 +155,7 @@
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(991, 160);
             this.actionPanel.Name = "actionPanel";
-            this.actionPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
             this.actionPanel.TabIndex = 3;
             // 
@@ -164,9 +166,9 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 269);
+            this.groupBox1.Location = new System.Drawing.Point(20, 336);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(160, 125);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
@@ -214,61 +216,23 @@
             // 
             // actionGroupBox
             // 
-            this.actionGroupBox.Controls.Add(this.btnexport);
-            this.actionGroupBox.Controls.Add(this.btnview);
             this.actionGroupBox.Controls.Add(this.btnrefresh);
             this.actionGroupBox.Controls.Add(this.btndeleteall);
             this.actionGroupBox.Controls.Add(this.btndelete);
+            this.actionGroupBox.Controls.Add(this.btnviewrefunds);
+            this.actionGroupBox.Controls.Add(this.btnrefund);
+            this.actionGroupBox.Controls.Add(this.btnview);
+            this.actionGroupBox.Controls.Add(this.btnexport);
             this.actionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.actionGroupBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
-            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 249);
+            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 316);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
-            // 
-            // btnexport
-            // 
-            this.btnexport.BackColor = System.Drawing.Color.Green;
-            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnexport.FlatAppearance.BorderSize = 0;
-            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnexport.ForeColor = System.Drawing.Color.White;
-            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnexport.ImageIndex = 0;
-            this.btnexport.Location = new System.Drawing.Point(10, 188);
-            this.btnexport.Name = "btnexport";
-            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnexport.Size = new System.Drawing.Size(140, 40);
-            this.btnexport.TabIndex = 5;
-            this.btnexport.Text = "&Export";
-            this.btnexport.UseVisualStyleBackColor = false;
-            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
-            // 
-            // btnview
-            // 
-            this.btnview.BackColor = System.Drawing.Color.DimGray;
-            this.btnview.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnview.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnview.FlatAppearance.BorderSize = 0;
-            this.btnview.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnview.ForeColor = System.Drawing.Color.White;
-            this.btnview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnview.ImageIndex = 0;
-            this.btnview.Location = new System.Drawing.Point(10, 148);
-            this.btnview.Name = "btnview";
-            this.btnview.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnview.Size = new System.Drawing.Size(140, 40);
-            this.btnview.TabIndex = 4;
-            this.btnview.Text = "&View";
-            this.btnview.UseVisualStyleBackColor = false;
-            this.btnview.Click += new System.EventHandler(this.btnview_Click);
             // 
             // btnrefresh
             // 
@@ -281,7 +245,7 @@
             this.btnrefresh.ForeColor = System.Drawing.Color.White;
             this.btnrefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnrefresh.ImageIndex = 6;
-            this.btnrefresh.Location = new System.Drawing.Point(10, 108);
+            this.btnrefresh.Location = new System.Drawing.Point(10, 268);
             this.btnrefresh.Name = "btnrefresh";
             this.btnrefresh.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnrefresh.Size = new System.Drawing.Size(140, 40);
@@ -301,7 +265,7 @@
             this.btndeleteall.ForeColor = System.Drawing.Color.White;
             this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndeleteall.ImageIndex = 5;
-            this.btndeleteall.Location = new System.Drawing.Point(10, 68);
+            this.btndeleteall.Location = new System.Drawing.Point(10, 228);
             this.btndeleteall.Name = "btndeleteall";
             this.btndeleteall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btndeleteall.Size = new System.Drawing.Size(140, 40);
@@ -321,7 +285,7 @@
             this.btndelete.ForeColor = System.Drawing.Color.White;
             this.btndelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndelete.ImageIndex = 1;
-            this.btndelete.Location = new System.Drawing.Point(10, 28);
+            this.btndelete.Location = new System.Drawing.Point(10, 188);
             this.btndelete.Name = "btndelete";
             this.btndelete.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btndelete.Size = new System.Drawing.Size(140, 40);
@@ -329,6 +293,46 @@
             this.btndelete.Text = "&Delete";
             this.btndelete.UseVisualStyleBackColor = false;
             this.btndelete.Click += new System.EventHandler(this.btndelete_Click);
+            // 
+            // btnexport
+            // 
+            this.btnexport.BackColor = System.Drawing.Color.Green;
+            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnexport.FlatAppearance.BorderSize = 0;
+            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnexport.ForeColor = System.Drawing.Color.White;
+            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnexport.ImageIndex = 0;
+            this.btnexport.Location = new System.Drawing.Point(10, 28);
+            this.btnexport.Name = "btnexport";
+            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnexport.Size = new System.Drawing.Size(140, 40);
+            this.btnexport.TabIndex = 5;
+            this.btnexport.Text = "&Export";
+            this.btnexport.UseVisualStyleBackColor = false;
+            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
+            // 
+            // btnview
+            // 
+            this.btnview.BackColor = System.Drawing.Color.DimGray;
+            this.btnview.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnview.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnview.FlatAppearance.BorderSize = 0;
+            this.btnview.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnview.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnview.ForeColor = System.Drawing.Color.White;
+            this.btnview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnview.ImageIndex = 0;
+            this.btnview.Location = new System.Drawing.Point(10, 68);
+            this.btnview.Name = "btnview";
+            this.btnview.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnview.Size = new System.Drawing.Size(140, 40);
+            this.btnview.TabIndex = 4;
+            this.btnview.Text = "&View Receipt";
+            this.btnview.UseVisualStyleBackColor = false;
+            this.btnview.Click += new System.EventHandler(this.btnview_Click);
             // 
             // searchPanel
             // 
@@ -345,7 +349,7 @@
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
-            this.searchPanel.Padding = new System.Windows.Forms.Padding(20, 20, 20, 20);
+            this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
             this.searchPanel.Size = new System.Drawing.Size(1171, 80);
             this.searchPanel.TabIndex = 1;
             // 
@@ -456,6 +460,46 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Sales Report";
             // 
+            // btnrefund
+            // 
+            this.btnrefund.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(196)))), ((int)(((byte)(15)))));
+            this.btnrefund.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnrefund.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnrefund.FlatAppearance.BorderSize = 0;
+            this.btnrefund.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnrefund.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnrefund.ForeColor = System.Drawing.Color.White;
+            this.btnrefund.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnrefund.ImageIndex = 6;
+            this.btnrefund.Location = new System.Drawing.Point(10, 108);
+            this.btnrefund.Name = "btnrefund";
+            this.btnrefund.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnrefund.Size = new System.Drawing.Size(140, 40);
+            this.btnrefund.TabIndex = 6;
+            this.btnrefund.Text = "&Refund";
+            this.btnrefund.UseVisualStyleBackColor = false;
+            this.btnrefund.Click += new System.EventHandler(this.btnrefund_Click);
+            // 
+            // btnviewrefunds
+            // 
+            this.btnviewrefunds.BackColor = System.Drawing.Color.DimGray;
+            this.btnviewrefunds.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnviewrefunds.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnviewrefunds.FlatAppearance.BorderSize = 0;
+            this.btnviewrefunds.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnviewrefunds.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnviewrefunds.ForeColor = System.Drawing.Color.White;
+            this.btnviewrefunds.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnviewrefunds.ImageIndex = 6;
+            this.btnviewrefunds.Location = new System.Drawing.Point(10, 148);
+            this.btnviewrefunds.Name = "btnviewrefunds";
+            this.btnviewrefunds.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnviewrefunds.Size = new System.Drawing.Size(140, 40);
+            this.btnviewrefunds.TabIndex = 7;
+            this.btnviewrefunds.Text = "V&iew Refunds";
+            this.btnviewrefunds.UseVisualStyleBackColor = false;
+            this.btnviewrefunds.Click += new System.EventHandler(this.btnviewrefunds_Click);
+            // 
             // frmSalesReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -513,5 +557,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cmbduration;
         private System.Windows.Forms.Button btnexport;
+        private System.Windows.Forms.Button btnrefund;
+        private System.Windows.Forms.Button btnviewrefunds;
     }
 }

@@ -33,6 +33,8 @@ namespace Inventory_Management_System
         private string printDateCreated;
         private string printTimeCreated;
         private string printCreatedBy;
+        private DataTable printRefundData;
+        private decimal printTotalRefund;
 
         Class1 sales = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
@@ -112,7 +114,13 @@ namespace Inventory_Management_System
                 string taglineText = "Your Health, Our Priority";
                 SizeF taglineSize = g.MeasureString(taglineText, regularFont);
                 g.DrawString(taglineText, regularFont, brush, centerPos - (taglineSize.Width / 2), yPos);
-                yPos += 25;
+                yPos += 15;
+
+                // ADD ADDRESS BELOW TAGLINE
+                string addressText = "1340 G Tuazon St Sampaloc Manila";
+                SizeF addressSize = g.MeasureString(addressText, smallFont);
+                g.DrawString(addressText, smallFont, brush, centerPos - (addressSize.Width / 2), yPos);
+                yPos += 20;
 
                 // Line separator
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
@@ -124,6 +132,11 @@ namespace Inventory_Management_System
                 g.DrawString($"Date: {printDateCreated} {printTimeCreated}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
                 g.DrawString($"Cashier: {printCreatedBy}", regularFont, brush, leftMargin, yPos);
+                yPos += 15;
+
+                // ADD TIN BELOW CASHIER
+                string tinText = "Tin:";
+                g.DrawString(tinText, smallFont, brush, leftMargin, yPos);
                 yPos += 20;
 
                 // Line separator
@@ -166,6 +179,61 @@ namespace Inventory_Management_System
                 }
 
                 yPos += 10;
+
+                // REFUND SECTION - Only show if there are refunds
+                if (printRefundData != null && printRefundData.Rows.Count > 0)
+                {
+                    // Line separator before refunds
+                    g.DrawLine(Pens.Red, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
+                    yPos += 10;
+
+                    // Refund header
+                    string refundHeader = "REFUNDED ITEMS";
+                    SizeF refundHeaderSize = g.MeasureString(refundHeader, headerFont);
+                    g.DrawString(refundHeader, headerFont, Brushes.Red, centerPos - (refundHeaderSize.Width / 2), yPos);
+                    yPos += 15;
+
+                    // Refunded items
+                    foreach (DataRow row in printRefundData.Rows)
+                    {
+                        string productName = row["products"].ToString();
+                        int quantity = Convert.ToInt32(row["quantity"]);
+                        decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
+                        decimal itemTotal = quantity * unitPrice;
+                        string refundDate = row["daterefunded"].ToString();
+                        string reason = row["reason"].ToString();
+
+                        // Truncate product name if too long for receipt
+                        if (productName.Length > 18)
+                            productName = productName.Substring(0, 15) + "...";
+
+                        g.DrawString(productName, regularFont, brush, leftMargin, yPos);
+                        g.DrawString($"-{quantity}", regularFont, Brushes.Red, 145, yPos);
+                        g.DrawString($"-{itemTotal:₱#,##0.00}", regularFont, Brushes.Red, 180, yPos);
+                        yPos += 12;
+
+                        // Unit price for multiple quantities
+                        if (quantity > 1)
+                        {
+                            g.DrawString($"  @ {unitPrice:₱#,##0.00} each", smallFont, Brushes.Gray, leftMargin + 5, yPos);
+                            yPos += 10;
+                        }
+
+                        // Refund details
+                        g.DrawString($"Refunded on {refundDate} - Reason: {reason}", smallFont, Brushes.DarkRed, leftMargin, yPos);
+                        yPos += 10;
+                    }
+
+                    yPos += 5;
+
+                    // TOTAL REFUND line
+                    g.DrawLine(Pens.Red, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
+                    yPos += 10;
+
+                    g.DrawString("TOTAL REFUND:", headerFont, Brushes.Red, leftMargin, yPos);
+                    g.DrawString(printTotalRefund.ToString("-₱#,##0.00"), headerFont, Brushes.Red, 180, yPos);
+                    yPos += 20;
+                }
 
                 // Line separator
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
@@ -671,8 +739,23 @@ namespace Inventory_Management_System
                 // Apply discount if applicable
                 decimal finalTotal = discounted ? total * 0.8m : total;
 
+                // Get refund information for this order
+                DataTable refundData = GetRefundData(orderid);
+
+                // Calculate total refund amount
+                decimal totalRefund = 0;
+                if (refundData.Rows.Count > 0)
+                {
+                    foreach (DataRow row in refundData.Rows)
+                    {
+                        int quantity = Convert.ToInt32(row["quantity"]);
+                        decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
+                        totalRefund += quantity * unitPrice;
+                    }
+                }
+
                 // Show receipt
-                ShowReceipt(orderid, finalTotal, payment, change, orderData, discounted, dateCreated, timeCreated, createdBy);
+                ShowReceipt(orderid, finalTotal, payment, change, orderData, discounted, dateCreated, timeCreated, createdBy, refundData, totalRefund);
             }
             catch (Exception ex)
             {
@@ -680,7 +763,23 @@ namespace Inventory_Management_System
             }
         }
 
-        private void ShowReceipt(string orderID, decimal finalTotal, decimal payment, decimal change, System.Data.DataTable orderData, bool discounted, string dateCreated, string timeCreated, string createdBy)
+        private DataTable GetRefundData(string orderID)
+        {
+            try
+            {
+                string query = "SELECT products, quantity, unitprice, reason, daterefunded, timerefunded, refundedby " +
+                              "FROM tblrefunds WHERE orderid = '" + orderID.Replace("'", "''") + "' " +
+                              "ORDER BY daterefunded DESC, timerefunded DESC";
+                return sales.GetData(query);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading refund data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new DataTable();
+            }
+        }
+
+        private void ShowReceipt(string orderID, decimal finalTotal, decimal payment, decimal change, System.Data.DataTable orderData, bool discounted, string dateCreated, string timeCreated, string createdBy, DataTable refundData, decimal totalRefund)
         {
             try
             {
@@ -693,9 +792,10 @@ namespace Inventory_Management_System
                 receiptForm.MinimizeBox = false;
                 receiptForm.BackColor = Color.White;
 
-                // Calculate the required height based on order items
+                // Calculate the required height based on order items and refunds
                 int baseHeight = 400; // Base height for header, footer, totals
                 int itemHeight = 20; // Height per order item
+                int refundItemHeight = 32; // Height per refund item (including details)
                 int extraHeightForMultipleQty = 0;
 
                 // Calculate extra height for items with quantity > 1 (they show unit price)
@@ -706,7 +806,21 @@ namespace Inventory_Management_System
                         extraHeightForMultipleQty += 15; // Extra height for unit price line
                 }
 
-                int calculatedHeight = baseHeight + (orderData.Rows.Count * itemHeight) + extraHeightForMultipleQty;
+                // Add height for refund section if there are refunds
+                int refundSectionHeight = 0;
+                if (refundData.Rows.Count > 0)
+                {
+                    refundSectionHeight = 80 + (refundData.Rows.Count * refundItemHeight); // Header + items + total refund
+                    // Add extra height for refund items with multiple quantities
+                    foreach (DataRow row in refundData.Rows)
+                    {
+                        int quantity = Convert.ToInt32(row["quantity"]);
+                        if (quantity > 1)
+                            refundSectionHeight += 12; // Extra height for unit price line
+                    }
+                }
+
+                int calculatedHeight = baseHeight + (orderData.Rows.Count * itemHeight) + extraHeightForMultipleQty + refundSectionHeight;
                 int panelHeight = Math.Max(550, calculatedHeight); // Minimum 550, or calculated height
 
                 // Create a scrollable panel for the receipt content
@@ -736,7 +850,14 @@ namespace Inventory_Management_System
                 taglineLabel.Location = new Point(0, yPos);
                 taglineLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(taglineLabel);
-                yPos += 30;
+                yPos += 20;
+
+                // ADD ADDRESS BELOW TAGLINE
+                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new Font("Arial", 8), 380);
+                addressLabel.Location = new Point(0, yPos);
+                addressLabel.TextAlign = ContentAlignment.MiddleCenter;
+                receiptPanel.Controls.Add(addressLabel);
+                yPos += 20;
 
                 // Separator line
                 Panel line1 = new Panel();
@@ -760,7 +881,13 @@ namespace Inventory_Management_System
                 Label cashierLabel = CreateReceiptLabel($"Cashier: {createdBy}", new Font("Arial", 9), 380);
                 cashierLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(cashierLabel);
-                yPos += 25;
+                yPos += 18;
+
+                // ADD TIN BELOW CASHIER
+                Label tinLabel = CreateReceiptLabel("Tin:", new Font("Arial", 8), 380);
+                tinLabel.Location = new Point(10, yPos);
+                receiptPanel.Controls.Add(tinLabel);
+                yPos += 20;
 
                 // Product header
                 Panel line2 = new Panel();
@@ -849,6 +976,115 @@ namespace Inventory_Management_System
                 }
 
                 yPos += 10;
+
+                // REFUND SECTION - Only show if there are refunds
+                if (refundData.Rows.Count > 0)
+                {
+                    // Separator line before refunds
+                    Panel refundSeparator = new Panel();
+                    refundSeparator.Size = new Size(360, 2);
+                    refundSeparator.Location = new Point(10, yPos);
+                    refundSeparator.BackColor = Color.Red;
+                    receiptPanel.Controls.Add(refundSeparator);
+                    yPos += 10;
+
+                    // Refund header
+                    Label refundHeaderLabel = CreateReceiptLabel("REFUNDED ITEMS", new Font("Arial", 10, FontStyle.Bold), 380);
+                    refundHeaderLabel.Location = new Point(0, yPos);
+                    refundHeaderLabel.TextAlign = ContentAlignment.MiddleCenter;
+                    refundHeaderLabel.ForeColor = Color.Red;
+                    receiptPanel.Controls.Add(refundHeaderLabel);
+                    yPos += 20;
+
+                    // Refund items - FIXED ALIGNMENT to match main products
+                    foreach (DataRow row in refundData.Rows)
+                    {
+                        string productName = row["products"].ToString();
+                        int quantity = Convert.ToInt32(row["quantity"]);
+                        decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
+                        decimal refundAmount = quantity * unitPrice;
+                        string reason = row["reason"].ToString();
+                        string refundDate = row["daterefunded"].ToString();
+                        string refundTime = row["timerefunded"].ToString();
+
+                        // Truncate product name if too long - SAME as main products
+                        if (productName.Length > 20)
+                            productName = productName.Substring(0, 17) + "...";
+
+                        // Product line - EXACT SAME ALIGNMENT as main products
+                        Label refundProductLabel = new Label();
+                        refundProductLabel.Text = productName;
+                        refundProductLabel.Font = new Font("Arial", 9);
+                        refundProductLabel.Size = new Size(180, 18);
+                        refundProductLabel.Location = new Point(10, yPos);
+                        receiptPanel.Controls.Add(refundProductLabel);
+
+                        Label refundQtyLabel = new Label();
+                        refundQtyLabel.Text = $"-{quantity}";
+                        refundQtyLabel.Font = new Font("Arial", 9);
+                        refundQtyLabel.Size = new Size(50, 18);
+                        refundQtyLabel.Location = new Point(190, yPos);
+                        refundQtyLabel.TextAlign = ContentAlignment.MiddleCenter;
+                        refundQtyLabel.ForeColor = Color.Red;
+                        receiptPanel.Controls.Add(refundQtyLabel);
+
+                        Label refundAmountLabel = new Label();
+                        refundAmountLabel.Text = $"-{refundAmount.ToString("₱#,##0.00")}";
+                        refundAmountLabel.Font = new Font("Arial", 9);
+                        refundAmountLabel.Size = new Size(100, 18);
+                        refundAmountLabel.Location = new Point(270, yPos);
+                        refundAmountLabel.TextAlign = ContentAlignment.MiddleRight;
+                        refundAmountLabel.ForeColor = Color.Red;
+                        receiptPanel.Controls.Add(refundAmountLabel);
+
+                        yPos += 18;
+
+                        // Unit price for multiple quantities - SAME as main products
+                        if (quantity > 1)
+                        {
+                            Label unitPriceLabel = CreateReceiptLabel($"  @ {unitPrice.ToString("₱#,##0.00")} each", new Font("Arial", 8, FontStyle.Italic), 380);
+                            unitPriceLabel.Location = new Point(20, yPos);
+                            unitPriceLabel.ForeColor = Color.Gray;
+                            receiptPanel.Controls.Add(unitPriceLabel);
+                            yPos += 12;
+                        }
+
+                        // Refund details
+                        Label refundDetailsLabel = CreateReceiptLabel($"Refunded on {refundDate} - Reason: {reason}", new Font("Arial", 7, FontStyle.Italic), 380);
+                        refundDetailsLabel.Location = new Point(15, yPos);
+                        refundDetailsLabel.ForeColor = Color.DarkRed;
+                        receiptPanel.Controls.Add(refundDetailsLabel);
+                        yPos += 14;
+                    }
+
+                    yPos += 10;
+
+                    // TOTAL REFUND section
+                    Panel totalRefundSeparator = new Panel();
+                    totalRefundSeparator.Size = new Size(360, 1);
+                    totalRefundSeparator.Location = new Point(10, yPos);
+                    totalRefundSeparator.BackColor = Color.Red;
+                    receiptPanel.Controls.Add(totalRefundSeparator);
+                    yPos += 10;
+
+                    Label totalRefundLabel = new Label();
+                    totalRefundLabel.Text = "TOTAL REFUND:";
+                    totalRefundLabel.Font = new Font("Arial", 9, FontStyle.Bold);
+                    totalRefundLabel.Size = new Size(200, 18);
+                    totalRefundLabel.Location = new Point(10, yPos);
+                    totalRefundLabel.ForeColor = Color.Red;
+                    receiptPanel.Controls.Add(totalRefundLabel);
+
+                    Label totalRefundAmountLabel = new Label();
+                    totalRefundAmountLabel.Text = totalRefund.ToString("-₱#,##0.00");
+                    totalRefundAmountLabel.Font = new Font("Arial", 9, FontStyle.Bold);
+                    totalRefundAmountLabel.Size = new Size(150, 18);
+                    totalRefundAmountLabel.Location = new Point(220, yPos);
+                    totalRefundAmountLabel.TextAlign = ContentAlignment.MiddleRight;
+                    totalRefundAmountLabel.ForeColor = Color.Red;
+                    receiptPanel.Controls.Add(totalRefundAmountLabel);
+                    yPos += 25;
+                }
 
                 // Separator line
                 Panel line3 = new Panel();
@@ -1017,6 +1253,8 @@ namespace Inventory_Management_System
                 printDateCreated = dateCreated;
                 printTimeCreated = timeCreated;
                 printCreatedBy = createdBy;
+                printRefundData = refundData;
+                printTotalRefund = totalRefund;
 
                 // Buttons
                 Button printButton = new Button();
@@ -1249,6 +1487,48 @@ namespace Inventory_Management_System
             {
                 row = -1;
                 UpdateButtonStates();
+            }
+        }
+
+        private void btnrefund_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string selectedOrderID = null;
+
+                if (row >= 0 && row < dataGridView1.Rows.Count)
+                {
+                    DataGridViewRow sel = dataGridView1.Rows[row];
+                    selectedOrderID = sel.Cells["orderid"].Value?.ToString() ?? "";
+                }
+
+                using (frmRefund refundForm = new frmRefund(username, selectedOrderID))
+                {
+                    if (refundForm.ShowDialog() == DialogResult.OK)
+                    {
+                        MessageBox.Show("Refund processed successfully.", "Refund Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadSalesReport(); // Refresh the sales report
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening refund form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnviewrefunds_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (frmViewRefunds viewRefundsForm = new frmViewRefunds(username))
+                {
+                    viewRefundsForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening refunds view: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

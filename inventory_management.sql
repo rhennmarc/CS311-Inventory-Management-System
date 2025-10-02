@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 26, 2025 at 01:09 PM
+-- Generation Time: Oct 02, 2025 at 09:46 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,7 +115,37 @@ INSERT INTO `tbllogs` (`datelog`, `timelog`, `module`, `action`, `performedto`, 
 ('09/26/2025', '4:50 pm', 'ADJUSTMENT MANAGEMENT', 'UPDATE PRICE', 'Product: Alaxan FR Capsule, Price: 13.00?12.00', 'admin'),
 ('09/26/2025', '04:55:31 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/26/2025-045531-pm | TOTAL: 106.', 'admin'),
 ('09/26/2025', '05:07:41 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/26/2025-050741-pm | TOTAL: 110.', 'admin'),
-('09/26/2025', '17:08:18', 'SALES REPORT', 'EXPORT', 'CSV Export: Weekly - 09/26/2025', 'admin');
+('09/26/2025', '17:08:18', 'SALES REPORT', 'EXPORT', 'CSV Export: Weekly - 09/26/2025', 'admin'),
+('09/26/2025', '07:13:43 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/26/2025-071343-pm | TOTAL: 106.', 'admin'),
+('09/26/2025', '19:14:19', 'PURCHASE ORDER MANAGEMENT', 'EXPORT', 'CSV Export: Test - All', 'admin'),
+('09/26/2025', '19:15:16', 'SALES REPORT', 'EXPORT', 'CSV Export: Weekly - 09/26/2025', 'admin'),
+('09/28/2025', '08:15:44 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/28/2025-081544-pm | TOTAL: 22.0', 'admin'),
+('09/28/2025', '08:16:09 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/28/2025-081609-pm | TOTAL: 176.', 'admin'),
+('09/30/2025', '03:43:32 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/30/2025-034332-pm | TOTAL: 216.', 'admin'),
+('09/30/2025', '03:44:43 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/30/2025-034443-pm | TOTAL: 272.', 'admin'),
+('09/30/2025', '15:44:56', 'SALES REPORT', 'EXPORT', 'CSV Export: Daily - 09/30/2025', 'admin'),
+('09/30/2025', '08:03:48 pm', 'POS', 'PURCHASE', 'ORDER ID: order-09/30/2025-080348-pm | TOTAL: 322.', 'admin'),
+('09/30/2025', '20:44:53', 'SALES', 'REFUND', 'ORDER ID: order-09/30/2025-080348-pm - 2 items', 'admin'),
+('09/30/2025', '23:13:33', 'REFUNDS', 'EXPORT', 'CSV Export: Daily - 09/30/2025', 'admin'),
+('10/01/2025', '09:04:17', 'SALES REPORT', 'EXPORT', 'CSV Export: Monthly - 09/17/2025', 'admin'),
+('10/02/2025', '09:28:16 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-092816-am | TOTAL: 142.', 'admin'),
+('10/02/2025', '09:39:39 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-093939-am | TOTAL: 136.', 'admin'),
+('10/02/2025', '09:50:00 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-095000-am | TOTAL: 156.', 'admin'),
+('10/02/2025', '10:24:25', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-095000-am - 1 items', 'admin'),
+('10/02/2025', '11:20:56 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-112056-am | TOTAL: 640.', 'admin'),
+('10/02/2025', '11:23:28', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-112056-am - 1 items', 'admin'),
+('10/02/2025', '11:32:49', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-112056-am - 1 items', 'admin'),
+('10/02/2025', '11:43:02 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-114302-am | TOTAL: 64.0', 'admin'),
+('10/02/2025', '11:43:29', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-114302-am - 1 items', 'admin'),
+('10/02/2025', '11:55:06 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-115506-am | TOTAL: 140.', 'admin'),
+('10/02/2025', '11:55:32', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-115506-am - 1 items', 'admin'),
+('10/02/2025', '11:56:33 am', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-115633-am | TOTAL: 440.', 'admin'),
+('10/02/2025', '11:56:58', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-115633-am - 1 items', 'admin'),
+('10/02/2025', '12:07:38', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-115633-am - 1 items', 'admin'),
+('10/02/2025', '12:22:39 pm', 'POS', 'PURCHASE', 'ORDER ID: order-10/02/2025-122239-pm | TOTAL: 280.', 'admin'),
+('10/02/2025', '12:23:04', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-122239-pm - 1 items', 'admin'),
+('10/02/2025', '13:12:48', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-114302-am - 1 items', 'admin'),
+('10/02/2025', '13:42:02', 'SALES', 'REFUND', 'ORDER ID: order-10/02/2025-114302-am - 1 items', 'admin');
 
 -- --------------------------------------------------------
 
@@ -140,34 +170,34 @@ INSERT INTO `tblproducts` (`products`, `description`, `unitprice`, `currentstock
 ('Mucotuss Forte', '', '7.00', '223', 'admin', '11/09/2025'),
 ('Neozep Forte Tablet', '', '8.00', '99', 'admin', '09/18/2025'),
 ('Tuseran Forte Capsule', '', '14.00', '97', 'admin', '09/18/2025'),
-('Biogesic 500mg Tablet', '', '7.00', '191', 'admin', '09/19/2025'),
-('Bioflu Tablet', '', '9.00', '141', 'admin', '09/19/2025'),
-('Alaxan FR Capsule', '', '12.00', '122', 'admin', '09/19/2025'),
+('Biogesic 500mg Tablet', '', '7.00', '178', 'admin', '09/19/2025'),
+('Bioflu Tablet', '', '9.00', '136', 'admin', '09/19/2025'),
+('Alaxan FR Capsule', '', '12.00', '109', 'admin', '09/19/2025'),
 ('Decolgen Forte Tablet', '', '8.50', '178', 'admin', '09/19/2025'),
 ('Paracetamol 500mg Tablet (Generic)', '', '2.00', '498', 'admin', '09/19/2025'),
 ('Ibuprofen 400mg Tablet', '', '4.50', '299', 'admin', '09/19/2025'),
 ('Kremil-S Tablet', '', '10.00', '98', 'admin', '09/19/2025'),
-('Ascof Lagundi Syrup 60ml', '', '90.00', '59', 'admin', '09/19/2025'),
+('Ascof Lagundi Syrup 60ml', '', '90.00', '54', 'admin', '09/19/2025'),
 ('Ventolin Inhaler 100mcg', '', '350.00', '29', 'admin', '09/19/2025'),
-('Cetirizine 10mg Tablet', '', '6.00', '197', 'admin', '09/19/2025'),
+('Cetirizine 10mg Tablet', '', '6.00', '196', 'admin', '09/19/2025'),
 ('Claritin 10mg Tablet', '', '35.00', '75', 'admin', '09/19/2025'),
 ('Myra-E 400IU Capsule', '', '12.00', '149', 'admin', '09/19/2025'),
 ('Enervon Tablet', '', '10.00', '98', 'admin', '09/19/2025'),
 ('Stresstabs Capsule', '', '18.00', '99', 'admin', '09/19/2025'),
 ('Centrum Advance Tablet', '', '22.00', '59', 'admin', '09/19/2025'),
-('Ascorbic Acid 500mg Tablet (Generic)', '', '4.00', '290', 'admin', '09/19/2025'),
+('Ascorbic Acid 500mg Tablet (Generic)', '', '4.00', '262', 'admin', '09/19/2025'),
 ('Fern-C 500mg Capsule', '', '13.00', '78', 'admin', '09/19/2025'),
-('Ceelin Syrup 120ml', '', '140.00', '37', 'admin', '09/19/2025'),
+('Ceelin Syrup 120ml', '', '140.00', '34', 'admin', '09/19/2025'),
 ('Diatabs Capsule', '', '9.00', '98', 'admin', '09/19/2025'),
 ('Dulcolax 5mg Tablet', '', '12.00', '48', 'admin', '09/19/2025'),
 ('Gaviscon Liquid 120ml', '', '180.00', '18', 'admin', '09/19/2025'),
 ('Hydrite Oral Rehydration Salt Sachet', '', '8.00', '148', 'admin', '09/19/2025'),
 ('Imodium Capsule', '', '22.00', '69', 'admin', '09/19/2025'),
 ('Mefenamic Acid 500mg Tablet', '', '4.00', '249', 'admin', '09/19/2025'),
-('Buscopan Tablet', '', '16.00', '117', 'admin', '09/19/2025'),
+('Buscopan Tablet', '', '16.00', '116', 'admin', '09/19/2025'),
 ('Robitussin DM Syrup 60ml', '', '95.00', '30', 'admin', '09/19/2025'),
 ('Tempra Forte 60ml (Paracetamol)', '', '120.00', '40', 'admin', '09/19/2025'),
-('Biogesic Syrup 60ml', '', '110.00', '30', 'admin', '09/19/2025');
+('Biogesic Syrup 60ml', '', '110.00', '25', 'admin', '09/19/2025');
 
 -- --------------------------------------------------------
 
@@ -195,6 +225,41 @@ INSERT INTO `tblpurchase_order` (`products`, `quantity`, `unitcost`, `totalcost`
 ('Biogesic 500mg Tablet', '100', '5', '500.00', 'Pending', 'admin', '09/19/2025', 'Test', ''),
 ('Neozep Forte Tablet', '150', '6', '900.00', 'Pending', 'admin', '09/19/2025', 'Test', ''),
 ('Alaxan FR Capsule', '20', '7', '140.00', 'Pending', 'admin', '09/25/2025', 'Test', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblrefunds`
+--
+
+CREATE TABLE `tblrefunds` (
+  `orderid` varchar(50) NOT NULL,
+  `products` varchar(50) NOT NULL,
+  `quantity` varchar(50) NOT NULL,
+  `unitprice` varchar(50) NOT NULL,
+  `reason` text NOT NULL,
+  `daterefunded` varchar(50) NOT NULL,
+  `timerefunded` varchar(50) NOT NULL,
+  `refundedby` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `tblrefunds`
+--
+
+INSERT INTO `tblrefunds` (`orderid`, `products`, `quantity`, `unitprice`, `reason`, `daterefunded`, `timerefunded`, `refundedby`) VALUES
+('order-09/30/2025-080348-pm', 'Ascof Lagundi Syrup 60ml', '2', '90.00', 'Wrong quantity', '09/30/2025', '20:44:53', 'admin'),
+('order-09/30/2025-080348-pm', 'Alaxan FR Capsule', '1', '12.00', 'Wrong quantity', '09/30/2025', '20:44:53', 'admin'),
+('order-10/02/2025-095000-am', 'Bioflu Tablet', '8', '9.00', 'Wrong order', '10/02/2025', '10:24:25', 'admin'),
+('order-10/02/2025-112056-am', 'Ceelin Syrup 120ml', '2', '140.00', 'Wrong product', '10/02/2025', '11:23:28', 'admin'),
+('order-10/02/2025-112056-am', 'Ceelin Syrup 120ml', '1', '140.00', 'Wrong product', '10/02/2025', '11:32:49', 'admin'),
+('order-10/02/2025-114302-am', 'Ascorbic Acid 500mg Tablet (Generic)', '6', '4.00', 'Wrong quantity', '10/02/2025', '11:43:29', 'admin'),
+('order-10/02/2025-115506-am', 'Ceelin Syrup 120ml', '1', '140.00', 'Wrong product', '10/02/2025', '11:55:32', 'admin'),
+('order-10/02/2025-115633-am', 'Biogesic Syrup 60ml', '2', '110.00', 'Wrong quantity', '10/02/2025', '11:56:58', 'admin'),
+('order-10/02/2025-115633-am', 'Biogesic Syrup 60ml', '1', '110.00', 'Wrong quantity', '10/02/2025', '12:07:38', 'admin'),
+('order-10/02/2025-122239-pm', 'Ceelin Syrup 120ml', '1', '140.00', 'Wrong quantity', '10/02/2025', '12:23:04', 'admin'),
+('order-10/02/2025-114302-am', 'Ascorbic Acid 500mg Tablet (Generic)', '2', '4.00', 'Wrong quantity', '10/02/2025', '13:12:48', 'admin'),
+('order-10/02/2025-114302-am', 'Ascorbic Acid 500mg Tablet (Generic)', '2', '4.00', 'Wrong quantity', '10/02/2025', '13:42:02', 'admin');
 
 -- --------------------------------------------------------
 
@@ -274,7 +339,39 @@ INSERT INTO `tblsales` (`orderid`, `products`, `quantity`, `payment`, `paymentch
 ('order-09/26/2025-045531-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '120.00', '14.00', '4.00', 'No', '09/26/2025', '04:55:31 pm', 'admin'),
 ('order-09/26/2025-050741-pm', 'Alaxan FR Capsule', '1', '500.00', '389.60', '9.60', 'Yes', '09/26/2025', '05:07:41 pm', 'admin'),
 ('order-09/26/2025-050741-pm', 'Ascof Lagundi Syrup 60ml', '1', '500.00', '389.60', '72.00', 'Yes', '09/26/2025', '05:07:41 pm', 'admin'),
-('order-09/26/2025-050741-pm', 'Bioflu Tablet', '4', '500.00', '389.60', '28.80', 'Yes', '09/26/2025', '05:07:41 pm', 'admin');
+('order-09/26/2025-050741-pm', 'Bioflu Tablet', '4', '500.00', '389.60', '28.80', 'Yes', '09/26/2025', '05:07:41 pm', 'admin'),
+('order-09/26/2025-071343-pm', 'Alaxan FR Capsule', '1', '120.00', '14.00', '12.00', 'No', '09/26/2025', '07:13:43 pm', 'admin'),
+('order-09/26/2025-071343-pm', 'Ascof Lagundi Syrup 60ml', '1', '120.00', '14.00', '90.00', 'No', '09/26/2025', '07:13:43 pm', 'admin'),
+('order-09/26/2025-071343-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '120.00', '14.00', '4.00', 'No', '09/26/2025', '07:13:43 pm', 'admin'),
+('order-09/28/2025-081544-pm', 'Alaxan FR Capsule', '1', '30.00', '8.00', '12.00', 'No', '09/28/2025', '08:15:44 pm', 'admin'),
+('order-09/28/2025-081544-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '30.00', '8.00', '4.00', 'No', '09/28/2025', '08:15:44 pm', 'admin'),
+('order-09/28/2025-081544-pm', 'Cetirizine 10mg Tablet', '1', '30.00', '8.00', '6.00', 'No', '09/28/2025', '08:15:44 pm', 'admin'),
+('order-09/28/2025-081609-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '200.00', '24.00', '4.00', 'No', '09/28/2025', '08:16:09 pm', 'admin'),
+('order-09/28/2025-081609-pm', 'Bioflu Tablet', '1', '200.00', '24.00', '9.00', 'No', '09/28/2025', '08:16:09 pm', 'admin'),
+('order-09/28/2025-081609-pm', 'Biogesic 500mg Tablet', '1', '200.00', '24.00', '7.00', 'No', '09/28/2025', '08:16:09 pm', 'admin'),
+('order-09/28/2025-081609-pm', 'Buscopan Tablet', '1', '200.00', '24.00', '16.00', 'No', '09/28/2025', '08:16:09 pm', 'admin'),
+('order-09/28/2025-081609-pm', 'Ceelin Syrup 120ml', '1', '200.00', '24.00', '140.00', 'No', '09/28/2025', '08:16:09 pm', 'admin'),
+('order-09/30/2025-034332-pm', 'Alaxan FR Capsule', '1', '250.00', '34.00', '12.00', 'No', '09/30/2025', '03:43:32 pm', 'admin'),
+('order-09/30/2025-034332-pm', 'Ascof Lagundi Syrup 60ml', '1', '250.00', '34.00', '90.00', 'No', '09/30/2025', '03:43:32 pm', 'admin'),
+('order-09/30/2025-034332-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '250.00', '34.00', '4.00', 'No', '09/30/2025', '03:43:32 pm', 'admin'),
+('order-09/30/2025-034332-pm', 'Biogesic Syrup 60ml', '1', '250.00', '34.00', '110.00', 'No', '09/30/2025', '03:43:32 pm', 'admin'),
+('order-09/30/2025-034443-pm', 'Ceelin Syrup 120ml', '1', '300.00', '28.00', '112.00', 'Yes', '09/30/2025', '03:44:43 pm', 'admin'),
+('order-09/30/2025-034443-pm', 'Biogesic Syrup 60ml', '1', '300.00', '28.00', '88.00', 'Yes', '09/30/2025', '03:44:43 pm', 'admin'),
+('order-09/30/2025-034443-pm', 'Ascof Lagundi Syrup 60ml', '1', '300.00', '28.00', '72.00', 'Yes', '09/30/2025', '03:44:43 pm', 'admin'),
+('order-09/30/2025-080348-pm', 'Alaxan FR Capsule', '3', '400.00', '78.00', '36.00', 'No', '09/30/2025', '08:03:48 pm', 'admin'),
+('order-09/30/2025-080348-pm', 'Ascof Lagundi Syrup 60ml', '1', '400.00', '78.00', '90.00', 'No', '09/30/2025', '08:03:48 pm', 'admin'),
+('order-09/30/2025-080348-pm', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '400.00', '78.00', '4.00', 'No', '09/30/2025', '08:03:48 pm', 'admin'),
+('order-10/02/2025-092816-am', 'Alaxan FR Capsule', '1', '150.00', '8.00', '12.00', 'No', '10/02/2025', '09:28:16 am', 'admin'),
+('order-10/02/2025-092816-am', 'Ascorbic Acid 500mg Tablet (Generic)', '1', '150.00', '8.00', '4.00', 'No', '10/02/2025', '09:28:16 am', 'admin'),
+('order-10/02/2025-092816-am', 'Ascof Lagundi Syrup 60ml', '1', '150.00', '8.00', '90.00', 'No', '10/02/2025', '09:28:16 am', 'admin'),
+('order-10/02/2025-092816-am', 'Bioflu Tablet', '4', '150.00', '8.00', '36.00', 'No', '10/02/2025', '09:28:16 am', 'admin'),
+('order-10/02/2025-093939-am', 'Alaxan FR Capsule', '6', '150.00', '14.00', '72.00', 'No', '10/02/2025', '09:39:39 am', 'admin'),
+('order-10/02/2025-093939-am', 'Ascorbic Acid 500mg Tablet (Generic)', '16', '150.00', '14.00', '64.00', 'No', '10/02/2025', '09:39:39 am', 'admin'),
+('order-10/02/2025-095000-am', 'Biogesic 500mg Tablet', '12', '200.00', '44.00', '84.00', 'No', '10/02/2025', '09:50:00 am', 'admin'),
+('order-10/02/2025-112056-am', 'Biogesic Syrup 60ml', '2', '700.00', '60.00', '220.00', 'No', '10/02/2025', '11:20:56 am', 'admin'),
+('order-10/02/2025-114302-am', 'Ascorbic Acid 500mg Tablet (Generic)', '6', '100.00', '36.00', '24.00', 'No', '10/02/2025', '11:43:02 am', 'admin'),
+('order-10/02/2025-115633-am', 'Biogesic Syrup 60ml', '1', '500.00', '60.00', '110.00', 'No', '10/02/2025', '11:56:33 am', 'admin'),
+('order-10/02/2025-122239-pm', 'Ceelin Syrup 120ml', '1', '300.00', '20.00', '140.00', 'No', '10/02/2025', '12:22:39 pm', 'admin');
 
 -- --------------------------------------------------------
 

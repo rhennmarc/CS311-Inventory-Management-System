@@ -381,7 +381,13 @@ namespace Inventory_Management_System
                 string taglineText = "Your Health, Our Priority";
                 SizeF taglineSize = g.MeasureString(taglineText, regularFont);
                 g.DrawString(taglineText, regularFont, brush, centerPos - (taglineSize.Width / 2), yPos);
-                yPos += 25;
+                yPos += 15;
+
+                // ADD ADDRESS BELOW TAGLINE
+                string addressText = "1340 G Tuazon St Sampaloc Manila";
+                SizeF addressSize = g.MeasureString(addressText, smallFont);
+                g.DrawString(addressText, smallFont, brush, centerPos - (addressSize.Width / 2), yPos);
+                yPos += 20;
 
                 // Line separator
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
@@ -393,6 +399,11 @@ namespace Inventory_Management_System
                 g.DrawString($"Date & Time: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
                 g.DrawString($"Cashier: {username}", regularFont, brush, leftMargin, yPos);
+                yPos += 15;
+
+                // ADD TIN BELOW CASHIER
+                string tinText = "Tin:";
+                g.DrawString(tinText, smallFont, brush, leftMargin, yPos);
                 yPos += 20;
 
                 // Line separator
@@ -574,7 +585,14 @@ namespace Inventory_Management_System
                 taglineLabel.Location = new System.Drawing.Point(0, yPos);
                 taglineLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(taglineLabel);
-                yPos += 30;
+                yPos += 20;
+
+                // ADD ADDRESS BELOW TAGLINE
+                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new System.Drawing.Font("Arial", 8), 380);
+                addressLabel.Location = new System.Drawing.Point(0, yPos);
+                addressLabel.TextAlign = ContentAlignment.MiddleCenter;
+                receiptPanel.Controls.Add(addressLabel);
+                yPos += 20;
 
                 // Separator line
                 Panel line1 = new Panel();
@@ -598,7 +616,13 @@ namespace Inventory_Management_System
                 Label cashierLabel = CreateReceiptLabel($"Cashier: {username}", new System.Drawing.Font("Arial", 9), 380);
                 cashierLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(cashierLabel);
-                yPos += 25;
+                yPos += 18;
+
+                // ADD TIN BELOW CASHIER
+                Label tinLabel = CreateReceiptLabel("Tin:", new System.Drawing.Font("Arial", 8), 380);
+                tinLabel.Location = new System.Drawing.Point(10, yPos);
+                receiptPanel.Controls.Add(tinLabel);
+                yPos += 20;
 
                 // Product header
                 Panel line2 = new Panel();
