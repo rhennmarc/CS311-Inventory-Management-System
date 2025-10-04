@@ -156,6 +156,7 @@
             this.txtproduct.Name = "txtproduct";
             this.txtproduct.Size = new System.Drawing.Size(533, 20);
             this.txtproduct.TabIndex = 0;
+            this.txtproduct.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtproduct_KeyPress);
             // 
             // label3
             // 
@@ -200,6 +201,7 @@
             this.txtunitprice.Name = "txtunitprice";
             this.txtunitprice.Size = new System.Drawing.Size(533, 20);
             this.txtunitprice.TabIndex = 0;
+            this.txtunitprice.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtunitprice_KeyPress);
             // 
             // label8
             // 
@@ -244,6 +246,7 @@
             this.txtcurrentstock.Name = "txtcurrentstock";
             this.txtcurrentstock.Size = new System.Drawing.Size(533, 20);
             this.txtcurrentstock.TabIndex = 0;
+            this.txtcurrentstock.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtcurrentstock_KeyPress);
             // 
             // label7
             // 

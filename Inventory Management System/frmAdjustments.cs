@@ -3,6 +3,10 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Inventory_Management_System
 {
@@ -49,6 +53,10 @@ namespace Inventory_Management_System
             cmbduration.Items.AddRange(new string[] { "Daily", "Weekly", "Monthly", "Yearly", "All Records" });
             cmbduration.SelectedIndex = 0;
 
+            // Initialize category combobox
+            cmbcategory.Items.AddRange(new string[] { "All", "Quantity", "Unit Price" });
+            cmbcategory.SelectedIndex = 0;
+
             // DatePicker setup: default to today, format MM/dd/yyyy
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
             dateTimePicker1.CustomFormat = "MM/dd/yyyy";
@@ -62,6 +70,12 @@ namespace Inventory_Management_System
             };
 
             cmbduration.SelectedIndexChanged += (s, ev) =>
+            {
+                currentPage = 1;
+                LoadAdjustments();
+            };
+
+            cmbcategory.SelectedIndexChanged += (s, ev) =>
             {
                 currentPage = 1;
                 LoadAdjustments();
@@ -85,10 +99,21 @@ namespace Inventory_Management_System
             {
                 string duration = cmbduration.SelectedItem?.ToString() ?? "Daily";
                 DateTime selectedDate = dateTimePicker1.Value;
+                string category = cmbcategory.SelectedItem?.ToString() ?? "All";
 
                 string query = @"SELECT products, quantity, unitprice, reason, createdby, dateadjusted, timeadjusted 
                                  FROM tbladjustment 
                                  WHERE " + GetDurationWhereClause(duration, selectedDate);
+
+                // Add category filter at database level to exclude records without values
+                if (category == "Quantity")
+                {
+                    query += " AND quantity IS NOT NULL AND quantity != 0";
+                }
+                else if (category == "Unit Price")
+                {
+                    query += " AND unitprice IS NOT NULL AND unitprice != 0";
+                }
 
                 if (!string.IsNullOrEmpty(search))
                 {
@@ -114,6 +139,9 @@ namespace Inventory_Management_System
                 }
 
                 dataGridView1.DataSource = dtPage;
+
+                // Apply category filter for column visibility
+                ApplyCategoryFilter();
 
                 // === Table Styling ===
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
@@ -187,6 +215,72 @@ namespace Inventory_Management_System
             }
         }
 
+        private void ApplyCategoryFilter()
+        {
+            if (dataGridView1.Columns.Contains("quantity") && dataGridView1.Columns.Contains("unitprice"))
+            {
+                string category = cmbcategory.SelectedItem?.ToString() ?? "All";
+
+                switch (category)
+                {
+                    case "All":
+                        dataGridView1.Columns["quantity"].Visible = true;
+                        dataGridView1.Columns["unitprice"].Visible = true;
+                        break;
+                    case "Quantity":
+                        dataGridView1.Columns["quantity"].Visible = true;
+                        dataGridView1.Columns["unitprice"].Visible = false;
+                        break;
+                    case "Unit Price":
+                        dataGridView1.Columns["quantity"].Visible = false;
+                        dataGridView1.Columns["unitprice"].Visible = true;
+                        break;
+                }
+
+                // Update column widths when some columns are hidden
+                UpdateColumnWidths();
+            }
+        }
+
+        private void UpdateColumnWidths()
+        {
+            // Adjust column widths based on which columns are visible
+            int visibleColumnCount = 0;
+
+            if (dataGridView1.Columns.Contains("products") && dataGridView1.Columns["products"].Visible)
+                visibleColumnCount++;
+            if (dataGridView1.Columns.Contains("quantity") && dataGridView1.Columns["quantity"].Visible)
+                visibleColumnCount++;
+            if (dataGridView1.Columns.Contains("unitprice") && dataGridView1.Columns["unitprice"].Visible)
+                visibleColumnCount++;
+            if (dataGridView1.Columns.Contains("reason") && dataGridView1.Columns["reason"].Visible)
+                visibleColumnCount++;
+            if (dataGridView1.Columns.Contains("createdby") && dataGridView1.Columns["createdby"].Visible)
+                visibleColumnCount++;
+            if (dataGridView1.Columns.Contains("dateadjusted") && dataGridView1.Columns["dateadjusted"].Visible)
+                visibleColumnCount++;
+
+            if (visibleColumnCount > 0)
+            {
+                // Adjust widths based on number of visible columns
+                int baseWidth = dataGridView1.Width - 50; // Leave some margin
+                int columnWidth = baseWidth / visibleColumnCount;
+
+                if (dataGridView1.Columns.Contains("products"))
+                    dataGridView1.Columns["products"].Width = Math.Max(180, columnWidth);
+                if (dataGridView1.Columns.Contains("quantity") && dataGridView1.Columns["quantity"].Visible)
+                    dataGridView1.Columns["quantity"].Width = Math.Max(100, columnWidth);
+                if (dataGridView1.Columns.Contains("unitprice") && dataGridView1.Columns["unitprice"].Visible)
+                    dataGridView1.Columns["unitprice"].Width = Math.Max(120, columnWidth);
+                if (dataGridView1.Columns.Contains("reason"))
+                    dataGridView1.Columns["reason"].Width = Math.Max(250, columnWidth);
+                if (dataGridView1.Columns.Contains("createdby"))
+                    dataGridView1.Columns["createdby"].Width = Math.Max(120, columnWidth);
+                if (dataGridView1.Columns.Contains("dateadjusted"))
+                    dataGridView1.Columns["dateadjusted"].Width = Math.Max(120, columnWidth);
+            }
+        }
+
         private string GetDurationWhereClause(string duration, DateTime selectedDate)
         {
             switch (duration)
@@ -224,6 +318,7 @@ namespace Inventory_Management_System
             txtsearch.Text = "";
             dateTimePicker1.Value = DateTime.Today;
             cmbduration.SelectedIndex = 0;
+            cmbcategory.SelectedIndex = 0;
             LoadAdjustments();
         }
 
@@ -415,6 +510,170 @@ namespace Inventory_Management_System
                 row = -1;
                 UpdateButtonStates();
             }
+        }
+
+        private void btnexport_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Get all adjustments data for export
+                string duration = cmbduration.SelectedItem?.ToString() ?? "Daily";
+                DateTime selectedDate = dateTimePicker1.Value;
+                string category = cmbcategory.SelectedItem?.ToString() ?? "All";
+
+                string query = @"SELECT products, quantity, unitprice, reason, createdby, dateadjusted, timeadjusted 
+                                 FROM tbladjustment 
+                                 WHERE " + GetDurationWhereClause(duration, selectedDate);
+
+                // Add category filter at database level to exclude records without values
+                if (category == "Quantity")
+                {
+                    query += " AND quantity IS NOT NULL AND quantity != 0";
+                }
+                else if (category == "Unit Price")
+                {
+                    query += " AND unitprice IS NOT NULL AND unitprice != 0";
+                }
+
+                query += " ORDER BY dateadjusted DESC, timeadjusted DESC";
+
+                DataTable exportData = adjustments.GetData(query);
+
+                if (exportData.Rows.Count == 0)
+                {
+                    MessageBox.Show("No data to export for the selected criteria.", "No Data", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                SaveFileDialog saveDialog = new SaveFileDialog();
+                saveDialog.Filter = "CSV Files|*.csv|Excel Files|*.xlsx";
+                saveDialog.Title = "Export Adjustments Report";
+                string durationText = duration.ToLower().Replace(" ", "");
+                string dateText = selectedDate.ToString("yyyy-MM-dd");
+                saveDialog.FileName = $"AdjustmentsReport_{durationText}_{dateText}";
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string extension = Path.GetExtension(saveDialog.FileName).ToLower();
+                    if (extension == ".csv")
+                    {
+                        ExportToCSV(exportData, saveDialog.FileName, duration, selectedDate, category);
+                    }
+                    else
+                    {
+                        string csvFileName = Path.ChangeExtension(saveDialog.FileName, ".csv");
+                        ExportToCSV(exportData, csvFileName, duration, selectedDate, category);
+                        MessageBox.Show($"Data exported as CSV: {csvFileName}\n\nYou can open this file in Excel and save it as .xlsx format if needed.",
+                            "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error exporting data: " + ex.Message, "Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ExportToCSV(DataTable data, string fileName, string duration, DateTime selectedDate, string category)
+        {
+            try
+            {
+                StringBuilder csvContent = new StringBuilder();
+
+                // Add title and header information
+                csvContent.AppendLine("AMGC PHARMACY - ADJUSTMENTS REPORT");
+                csvContent.AppendLine($"Duration: {duration}, Date: {selectedDate:MM/dd/yyyy}, Category: {category}, Generated: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}");
+                csvContent.AppendLine(); // Empty line
+
+                // Add column headers based on category
+                if (category == "All")
+                {
+                    csvContent.AppendLine("Product,Quantity,Unit Price,Reason,Created By,Date Adjusted,Time Adjusted");
+                }
+                else if (category == "Quantity")
+                {
+                    csvContent.AppendLine("Product,Quantity,Reason,Created By,Date Adjusted,Time Adjusted");
+                }
+                else if (category == "Unit Price")
+                {
+                    csvContent.AppendLine("Product,Unit Price,Reason,Created By,Date Adjusted,Time Adjusted");
+                }
+
+                // Add data rows
+                foreach (DataRow row in data.Rows)
+                {
+                    string product = EscapeCSVField(row["products"].ToString());
+                    string quantity = row["quantity"].ToString();
+                    string unitPrice = row["unitprice"].ToString();
+                    string reason = EscapeCSVField(row["reason"].ToString());
+                    string createdBy = EscapeCSVField(row["createdby"].ToString());
+                    string dateAdjusted = EscapeCSVField(row["dateadjusted"].ToString());
+                    string timeAdjusted = EscapeCSVField(row["timeadjusted"].ToString());
+
+                    if (category == "All")
+                    {
+                        // Format quantity with + sign for positive values
+                        if (int.TryParse(quantity, out int qty) && qty != 0)
+                        {
+                            quantity = qty > 0 ? $"+{qty}" : qty.ToString();
+                        }
+
+                        // Format unit price as currency
+                        if (decimal.TryParse(unitPrice, out decimal price) && price != 0)
+                        {
+                            unitPrice = price.ToString("F2");
+                        }
+
+                        csvContent.AppendLine($"{product},{quantity},{unitPrice},{reason},{createdBy},{dateAdjusted},{timeAdjusted}");
+                    }
+                    else if (category == "Quantity")
+                    {
+                        // Format quantity with + sign for positive values
+                        if (int.TryParse(quantity, out int qty) && qty != 0)
+                        {
+                            quantity = qty > 0 ? $"+{qty}" : qty.ToString();
+                            csvContent.AppendLine($"{product},{quantity},{reason},{createdBy},{dateAdjusted},{timeAdjusted}");
+                        }
+                    }
+                    else if (category == "Unit Price")
+                    {
+                        // Format unit price as currency
+                        if (decimal.TryParse(unitPrice, out decimal price) && price != 0)
+                        {
+                            unitPrice = price.ToString("F2");
+                            csvContent.AppendLine($"{product},{unitPrice},{reason},{createdBy},{dateAdjusted},{timeAdjusted}");
+                        }
+                    }
+                }
+
+                // Write to file
+                File.WriteAllText(fileName, csvContent.ToString(), Encoding.UTF8);
+
+                MessageBox.Show($"Adjustments report exported successfully!\nLocation: {fileName}\n" +
+                    $"Records: {data.Rows.Count}\nDuration: {duration}\nCategory: {category}",
+                    "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Log the export action
+                adjustments.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                    "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
+                    "', 'EXPORT', 'ADJUSTMENT MANAGEMENT', 'CSV Export: " + duration + " - " + selectedDate.ToString("MM/dd/yyyy") + "', '" + username.Replace("'", "''") + "')");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error creating CSV file: " + ex.Message, "CSV Export Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string EscapeCSVField(string field)
+        {
+            if (string.IsNullOrEmpty(field))
+                return "";
+
+            if (field.Contains(",") || field.Contains("\n") || field.Contains("\r") || field.Contains("\""))
+            {
+                return "\"" + field.Replace("\"", "\"\"") + "\"";
+            }
+            return field;
         }
     }
 }

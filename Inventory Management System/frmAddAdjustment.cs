@@ -33,6 +33,42 @@ namespace Inventory_Management_System
         Class1 newAdjustment = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
         private int errorcount;
 
+        // Helper method to convert 24-hour time to 12-hour format with AM/PM
+        private string ConvertTo12HourFormat(string time24)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(time24))
+                    return string.Empty;
+
+                string[] timeFormats = new[] { "HH:mm:ss", "H:mm:ss", "HH:mm", "H:mm" };
+                DateTime time;
+
+                if (DateTime.TryParseExact(time24, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                // If parsing fails, try regular DateTime parsing as fallback
+                if (DateTime.TryParse(time24, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                return time24; // Return original if parsing fails
+            }
+            catch
+            {
+                return time24; // Return original if any error occurs
+            }
+        }
+
+        // Helper method to get current time in 12-hour format
+        private string GetCurrentTime12Hour()
+        {
+            return DateTime.Now.ToString("h:mm:ss tt");
+        }
+
         private void btnsave_Click(object sender, EventArgs e)
         {
             errorProvider1.Clear();
@@ -111,7 +147,8 @@ namespace Inventory_Management_System
                         string reason = txtreason.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateAdjusted = DateTime.Now.ToString("MM/dd/yyyy");
-                        string timeAdjusted = DateTime.Now.ToString("HH:mm:ss"); // Add time
+                        // Updated to use 12-hour format with AM/PM
+                        string timeAdjusted = GetCurrentTime12Hour();
 
                         // Check if product exists in tblproducts
                         string checkProductQuery = "SELECT currentstock, unitprice FROM tblproducts WHERE LOWER(products) = LOWER('" + product + "')";
@@ -181,7 +218,7 @@ namespace Inventory_Management_System
                             "'" + (action.ToUpper() == "ADD" ? quantity : ("-" + quantity)) + "'" :
                             "NULL";
 
-                        // Insert adjustment record with timeadjusted
+                        // Insert adjustment record with timeadjusted in 12-hour format
                         string insertAdjustment =
                             "INSERT INTO tbladjustment (products, quantity, unitprice, reason, createdby, dateadjusted, timeadjusted) " +
                             "VALUES ('" + product + "', " + sqlQuantity + ", " + recordPrice + ", '" + reason + "', '" + createdBy + "', '" + dateAdjusted + "', '" + timeAdjusted + "')";
@@ -225,7 +262,7 @@ namespace Inventory_Management_System
 
                                     MessageBox.Show(message, "Adjustment Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                    // Log the action
+                                    // Log the action with 12-hour time format
                                     string logAction = hasQuantity ? action.ToUpper() + " ADJUSTMENT" : "PRICE UPDATE";
                                     string logDetails = "Product: " + product;
 
@@ -238,8 +275,9 @@ namespace Inventory_Management_System
                                         logDetails += ", Price: " + currentPrice.ToString("F2") + "→" + newPrice.ToString("F2");
                                     }
 
+                                    // Use 12-hour format for logs as well
                                     newAdjustment.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                                        "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                                        "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + GetCurrentTime12Hour() +
                                         "', '" + logAction + "', 'ADJUSTMENT MANAGEMENT', '" + logDetails + "', '" + username + "')");
 
                                     this.Close();

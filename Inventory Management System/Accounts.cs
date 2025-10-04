@@ -51,7 +51,8 @@ namespace Inventory_Management_System
         {
             try
             {
-                DataTable dt = accounts.GetData("SELECT username, usertype, status, createdby, datecreated FROM tblaccounts ORDER BY username");
+                // Include password in the SELECT query
+                DataTable dt = accounts.GetData("SELECT username, password, usertype, status, createdby, datecreated FROM tblaccounts ORDER BY username");
                 dataGridView1.DataSource = dt;
 
                 // === Table Styling ===
@@ -64,6 +65,8 @@ namespace Inventory_Management_System
                 // === Rename headers ===
                 if (dataGridView1.Columns.Contains("username"))
                     dataGridView1.Columns["username"].HeaderText = "Username";
+                if (dataGridView1.Columns.Contains("password"))
+                    dataGridView1.Columns["password"].HeaderText = "Password";
                 if (dataGridView1.Columns.Contains("usertype"))
                     dataGridView1.Columns["usertype"].HeaderText = "User Type";
                 if (dataGridView1.Columns.Contains("status"))
@@ -72,6 +75,10 @@ namespace Inventory_Management_System
                     dataGridView1.Columns["createdby"].HeaderText = "Created By";
                 if (dataGridView1.Columns.Contains("datecreated"))
                     dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
+
+                // Hide password column for security
+                if (dataGridView1.Columns.Contains("password"))
+                    dataGridView1.Columns["password"].Visible = false;
 
                 // Optional: minimum widths for cleaner spacing
                 dataGridView1.Columns["username"].MinimumWidth = 150;
@@ -114,8 +121,12 @@ namespace Inventory_Management_System
         {
             try
             {
-                DataTable dt = accounts.GetData("SELECT * FROM tblaccounts WHERE username LIKE '%" + txtsearch.Text + "%' OR usertype LIKE '%" + txtsearch.Text + "%' ORDER BY username");
+                DataTable dt = accounts.GetData("SELECT username, password, usertype, status, createdby, datecreated FROM tblaccounts WHERE username LIKE '%" + txtsearch.Text + "%' OR usertype LIKE '%" + txtsearch.Text + "%' ORDER BY username");
                 dataGridView1.DataSource = dt;
+
+                // Hide password column for security
+                if (dataGridView1.Columns.Contains("password"))
+                    dataGridView1.Columns["password"].Visible = false;
 
                 // Clear selection after search
                 dataGridView1.ClearSelection();
@@ -144,10 +155,14 @@ namespace Inventory_Management_System
                 return;
             }
 
-            string editusername = dataGridView1.Rows[row].Cells[0].Value.ToString();
-            string editpassword = dataGridView1.Rows[row].Cells[1].Value.ToString();
-            string editusertype = dataGridView1.Rows[row].Cells[2].Value.ToString();
-            string editstatus = dataGridView1.Rows[row].Cells[3].Value.ToString();
+            // Use column names instead of indices to avoid confusion
+            string editusername = dataGridView1.Rows[row].Cells["username"].Value?.ToString() ?? "";
+            string editpassword = dataGridView1.Rows[row].Cells["password"].Value?.ToString() ?? "";
+            string editusertype = dataGridView1.Rows[row].Cells["usertype"].Value?.ToString() ?? "";
+            string editstatus = dataGridView1.Rows[row].Cells["status"].Value?.ToString() ?? "";
+
+            // Debug: Show what values we're passing
+            Console.WriteLine($"Passing to update form - Username: {editusername}, UserType: {editusertype}, Status: {editstatus}");
 
             ShowOrActivateForm(() => new frmUpdateAccount(editusername, editpassword, editusertype, editstatus, username));
         }
@@ -162,15 +177,17 @@ namespace Inventory_Management_System
                     return;
                 }
 
+                string usernameToDelete = dataGridView1.Rows[row].Cells["username"].Value?.ToString() ?? "";
+
                 DialogResult dr = MessageBox.Show("Are you sure you want to delete this account?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                 if (dr == DialogResult.Yes)
                 {
-                    accounts.executeSQL("DELETE FROM tblaccounts WHERE username = '" + dataGridView1.Rows[row].Cells[0].Value.ToString() + "'");
+                    accounts.executeSQL("DELETE FROM tblaccounts WHERE username = '" + usernameToDelete + "'");
                     if (accounts.rowAffected > 0)
                     {
                         MessageBox.Show("Account deleted.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         accounts.executeSQL("INSERT tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy")
-                            + "' , '" + DateTime.Now.ToShortTimeString() + "' , 'DELETE', 'ACCOUNTS MANAGEMENT', '" + dataGridView1.Rows[row].Cells[0].Value.ToString() + "', '" + username + "')");
+                            + "' , '" + DateTime.Now.ToShortTimeString() + "' , 'DELETE', 'ACCOUNTS MANAGEMENT', '" + usernameToDelete + "', '" + username + "')");
                     }
                     frmAccounts_Load(sender, e);
                 }

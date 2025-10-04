@@ -42,15 +42,18 @@
             this.btnupdate = new System.Windows.Forms.Button();
             this.btnadd = new System.Windows.Forms.Button();
             this.searchPanel = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cmbduration = new System.Windows.Forms.ComboBox();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnsearch = new System.Windows.Forms.Button();
             this.txtsearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.cmbduration = new System.Windows.Forms.ComboBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbcategory = new System.Windows.Forms.ComboBox();
+            this.btnexport = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -72,7 +75,7 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.mainPanel.Size = new System.Drawing.Size(1212, 647);
+            this.mainPanel.Size = new System.Drawing.Size(1369, 647);
             this.mainPanel.TabIndex = 2;
             // 
             // contentPanel
@@ -83,7 +86,7 @@
             this.contentPanel.Location = new System.Drawing.Point(20, 160);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
-            this.contentPanel.Size = new System.Drawing.Size(972, 467);
+            this.contentPanel.Size = new System.Drawing.Size(1129, 467);
             this.contentPanel.TabIndex = 2;
             // 
             // lblPageInfo
@@ -125,7 +128,7 @@
             this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.actionPanel.Location = new System.Drawing.Point(992, 160);
+            this.actionPanel.Location = new System.Drawing.Point(1149, 160);
             this.actionPanel.Name = "actionPanel";
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
@@ -138,7 +141,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 220);
+            this.groupBox1.Location = new System.Drawing.Point(20, 260);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(160, 125);
@@ -192,13 +195,14 @@
             this.actionGroupBox.Controls.Add(this.btndelete);
             this.actionGroupBox.Controls.Add(this.btnupdate);
             this.actionGroupBox.Controls.Add(this.btnadd);
+            this.actionGroupBox.Controls.Add(this.btnexport);
             this.actionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.actionGroupBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 200);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 240);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
@@ -214,7 +218,7 @@
             this.btnrefresh.ForeColor = System.Drawing.Color.White;
             this.btnrefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnrefresh.ImageIndex = 6;
-            this.btnrefresh.Location = new System.Drawing.Point(10, 148);
+            this.btnrefresh.Location = new System.Drawing.Point(10, 188);
             this.btnrefresh.Name = "btnrefresh";
             this.btnrefresh.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnrefresh.Size = new System.Drawing.Size(140, 40);
@@ -234,7 +238,7 @@
             this.btndelete.ForeColor = System.Drawing.Color.White;
             this.btndelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndelete.ImageIndex = 5;
-            this.btndelete.Location = new System.Drawing.Point(10, 108);
+            this.btndelete.Location = new System.Drawing.Point(10, 148);
             this.btndelete.Name = "btndelete";
             this.btndelete.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btndelete.Size = new System.Drawing.Size(140, 40);
@@ -254,7 +258,7 @@
             this.btnupdate.ForeColor = System.Drawing.Color.White;
             this.btnupdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnupdate.ImageIndex = 1;
-            this.btnupdate.Location = new System.Drawing.Point(10, 68);
+            this.btnupdate.Location = new System.Drawing.Point(10, 108);
             this.btnupdate.Name = "btnupdate";
             this.btnupdate.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnupdate.Size = new System.Drawing.Size(140, 40);
@@ -274,7 +278,7 @@
             this.btnadd.ForeColor = System.Drawing.Color.White;
             this.btnadd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnadd.ImageIndex = 0;
-            this.btnadd.Location = new System.Drawing.Point(10, 28);
+            this.btnadd.Location = new System.Drawing.Point(10, 68);
             this.btnadd.Name = "btnadd";
             this.btnadd.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnadd.Size = new System.Drawing.Size(140, 40);
@@ -287,6 +291,8 @@
             // 
             this.searchPanel.BackColor = System.Drawing.Color.White;
             this.searchPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.searchPanel.Controls.Add(this.label2);
+            this.searchPanel.Controls.Add(this.cmbcategory);
             this.searchPanel.Controls.Add(this.label3);
             this.searchPanel.Controls.Add(this.cmbduration);
             this.searchPanel.Controls.Add(this.dateTimePicker1);
@@ -298,8 +304,47 @@
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.searchPanel.Size = new System.Drawing.Size(1172, 80);
+            this.searchPanel.Size = new System.Drawing.Size(1329, 80);
             this.searchPanel.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label3.Location = new System.Drawing.Point(735, 29);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 19);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Duration:";
+            // 
+            // cmbduration
+            // 
+            this.cmbduration.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbduration.FormattingEnabled = true;
+            this.cmbduration.Location = new System.Drawing.Point(812, 24);
+            this.cmbduration.Name = "cmbduration";
+            this.cmbduration.Size = new System.Drawing.Size(181, 28);
+            this.cmbduration.TabIndex = 12;
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateTimePicker1.Location = new System.Drawing.Point(1058, 25);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.Size = new System.Drawing.Size(250, 27);
+            this.dateTimePicker1.TabIndex = 11;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label1.Location = new System.Drawing.Point(1008, 29);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 19);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Date:";
             // 
             // btnsearch
             // 
@@ -310,7 +355,7 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(452, 20);
+            this.btnsearch.Location = new System.Drawing.Point(355, 18);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(110, 35);
             this.btnsearch.TabIndex = 2;
@@ -323,9 +368,9 @@
             this.txtsearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtsearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtsearch.Location = new System.Drawing.Point(118, 25);
+            this.txtsearch.Location = new System.Drawing.Point(89, 23);
             this.txtsearch.Name = "txtsearch";
-            this.txtsearch.Size = new System.Drawing.Size(328, 27);
+            this.txtsearch.Size = new System.Drawing.Size(260, 27);
             this.txtsearch.TabIndex = 1;
             this.txtsearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtsearch_KeyPress);
             // 
@@ -334,7 +379,7 @@
             this.lblSearch.AutoSize = true;
             this.lblSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.lblSearch.Location = new System.Drawing.Point(43, 29);
+            this.lblSearch.Location = new System.Drawing.Point(14, 27);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(58, 19);
             this.lblSearch.TabIndex = 0;
@@ -347,7 +392,7 @@
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(20, 20);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(1172, 60);
+            this.headerPanel.Size = new System.Drawing.Size(1329, 60);
             this.headerPanel.TabIndex = 0;
             // 
             // lblTitle
@@ -361,50 +406,51 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Adjustments Report";
             // 
-            // label3
+            // label2
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label3.Location = new System.Drawing.Point(568, 30);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 19);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "Duration:";
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label2.Location = new System.Drawing.Point(471, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 19);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Category:";
             // 
-            // cmbduration
+            // cmbcategory
             // 
-            this.cmbduration.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbduration.FormattingEnabled = true;
-            this.cmbduration.Location = new System.Drawing.Point(645, 25);
-            this.cmbduration.Name = "cmbduration";
-            this.cmbduration.Size = new System.Drawing.Size(181, 28);
-            this.cmbduration.TabIndex = 12;
+            this.cmbcategory.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbcategory.FormattingEnabled = true;
+            this.cmbcategory.Location = new System.Drawing.Point(548, 25);
+            this.cmbcategory.Name = "cmbcategory";
+            this.cmbcategory.Size = new System.Drawing.Size(181, 28);
+            this.cmbcategory.TabIndex = 14;
             // 
-            // dateTimePicker1
+            // btnexport
             // 
-            this.dateTimePicker1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateTimePicker1.Location = new System.Drawing.Point(891, 26);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(250, 27);
-            this.dateTimePicker1.TabIndex = 11;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(841, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 19);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Date:";
+            this.btnexport.BackColor = System.Drawing.Color.Green;
+            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnexport.FlatAppearance.BorderSize = 0;
+            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnexport.ForeColor = System.Drawing.Color.White;
+            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnexport.ImageIndex = 0;
+            this.btnexport.Location = new System.Drawing.Point(10, 28);
+            this.btnexport.Name = "btnexport";
+            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnexport.Size = new System.Drawing.Size(140, 40);
+            this.btnexport.TabIndex = 6;
+            this.btnexport.Text = "&Export";
+            this.btnexport.UseVisualStyleBackColor = false;
+            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
             // 
             // frmAdjustments
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1212, 647);
+            this.ClientSize = new System.Drawing.Size(1369, 647);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -452,5 +498,8 @@
         private System.Windows.Forms.ComboBox cmbduration;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cmbcategory;
+        private System.Windows.Forms.Button btnexport;
     }
 }

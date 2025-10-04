@@ -98,20 +98,24 @@ namespace Inventory_Management_System
                         string supplier = supplierName.Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
+                        string timeCreated = DateTime.Now.ToString("hh:mm:ss tt"); // Added timecreated
                         string status = "Pending";
 
                         string insertPurchaseOrder =
-                            "INSERT INTO tblpurchase_order (products, quantity, unitcost, totalcost, status, createdby, datecreated, supplier) " +
-                            "VALUES ('" + product + "', '" + quantity + "', '" + unitcost + "', '" + totalcost + "', '" + status + "', '" + createdBy + "', '" + dateCreated + "', '" + supplier + "')";
+                            "INSERT INTO tblpurchase_order (products, quantity, unitcost, totalcost, status, createdby, datecreated, timecreated, supplier) " +
+                            "VALUES ('" + product + "', '" + quantity + "', '" + unitcost + "', '" + totalcost + "', '" + status + "', '" + createdBy + "', '" + dateCreated + "', '" + timeCreated + "', '" + supplier + "')";
 
                         newPurchaseOrder.executeSQL(insertPurchaseOrder);
 
                         if (newPurchaseOrder.rowAffected > 0)
                         {
+                            // Log unit cost history for new purchase order
+                            LogUnitCostHistory(product, unitcost, createdBy);
+
                             MessageBox.Show("New purchase order added successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             newPurchaseOrder.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
-                                "VALUES ('" + DateTime.Now.ToString("dd/MM/yyyy") + "', '" + DateTime.Now.ToShortTimeString() +
+                                "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                                 "', 'ADD', 'PURCHASE ORDER MANAGEMENT', '" + product + "', '" + username + "')");
 
                             this.Close();
@@ -122,6 +126,36 @@ namespace Inventory_Management_System
                 {
                     MessageBox.Show(error.Message, "ERROR on adding new purchase order", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void LogUnitCostHistory(string product, string unitCost, string username)
+        {
+            try
+            {
+                Class1 db = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
+
+                // Always log the unit cost history when a new purchase order is created
+                // This ensures every purchase order creates a history record
+                string insertQuery = $@"INSERT INTO tblhistory (products, unitcost, datecreated, createdby) 
+                                      VALUES ('{product.Replace("'", "''")}', '{unitCost.Replace("'", "''")}', 
+                                              '{DateTime.Now:MM/dd/yyyy hh:mm:ss tt}', '{username.Replace("'", "''")}')";
+
+                db.executeSQL(insertQuery);
+
+                // Log the history action
+                db.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                    "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
+                    "', 'HISTORY LOG', 'UNIT COST HISTORY', 'New unit cost for " + product.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
+
+                MessageBox.Show($"Unit cost history logged for {product}", "History Updated",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                // Show error to user for debugging
+                MessageBox.Show("Error logging unit cost history: " + ex.Message, "History Logging Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

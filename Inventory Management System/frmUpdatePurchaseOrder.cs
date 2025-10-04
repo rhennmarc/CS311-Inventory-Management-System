@@ -9,8 +9,10 @@ namespace Inventory_Management_System
     {
         private string username;
         private string originalProduct;
+        private string originalUnitCost; // Store original unit cost for comparison
+        private string originalTimeCreated; // Store original timecreated for unique identification
 
-        public frmUpdatePurchaseOrder(string products, string quantity, string unitcost, string username)
+        public frmUpdatePurchaseOrder(string products, string quantity, string unitcost, string username, string timecreated)
         {
             InitializeComponent();
 
@@ -21,14 +23,16 @@ namespace Inventory_Management_System
             txttotalcost.Text = CalculateTotalFromFields(quantity, unitcost);
 
             originalProduct = products;
+            originalUnitCost = unitcost; // Store the original unit cost
+            originalTimeCreated = timecreated; // Store the original timecreated
             this.username = username;
         }
 
         Class1 updatePO = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
-        private void LoadPurchaseOrder(string product)
+        private void LoadPurchaseOrder(string product, string timecreated)
         {
-            string q = "SELECT * FROM tblpurchase_order WHERE products='" + product.Replace("'", "''") + "'";
+            string q = "SELECT * FROM tblpurchase_order WHERE products='" + product.Replace("'", "''") + "' AND timecreated='" + timecreated.Replace("'", "''") + "'";
 
             DataTable dt = updatePO.GetData(q);
             if (dt.Rows.Count > 0)
@@ -40,6 +44,8 @@ namespace Inventory_Management_System
                 txttotalcost.Text = row["totalcost"].ToString();
 
                 originalProduct = cmbproduct.Text;
+                originalUnitCost = row["unitcost"].ToString(); // Store original unit cost
+                originalTimeCreated = row["timecreated"].ToString(); // Store original timecreated
             }
         }
 
@@ -102,14 +108,14 @@ namespace Inventory_Management_System
                 }
             }
 
-            // Check duplicate if product changed
-            if (!string.IsNullOrEmpty(cmbproduct.Text) && cmbproduct.Text != originalProduct)
+            // Check duplicate if product changed (using product + timecreated as unique key)
+            if (!string.IsNullOrEmpty(cmbproduct.Text) && (cmbproduct.Text != originalProduct))
             {
-                string dupQuery = "SELECT * FROM tblpurchase_order WHERE products = '" + cmbproduct.Text.Replace("'", "''") + "'";
+                string dupQuery = "SELECT * FROM tblpurchase_order WHERE products = '" + cmbproduct.Text.Replace("'", "''") + "' AND timecreated = '" + originalTimeCreated.Replace("'", "''") + "'";
                 DataTable dtDup = updatePO.GetData(dupQuery);
                 if (dtDup.Rows.Count > 0)
                 {
-                    errorProvider1.SetError(cmbproduct, "A purchase order for this product already exists.");
+                    errorProvider1.SetError(cmbproduct, "A purchase order for this product with the same creation time already exists.");
                     errorcount++;
                 }
             }
@@ -129,28 +135,36 @@ namespace Inventory_Management_System
                         string totalcost = txttotalcost.Text.Trim().Replace("'", "''");
                         string user = string.IsNullOrEmpty(username) ? "" : username.Replace("'", "''");
 
+                        // Use both original product and original timecreated to uniquely identify the record
                         string sql = "UPDATE tblpurchase_order SET " +
                                      "products = '" + product + "', " +
                                      "quantity = '" + quantity + "', " +
                                      "unitcost = '" + unitcost + "', " +
                                      "totalcost = '" + totalcost + "' " +
-                                     "WHERE products = '" + originalProduct.Replace("'", "''") + "'";
+                                     "WHERE products = '" + originalProduct.Replace("'", "''") + "' " +
+                                     "AND timecreated = '" + originalTimeCreated.Replace("'", "''") + "'";
 
                         updatePO.executeSQL(sql);
 
                         if (updatePO.rowAffected > 0)
                         {
+                            // Log unit cost history only if unit cost has changed
+                            if (unitcost != originalUnitCost)
+                            {
+                                LogUnitCostHistory(product, unitcost, user);
+                            }
+
                             MessageBox.Show("Purchase order updated successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                             updatePO.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
-                                DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
+                                DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToString("hh:mm:ss tt") +
                                 "' , 'UPDATE', 'PURCHASE ORDER MANAGEMENT', '" + product + "', '" + username + "')");
 
                             this.Close();
                         }
                         else
                         {
-                            MessageBox.Show("No rows were updated. Please verify the original Product.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show("No rows were updated. Please verify the original Product and Time Created.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }
                 }
@@ -158,6 +172,35 @@ namespace Inventory_Management_System
                 {
                     MessageBox.Show(error.Message, "ERROR on updating purchase order", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void LogUnitCostHistory(string product, string unitCost, string username)
+        {
+            try
+            {
+                Class1 db = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
+
+                // Always log the unit cost history when unit cost is changed in update
+                string insertQuery = $@"INSERT INTO tblhistory (products, unitcost, datecreated, createdby) 
+                                      VALUES ('{product.Replace("'", "''")}', '{unitCost.Replace("'", "''")}', 
+                                              '{DateTime.Now:MM/dd/yyyy hh:mm:ss tt}', '{username.Replace("'", "''")}')";
+
+                db.executeSQL(insertQuery);
+
+                // Log the history action
+                db.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                    "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
+                    "', 'HISTORY LOG', 'UNIT COST HISTORY', 'Updated unit cost for " + product.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
+
+                MessageBox.Show($"Unit cost history updated for {product}", "History Updated",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                // Show error to user for debugging
+                MessageBox.Show("Error logging unit cost history: " + ex.Message, "History Logging Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -169,6 +212,9 @@ namespace Inventory_Management_System
         private void frmUpdatePurchaseOrder_Load(object sender, EventArgs e)
         {
             this.ActiveControl = titleLabel;
+
+            // Load the specific record using product and timecreated
+            LoadPurchaseOrder(originalProduct, originalTimeCreated);
 
             // Load products to combo
             try

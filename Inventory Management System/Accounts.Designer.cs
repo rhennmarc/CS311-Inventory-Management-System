@@ -41,7 +41,6 @@
             this.btnsearch = new System.Windows.Forms.Button();
             this.txtsearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
@@ -50,7 +49,6 @@
             this.actionPanel.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.headerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -124,7 +122,7 @@
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 220);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 205);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
@@ -216,7 +214,6 @@
             this.searchPanel.Controls.Add(this.btnsearch);
             this.searchPanel.Controls.Add(this.txtsearch);
             this.searchPanel.Controls.Add(this.lblSearch);
-            this.searchPanel.Controls.Add(this.pictureBox1);
             this.searchPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
@@ -263,15 +260,6 @@
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Search:";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(20, 10);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
-            // 
             // headerPanel
             // 
             this.headerPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
@@ -312,7 +300,6 @@
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -334,7 +321,6 @@
         private System.Windows.Forms.Button btnsearch;
         private System.Windows.Forms.TextBox txtsearch;
         private System.Windows.Forms.Label lblSearch;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Label lblTitle;
     }

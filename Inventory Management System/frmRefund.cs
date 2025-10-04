@@ -60,6 +60,43 @@ namespace Inventory_Management_System
             refundPrintDocument.DefaultPageSettings.Margins = new Margins(10, 10, 10, 10);
         }
 
+        // Helper method to convert 24-hour time to 12-hour format with AM/PM
+        private string ConvertTo12HourFormat(string time24)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(time24))
+                    return string.Empty;
+
+                // Handle different time formats that might come from the database
+                string[] timeFormats = new[] { "HH:mm:ss", "H:mm:ss", "HH:mm", "H:mm" };
+                DateTime time;
+
+                if (DateTime.TryParseExact(time24, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                // If parsing fails, try regular DateTime parsing as fallback
+                if (DateTime.TryParse(time24, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                return time24; // Return original if parsing fails
+            }
+            catch
+            {
+                return time24; // Return original if any error occurs
+            }
+        }
+
+        // Helper method to get current time in 12-hour format
+        private string GetCurrentTime12Hour()
+        {
+            return DateTime.Now.ToString("h:mm:ss tt");
+        }
+
         private void RefundPrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
             try
@@ -97,11 +134,15 @@ namespace Inventory_Management_System
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
                 yPos += 15;
 
-                // Order details - EXACT same as sales report
+                // Order details - EXACT same as sales report with 12-hour time format
                 g.DrawString($"Order ID: {printOrderID}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
-                g.DrawString($"Date: {printDateCreated} {printTimeCreated}", regularFont, brush, leftMargin, yPos);
+
+                // Convert time to 12-hour format for display
+                string displayTime = ConvertTo12HourFormat(printTimeCreated);
+                g.DrawString($"Date: {printDateCreated} {displayTime}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
+
                 g.DrawString($"Cashier: {printCreatedBy}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
 
@@ -172,7 +213,11 @@ namespace Inventory_Management_System
                         decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
                         decimal itemTotal = quantity * unitPrice;
                         string refundDate = row["daterefunded"].ToString();
+                        string refundTime = row["timerefunded"]?.ToString() ?? "";
                         string refundReason = row["reason"].ToString();
+
+                        // Convert refund time to 12-hour format
+                        string displayRefundTime = ConvertTo12HourFormat(refundTime);
 
                         // Truncate product name if too long - EXACT same as sales report
                         if (productName.Length > 18)
@@ -190,8 +235,8 @@ namespace Inventory_Management_System
                             yPos += 10;
                         }
 
-                        // Refund details - Refunded on and reason - EXACT same as sales report
-                        g.DrawString($"Refunded on {refundDate} - Reason: {refundReason}", smallFont, Brushes.DarkRed, leftMargin, yPos);
+                        // Refund details - Refunded on and reason - EXACT same as sales report with 12-hour time
+                        g.DrawString($"Refunded on {refundDate} {displayRefundTime} - Reason: {refundReason}", smallFont, Brushes.DarkRed, leftMargin, yPos);
                         yPos += 10;
                     }
 
@@ -602,7 +647,8 @@ namespace Inventory_Management_System
             try
             {
                 string refundDate = DateTime.Now.ToString("MM/dd/yyyy");
-                string refundTime = DateTime.Now.ToString("HH:mm:ss");
+                // Get current time in 12-hour format for storage and display
+                string refundTime = GetCurrentTime12Hour(); // Store in 12-hour format
 
                 // Get original order details for receipt
                 DataRow firstRow = originalOrderData.Rows[0];
@@ -612,6 +658,9 @@ namespace Inventory_Management_System
                 bool discounted = firstRow["discounted"].ToString().ToUpper() == "YES";
                 decimal originalPayment = Convert.ToDecimal(firstRow["payment"]);
                 decimal originalChange = Convert.ToDecimal(firstRow["paymentchange"]);
+
+                // Convert original time to 12-hour format for display
+                string displayOriginalTime = ConvertTo12HourFormat(originalTime);
 
                 // Create DataTable for UPDATED products (remaining after refund)
                 DataTable updatedProductsData = new DataTable();
@@ -625,6 +674,7 @@ namespace Inventory_Management_System
                 refundReceiptData.Columns.Add("quantity", typeof(int));
                 refundReceiptData.Columns.Add("unitprice", typeof(decimal));
                 refundReceiptData.Columns.Add("daterefunded", typeof(string));
+                refundReceiptData.Columns.Add("timerefunded", typeof(string)); // Add time column
                 refundReceiptData.Columns.Add("reason", typeof(string));
 
                 decimal totalRefundAmount = 0;
@@ -643,12 +693,13 @@ namespace Inventory_Management_System
                     refundRow["quantity"] = refundQty;
                     refundRow["unitprice"] = unitPrice;
                     refundRow["daterefunded"] = refundDate;
+                    refundRow["timerefunded"] = refundTime; // Store the 12-hour time
                     refundRow["reason"] = txtReason.Text.Trim();
                     refundReceiptData.Rows.Add(refundRow);
 
                     totalRefundAmount += refundAmount;
 
-                    // Insert into tblrefunds
+                    // Insert into tblrefunds - store time in 12-hour format
                     string insertRefund = $"INSERT INTO tblrefunds (orderid, products, quantity, unitprice, reason, daterefunded, timerefunded, refundedby) " +
                         $"VALUES ('{orderID.Replace("'", "''")}', '{product.Replace("'", "''")}', '{refundQty}', '{unitPrice:F2}', " +
                         $"'{txtReason.Text.Trim().Replace("'", "''")}', '{refundDate}', '{refundTime}', '{username.Replace("'", "''")}')";
@@ -661,7 +712,7 @@ namespace Inventory_Management_System
                     UpdateSalesRecordAndGetRemaining(product, refundQty, refundAmount, updatedProductsData);
                 }
 
-                // Log the refund action
+                // Log the refund action - store time in 12-hour format
                 db.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                     "VALUES ('" + refundDate + "', '" + refundTime + "', 'REFUND', 'SALES', " +
                     "'ORDER ID: " + orderID.Replace("'", "''") + " - " + refundItems.Count + " items', '" + username.Replace("'", "''") + "')");
@@ -688,7 +739,7 @@ namespace Inventory_Management_System
                 printRefundData = refundReceiptData; // Refunded items with details
                 printDiscounted = discounted; // Keep original discount status
                 printDateCreated = originalDate; // Original order date
-                printTimeCreated = originalTime; // Original order time
+                printTimeCreated = displayOriginalTime; // Original order time converted to 12-hour format
                 printCreatedBy = originalCashier; // Original cashier
                 printTotalRefund = totalRefundAmount; // Total refund amount
 
@@ -798,12 +849,14 @@ namespace Inventory_Management_System
                 receiptPanel.Controls.Add(line1);
                 yPos += 10;
 
-                // Order info - EXACT same layout as sales report
+                // Order info - EXACT same layout as sales report with 12-hour time
                 Label orderInfoLabel = CreateReceiptLabel($"Order ID: {printOrderID}", new Font("Arial", 9), 380);
                 orderInfoLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(orderInfoLabel);
                 yPos += 18;
 
+                // Convert time to 12-hour format for display
+                string displayTime = ConvertTo12HourFormat(printTimeCreated);
                 Label dateTimeLabel = CreateReceiptLabel($"Date: {printDateCreated} {printTimeCreated}", new Font("Arial", 9), 380);
                 dateTimeLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(dateTimeLabel);
@@ -935,7 +988,11 @@ namespace Inventory_Management_System
                         decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
                         decimal itemTotal = quantity * unitPrice;
                         string refundDate = row["daterefunded"].ToString();
+                        string refundTime = row["timerefunded"]?.ToString() ?? "";
                         string refundReason = row["reason"].ToString();
+
+                        // Convert refund time to 12-hour format (already stored in 12-hour format)
+                        string displayRefundTime = refundTime; // Already in 12-hour format
 
                         // Truncate product name if too long - EXACT same as sales report
                         if (productName.Length > 20)
@@ -979,8 +1036,8 @@ namespace Inventory_Management_System
                             yPos += 12;
                         }
 
-                        // Refund details - Refunded on and reason - EXACT same as sales report
-                        Label refundDetailsLabel = CreateReceiptLabel($"Refunded on {refundDate} - Reason: {refundReason}", new Font("Arial", 7, FontStyle.Italic), 380);
+                        // Refund details - Refunded on and reason - EXACT same as sales report with 12-hour time
+                        Label refundDetailsLabel = CreateReceiptLabel($"Refunded on {refundDate} {displayRefundTime} - Reason: {refundReason}", new Font("Arial", 7, FontStyle.Italic), 380);
                         refundDetailsLabel.Location = new Point(15, yPos);
                         refundDetailsLabel.ForeColor = Color.DarkRed;
                         receiptPanel.Controls.Add(refundDetailsLabel);

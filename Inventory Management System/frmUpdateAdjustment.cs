@@ -59,7 +59,8 @@ namespace Inventory_Management_System
 
             originalProduct = product;
             originalDateAdjusted = dateadjusted;
-            originalTimeAdjusted = timeadjusted;
+            // Convert original time to 12-hour format if needed
+            originalTimeAdjusted = ConvertTo12HourFormat(timeadjusted);
 
             // Parse original price
             if (!string.IsNullOrEmpty(unitprice))
@@ -71,6 +72,42 @@ namespace Inventory_Management_System
         }
 
         Class1 updateadjustment = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
+
+        // Helper method to convert 24-hour time to 12-hour format with AM/PM
+        private string ConvertTo12HourFormat(string time24)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(time24))
+                    return string.Empty;
+
+                string[] timeFormats = new[] { "HH:mm:ss", "H:mm:ss", "HH:mm", "H:mm", "h:mm:ss tt", "h:mm tt" };
+                DateTime time;
+
+                if (DateTime.TryParseExact(time24, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                // If parsing fails, try regular DateTime parsing as fallback
+                if (DateTime.TryParse(time24, out time))
+                {
+                    return time.ToString("h:mm:ss tt");
+                }
+
+                return time24; // Return original if parsing fails
+            }
+            catch
+            {
+                return time24; // Return original if any error occurs
+            }
+        }
+
+        // Helper method to get current time in 12-hour format
+        private string GetCurrentTime12Hour()
+        {
+            return DateTime.Now.ToString("h:mm:ss tt");
+        }
 
         private void InitializeActionComboBox()
         {
@@ -129,7 +166,7 @@ namespace Inventory_Management_System
 
                 originalProduct = cmbproduct.Text;
                 originalDateAdjusted = row["dateadjusted"].ToString();
-                originalTimeAdjusted = row["timeadjusted"].ToString();
+                originalTimeAdjusted = ConvertTo12HourFormat(row["timeadjusted"].ToString());
 
                 if (row["unitprice"] != DBNull.Value && !string.IsNullOrEmpty(row["unitprice"].ToString()))
                 {
@@ -213,6 +250,8 @@ namespace Inventory_Management_System
                         decimal unitprice = hasPrice ? decimal.Parse(txtprice.Text.Trim()) : 0;
                         string reason = txtreason.Text.Trim().Replace("'", "''");
                         string user = string.IsNullOrEmpty(username) ? "" : username.Replace("'", "''");
+                        // Use current time in 12-hour format for the update
+                        string currentTimeAdjusted = GetCurrentTime12Hour();
 
                         // Check if product exists in tblproducts
                         string checkProductQuery = "SELECT currentstock, unitprice FROM tblproducts WHERE LOWER(products) = LOWER('" + product + "')";
@@ -274,13 +313,15 @@ namespace Inventory_Management_System
                         string quantitySqlValue = hasQuantity ? "'" + sqlQuantity + "'" : "NULL";
 
                         // Use dateadjusted and timeadjusted to uniquely identify the record
+                        // Update timeadjusted to current time in 12-hour format
                         string sql =
                             "UPDATE tbladjustment SET " +
                             "products='" + product + "', " +
                             "quantity=" + quantitySqlValue + ", " +
                             "unitprice=" + recordPrice + ", " +
                             "reason='" + reason + "', " +
-                            "createdby='" + user + "' " +
+                            "createdby='" + user + "', " +
+                            "timeadjusted='" + currentTimeAdjusted + "' " + // Update time to current time in 12-hour format
                             "WHERE products='" + originalProduct.Replace("'", "''") +
                             "' AND dateadjusted='" + originalDateAdjusted.Replace("'", "''") +
                             "' AND timeadjusted='" + originalTimeAdjusted.Replace("'", "''") + "'";
@@ -326,7 +367,7 @@ namespace Inventory_Management_System
 
                                     MessageBox.Show(message, "Update Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                    // Log the update action
+                                    // Log the update action with 12-hour time format
                                     string logAction = hasQuantity ? "UPDATE ADJUSTMENT" : "UPDATE PRICE";
                                     string logDetails = "Product: " + product;
 
@@ -342,7 +383,7 @@ namespace Inventory_Management_System
                                     }
 
                                     updateadjustment.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
-                                        DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
+                                        DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + GetCurrentTime12Hour() +
                                         "' , '" + logAction + "', 'ADJUSTMENT MANAGEMENT', '" + logDetails + "', '" + username + "')");
 
                                     this.Close();

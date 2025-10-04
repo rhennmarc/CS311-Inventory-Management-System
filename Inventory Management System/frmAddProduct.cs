@@ -122,6 +122,7 @@ namespace Inventory_Management_System
         }
 
         // --- Remove error when user starts typing ---
+
         private void txtproduct_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!string.IsNullOrEmpty(txtproduct.Text))

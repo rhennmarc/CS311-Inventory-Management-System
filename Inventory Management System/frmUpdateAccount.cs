@@ -90,5 +90,10 @@ namespace Inventory_Management_System
                 cmbstatus.SelectedIndex = -1;
             }
         }
+
+        private void btncancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
