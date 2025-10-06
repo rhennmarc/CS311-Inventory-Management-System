@@ -40,6 +40,9 @@ namespace Inventory_Management_System
         private DataTable printRefundData;
         private decimal printTotalRefund;
 
+        // Flags to prevent recursive selection changes
+        private bool isUpdatingSelection = false;
+
         Class1 sales = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
         public frmSalesReport(string username, string usertype)
@@ -48,8 +51,8 @@ namespace Inventory_Management_System
             this.username = username;
             this.usertype = usertype;
 
-            // Initialize duration combobox
-            cmbduration.Items.AddRange(new string[] { "Daily", "Weekly", "Monthly", "Yearly" });
+            // Initialize duration combobox with All time option
+            cmbduration.Items.AddRange(new string[] { "Daily", "Weekly", "Monthly", "Yearly", "All time" });
             cmbduration.SelectedIndex = 0;
 
             // DatePicker setup: default to today, format MM/dd/yyyy
@@ -463,6 +466,10 @@ namespace Inventory_Management_System
                     DateTime endOfYear = new DateTime(selectedDate.Year, 12, 31);
                     query += " AND STR_TO_DATE(datecreated, '%m/%d/%Y') BETWEEN '" + startOfYear.ToString("yyyy-MM-dd") + "' AND '" + endOfYear.ToString("yyyy-MM-dd") + "'";
                     break;
+
+                case "All time":
+                    // No date filter for "All time"
+                    break;
             }
 
             // FIXED: Proper date and time sorting with PM on top
@@ -503,6 +510,10 @@ namespace Inventory_Management_System
                     DateTime startOfYear = new DateTime(selectedDate.Year, 1, 1);
                     DateTime endOfYear = new DateTime(selectedDate.Year, 12, 31);
                     query += " AND STR_TO_DATE(daterefunded, '%m/%d/%Y') BETWEEN '" + startOfYear.ToString("yyyy-MM-dd") + "' AND '" + endOfYear.ToString("yyyy-MM-dd") + "'";
+                    break;
+
+                case "All time":
+                    // No date filter for "All time"
                     break;
             }
 
@@ -880,19 +891,24 @@ namespace Inventory_Management_System
                 // Check if sales row is selected
                 if (salesRow >= 0 && salesRow < dataGridView1.Rows.Count)
                 {
-                    // Delete sales order
+                    // Delete sales order and corresponding refunds
                     DataGridViewRow sel = dataGridView1.Rows[salesRow];
                     string orderid = sel.Cells["orderid"].Value?.ToString() ?? "";
 
-                    DialogResult dr = MessageBox.Show($"Delete all records for order {orderid}? This cannot be undone.", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult dr = MessageBox.Show($"Delete all records for order {orderid}? This will also delete any associated refund records. This cannot be undone.", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dr == DialogResult.Yes)
                     {
+                        // First, delete associated refunds
+                        string delRefunds = "DELETE FROM tblrefunds WHERE orderid = '" + orderid.Replace("'", "''") + "'";
+                        sales.executeSQL(delRefunds);
+
+                        // Then delete sales
                         string del = "DELETE FROM tblsales WHERE orderid = '" + orderid.Replace("'", "''") + "'";
                         sales.executeSQL(del);
 
                         if (sales.rowAffected > 0)
                         {
-                            MessageBox.Show($"Order {orderid} deleted successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Order {orderid} and all associated refunds deleted successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             sales.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                                 "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
                                 "', 'DELETE', 'SALES REPORT', 'ORDER ID: " + orderid.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
@@ -905,45 +921,22 @@ namespace Inventory_Management_System
                 // Check if refunds row is selected
                 else if (refundsRow >= 0 && refundsRow < dataGridView2.Rows.Count)
                 {
-                    // Delete refund records
+                    // Delete refund records only (do NOT restore stock)
                     DataGridViewRow sel = dataGridView2.Rows[refundsRow];
                     string orderid = sel.Cells["orderid"].Value?.ToString() ?? "";
 
-                    DialogResult dr = MessageBox.Show($"Delete all refund records for order {orderid}? This cannot be undone.", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    DialogResult dr = MessageBox.Show($"Delete all refund records for order {orderid}? This will NOT affect the product stock. This cannot be undone.", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dr == DialogResult.Yes)
                     {
-                        // First, get the refund items to restore stock
-                        string getRefundsQuery = $"SELECT products, quantity FROM tblrefunds WHERE orderid = '{orderid.Replace("'", "''")}'";
-                        DataTable refundItems = sales.GetData(getRefundsQuery);
+                        // CHANGED: Removed stock restoration logic - refunded quantity stays on product
 
-                        // Restore product stock for each refunded item
-                        foreach (DataRow refundRow in refundItems.Rows)
-                        {
-                            string product = refundRow["products"].ToString();
-                            int quantity = Convert.ToInt32(refundRow["quantity"]);
-
-                            // Get current stock
-                            string getStockQuery = $"SELECT currentstock FROM tblproducts WHERE products = '{product.Replace("'", "''")}'";
-                            DataTable stockData = sales.GetData(getStockQuery);
-
-                            if (stockData.Rows.Count > 0)
-                            {
-                                int currentStock = Convert.ToInt32(stockData.Rows[0]["currentstock"]);
-                                int newStock = currentStock - quantity; // Subtract because we're removing the refund
-
-                                // Update stock
-                                string updateStock = $"UPDATE tblproducts SET currentstock = '{newStock}' WHERE products = '{product.Replace("'", "''")}'";
-                                sales.executeSQL(updateStock);
-                            }
-                        }
-
-                        // Delete the refund records
-                        string del = "DELETE FROM tblrefunds WHERE orderid = '" + orderid.Replace("'", "''") + "'";
-                        sales.executeSQL(del);
+                        // Delete the refund records only (do NOT delete sales record)
+                        string delRefunds = "DELETE FROM tblrefunds WHERE orderid = '" + orderid.Replace("'", "''") + "'";
+                        sales.executeSQL(delRefunds);
 
                         if (sales.rowAffected > 0)
                         {
-                            MessageBox.Show($"Refund records for order {orderid} deleted successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            MessageBox.Show($"Refund records for order {orderid} deleted successfully. Product stock remains unchanged.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             sales.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                                 "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
                                 "', 'DELETE REFUND', 'SALES REPORT', 'ORDER ID: " + orderid.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
@@ -976,18 +969,25 @@ namespace Inventory_Management_System
 
                 string duration = cmbduration.SelectedItem?.ToString() ?? "Daily";
                 DateTime selectedDate = dateTimePicker1.Value;
-                string durationText = $"{duration} sales for {selectedDate:MM/dd/yyyy}";
+                string durationText = $"{duration} sales and refunds for {selectedDate:MM/dd/yyyy}";
 
-                DialogResult dr = MessageBox.Show($"Are you sure you want to delete ALL {durationText}? This cannot be undone.", "Delete All Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult dr = MessageBox.Show($"Are you sure you want to delete ALL {durationText}? This will delete ALL sales and refund records for this period. This cannot be undone.", "Delete All Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (dr == DialogResult.Yes)
                 {
-                    string whereClause = GetDurationWhereClause(duration, selectedDate);
-                    string delAll = "DELETE FROM tblsales WHERE " + whereClause;
+                    string whereClauseSales = GetDurationWhereClause(duration, selectedDate, "sales");
+                    string whereClauseRefunds = GetDurationWhereClause(duration, selectedDate, "refunds");
+
+                    // Delete all refunds for the duration
+                    string delRefunds = "DELETE FROM tblrefunds WHERE " + whereClauseRefunds;
+                    sales.executeSQL(delRefunds);
+
+                    // Delete all sales for the duration
+                    string delAll = "DELETE FROM tblsales WHERE " + whereClauseSales;
                     sales.executeSQL(delAll);
 
                     if (sales.rowAffected > 0)
                     {
-                        MessageBox.Show($"{sales.rowAffected} sale(s) deleted for {durationText}.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show($"All sales and refund records deleted for {durationText}.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         sales.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
                             "', 'DELETE ALL', 'SALES REPORT', '" + durationText.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
@@ -1007,28 +1007,33 @@ namespace Inventory_Management_System
             }
         }
 
-        private string GetDurationWhereClause(string duration, DateTime selectedDate)
+        private string GetDurationWhereClause(string duration, DateTime selectedDate, string tableType)
         {
+            string dateColumn = tableType == "sales" ? "datecreated" : "daterefunded";
+
             switch (duration)
             {
                 case "Daily":
                     string dailyDate = selectedDate.ToString("MM/dd/yyyy");
-                    return "datecreated = '" + dailyDate.Replace("'", "''") + "'";
+                    return $"{dateColumn} = '{dailyDate.Replace("'", "''")}'";
 
                 case "Weekly":
                     DateTime startOfWeek = selectedDate.AddDays(-(int)selectedDate.DayOfWeek);
                     DateTime endOfWeek = startOfWeek.AddDays(6);
-                    return "STR_TO_DATE(datecreated, '%m/%d/%Y') BETWEEN '" + startOfWeek.ToString("yyyy-MM-dd") + "' AND '" + endOfWeek.ToString("yyyy-MM-dd") + "'";
+                    return $"STR_TO_DATE({dateColumn}, '%m/%d/%Y') BETWEEN '{startOfWeek.ToString("yyyy-MM-dd")}' AND '{endOfWeek.ToString("yyyy-MM-dd")}'";
 
                 case "Monthly":
                     DateTime startOfMonth = new DateTime(selectedDate.Year, selectedDate.Month, 1);
                     DateTime endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
-                    return "STR_TO_DATE(datecreated, '%m/%d/%Y') BETWEEN '" + startOfMonth.ToString("yyyy-MM-dd") + "' AND '" + endOfMonth.ToString("yyyy-MM-dd") + "'";
+                    return $"STR_TO_DATE({dateColumn}, '%m/%d/%Y') BETWEEN '{startOfMonth.ToString("yyyy-MM-dd")}' AND '{endOfMonth.ToString("yyyy-MM-dd")}'";
 
                 case "Yearly":
                     DateTime startOfYear = new DateTime(selectedDate.Year, 1, 1);
                     DateTime endOfYear = new DateTime(selectedDate.Year, 12, 31);
-                    return "STR_TO_DATE(datecreated, '%m/%d/%Y') BETWEEN '" + startOfYear.ToString("yyyy-MM-dd") + "' AND '" + endOfYear.ToString("yyyy-MM-dd") + "'";
+                    return $"STR_TO_DATE({dateColumn}, '%m/%d/%Y') BETWEEN '{startOfYear.ToString("yyyy-MM-dd")}' AND '{endOfYear.ToString("yyyy-MM-dd")}'";
+
+                case "All time":
+                    return "1=1"; // No filter for "All time"
 
                 default:
                     return "1=1";
@@ -1993,67 +1998,141 @@ namespace Inventory_Management_System
             return field;
         }
 
+        // FIXED: Proper selection synchronization between sales and refunds
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
+            if (isUpdatingSelection) return;
+
             try
             {
+                isUpdatingSelection = true;
+
+                // Update sales row
                 if (dataGridView1.CurrentCell != null)
                 {
-                    int idx = dataGridView1.CurrentCell.RowIndex;
-                    if (idx >= 0 && idx < dataGridView1.Rows.Count)
-                    {
-                        salesRow = idx;
-                        // Clear selection in refunds grid
-                        dataGridView2.ClearSelection();
-                        refundsRow = -1;
-                    }
-                    else
-                    {
-                        salesRow = -1;
-                    }
+                    salesRow = dataGridView1.CurrentCell.RowIndex;
                 }
                 else
                 {
                     salesRow = -1;
                 }
+
+                // Update refunds grid selection if a sales row is selected
+                if (salesRow >= 0 && salesRow < dataGridView1.Rows.Count)
+                {
+                    string selectedOrderID = dataGridView1.Rows[salesRow].Cells["orderid"].Value?.ToString() ?? "";
+
+                    // Find and select corresponding refunds
+                    if (!string.IsNullOrEmpty(selectedOrderID))
+                    {
+                        bool found = false;
+                        for (int i = 0; i < dataGridView2.Rows.Count; i++)
+                        {
+                            string refundOrderID = dataGridView2.Rows[i].Cells["orderid"].Value?.ToString() ?? "";
+                            if (refundOrderID == selectedOrderID)
+                            {
+                                dataGridView2.ClearSelection();
+                                dataGridView2.Rows[i].Selected = true;
+                                dataGridView2.CurrentCell = dataGridView2.Rows[i].Cells[0];
+                                refundsRow = i;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        // If no corresponding refund found, clear the refunds selection
+                        if (!found)
+                        {
+                            dataGridView2.ClearSelection();
+                            refundsRow = -1;
+                        }
+                    }
+                }
+                else
+                {
+                    // If no sales selected, clear refunds selection too
+                    dataGridView2.ClearSelection();
+                    refundsRow = -1;
+                }
+
                 UpdateButtonStates();
             }
-            catch
+            catch (Exception ex)
             {
-                salesRow = -1;
-                UpdateButtonStates();
+                MessageBox.Show("Error in sales selection: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isUpdatingSelection = false;
             }
         }
 
+        // FIXED: Proper selection synchronization between refunds and sales
         private void dataGridView2_SelectionChanged(object sender, EventArgs e)
         {
+            if (isUpdatingSelection) return;
+
             try
             {
+                isUpdatingSelection = true;
+
+                // Update refunds row
                 if (dataGridView2.CurrentCell != null)
                 {
-                    int idx = dataGridView2.CurrentCell.RowIndex;
-                    if (idx >= 0 && idx < dataGridView2.Rows.Count)
-                    {
-                        refundsRow = idx;
-                        // Clear selection in sales grid
-                        dataGridView1.ClearSelection();
-                        salesRow = -1;
-                    }
-                    else
-                    {
-                        refundsRow = -1;
-                    }
+                    refundsRow = dataGridView2.CurrentCell.RowIndex;
                 }
                 else
                 {
                     refundsRow = -1;
                 }
+
+                // Update sales grid selection if a refunds row is selected AND corresponding sales exists
+                if (refundsRow >= 0 && refundsRow < dataGridView2.Rows.Count)
+                {
+                    string selectedOrderID = dataGridView2.Rows[refundsRow].Cells["orderid"].Value?.ToString() ?? "";
+
+                    // Find and select corresponding sales ONLY if it exists
+                    if (!string.IsNullOrEmpty(selectedOrderID))
+                    {
+                        bool found = false;
+                        for (int i = 0; i < dataGridView1.Rows.Count; i++)
+                        {
+                            string salesOrderID = dataGridView1.Rows[i].Cells["orderid"].Value?.ToString() ?? "";
+                            if (salesOrderID == selectedOrderID)
+                            {
+                                dataGridView1.ClearSelection();
+                                dataGridView1.Rows[i].Selected = true;
+                                dataGridView1.CurrentCell = dataGridView1.Rows[i].Cells[0];
+                                salesRow = i;
+                                found = true;
+                                break;
+                            }
+                        }
+
+                        // If no corresponding sale found, clear the sales selection
+                        if (!found)
+                        {
+                            dataGridView1.ClearSelection();
+                            salesRow = -1;
+                        }
+                    }
+                }
+                else
+                {
+                    // If no refunds selected, clear sales selection too
+                    dataGridView1.ClearSelection();
+                    salesRow = -1;
+                }
+
                 UpdateButtonStates();
             }
-            catch
+            catch (Exception ex)
             {
-                refundsRow = -1;
-                UpdateButtonStates();
+                MessageBox.Show("Error in refunds selection: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                isUpdatingSelection = false;
             }
         }
 

@@ -13,6 +13,7 @@ namespace Inventory_Management_System
     public partial class frmAdjustments : Form
     {
         private string username;
+        private string usertype; // Added usertype field
         private int row = -1; // Initialize to -1 to indicate no selection
         private int currentPage = 1;
         private int pageSize = 10;
@@ -21,10 +22,12 @@ namespace Inventory_Management_System
 
         Class1 adjustments = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
-        public frmAdjustments(string username)
+        // Updated constructor to accept usertype
+        public frmAdjustments(string username, string usertype)
         {
             InitializeComponent();
             this.username = username;
+            this.usertype = usertype; // Store usertype
         }
 
         private void ShowOrActivateForm<T>(Func<T> createForm) where T : Form
@@ -88,9 +91,10 @@ namespace Inventory_Management_System
         private void UpdateButtonStates()
         {
             bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
+            bool isAdmin = usertype != null && usertype.ToUpperInvariant() == "ADMINISTRATOR";
 
             btnupdate.Enabled = hasSelection;
-            btndelete.Enabled = hasSelection;
+            btndelete.Enabled = hasSelection && isAdmin; // Only enable delete for admins
         }
 
         private void LoadAdjustments(string search = "")
@@ -358,6 +362,13 @@ namespace Inventory_Management_System
         {
             try
             {
+                // Check if user is administrator
+                if (usertype == null || usertype.ToUpperInvariant() != "ADMINISTRATOR")
+                {
+                    MessageBox.Show("Only ADMINISTRATOR can delete adjustment records.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (row < 0 || row >= dataGridView1.Rows.Count)
                 {
                     MessageBox.Show("Please select a valid adjustment record first.",

@@ -34,14 +34,17 @@ namespace Inventory_Management_System
 
             this.IsMdiContainer = true;
 
+            // Set visibility based on user type
             if (usertype.ToUpper() == "PHARMACIST")
             {
-                accountToolStripMenuItem.Visible = false;
+                lblAdminActions.Visible = false;
+                btnAccountsManagement.Visible = false;
                 btnViewLogs.Visible = false;
             }
             else if (usertype.ToUpper() == "ADMINISTRATOR")
             {
-                accountToolStripMenuItem.Visible = true;
+                lblAdminActions.Visible = true;
+                btnAccountsManagement.Visible = true;
                 btnViewLogs.Visible = true;
             }
 
@@ -70,7 +73,7 @@ namespace Inventory_Management_System
             Color sidePanelColor = Color.FromArgb(44, 62, 80);
             Color hoverColor = Color.FromArgb(52, 73, 94);
 
-            var buttons = new[] { btnPOS, btnProducts, btnSuppliers, btnAdjustments, btnSales, btnViewLogs };
+            var buttons = new[] { btnPOS, btnProducts, btnSuppliers, btnAdjustments, btnSales, btnViewLogs, btnAccountsManagement };
 
             foreach (var button in buttons)
             {
@@ -330,7 +333,7 @@ namespace Inventory_Management_System
 
         private void btnAdjustments_Click(object sender, EventArgs e)
         {
-            ShowOrActivateForm(() => new frmAdjustments(username));
+            ShowOrActivateForm(() => new frmAdjustments(username, usertype));
         }
 
         private void btnSales_Click(object sender, EventArgs e)
@@ -343,7 +346,7 @@ namespace Inventory_Management_System
             ShowOrActivateForm(() => new frmLogs(username));
         }
 
-        private void accountToolStripMenuItem_Click(object sender, EventArgs e)
+        private void btnAccountsManagement_Click(object sender, EventArgs e)
         {
             ShowOrActivateForm(() => new frmAccounts(username));
         }
@@ -431,6 +434,11 @@ namespace Inventory_Management_System
                 login.Show();
                 Application.Exit();
             }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
