@@ -41,7 +41,10 @@
             this.btndelete = new System.Windows.Forms.Button();
             this.btnupdate = new System.Windows.Forms.Button();
             this.btnadd = new System.Windows.Forms.Button();
+            this.btnexport = new System.Windows.Forms.Button();
             this.searchPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cmbcategory = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cmbduration = new System.Windows.Forms.ComboBox();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
@@ -51,9 +54,7 @@
             this.lblSearch = new System.Windows.Forms.Label();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.cmbcategory = new System.Windows.Forms.ComboBox();
-            this.btnexport = new System.Windows.Forms.Button();
+            this.btndeleteall = new System.Windows.Forms.Button();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -141,7 +142,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 260);
+            this.groupBox1.Location = new System.Drawing.Point(20, 304);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox1.Size = new System.Drawing.Size(160, 125);
@@ -192,6 +193,7 @@
             // actionGroupBox
             // 
             this.actionGroupBox.Controls.Add(this.btnrefresh);
+            this.actionGroupBox.Controls.Add(this.btndeleteall);
             this.actionGroupBox.Controls.Add(this.btndelete);
             this.actionGroupBox.Controls.Add(this.btnupdate);
             this.actionGroupBox.Controls.Add(this.btnadd);
@@ -202,7 +204,7 @@
             this.actionGroupBox.Location = new System.Drawing.Point(20, 20);
             this.actionGroupBox.Name = "actionGroupBox";
             this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 240);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 284);
             this.actionGroupBox.TabIndex = 0;
             this.actionGroupBox.TabStop = false;
             this.actionGroupBox.Text = "Actions";
@@ -218,7 +220,7 @@
             this.btnrefresh.ForeColor = System.Drawing.Color.White;
             this.btnrefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnrefresh.ImageIndex = 6;
-            this.btnrefresh.Location = new System.Drawing.Point(10, 188);
+            this.btnrefresh.Location = new System.Drawing.Point(10, 228);
             this.btnrefresh.Name = "btnrefresh";
             this.btnrefresh.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnrefresh.Size = new System.Drawing.Size(140, 40);
@@ -287,6 +289,26 @@
             this.btnadd.UseVisualStyleBackColor = false;
             this.btnadd.Click += new System.EventHandler(this.btnadd_Click);
             // 
+            // btnexport
+            // 
+            this.btnexport.BackColor = System.Drawing.Color.Green;
+            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnexport.FlatAppearance.BorderSize = 0;
+            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnexport.ForeColor = System.Drawing.Color.White;
+            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnexport.ImageIndex = 0;
+            this.btnexport.Location = new System.Drawing.Point(10, 28);
+            this.btnexport.Name = "btnexport";
+            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnexport.Size = new System.Drawing.Size(140, 40);
+            this.btnexport.TabIndex = 6;
+            this.btnexport.Text = "&Export";
+            this.btnexport.UseVisualStyleBackColor = false;
+            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
+            // 
             // searchPanel
             // 
             this.searchPanel.BackColor = System.Drawing.Color.White;
@@ -306,6 +328,26 @@
             this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
             this.searchPanel.Size = new System.Drawing.Size(1329, 80);
             this.searchPanel.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label2.Location = new System.Drawing.Point(471, 30);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(76, 19);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Category:";
+            // 
+            // cmbcategory
+            // 
+            this.cmbcategory.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbcategory.FormattingEnabled = true;
+            this.cmbcategory.Location = new System.Drawing.Point(548, 25);
+            this.cmbcategory.Name = "cmbcategory";
+            this.cmbcategory.Size = new System.Drawing.Size(181, 28);
+            this.cmbcategory.TabIndex = 14;
             // 
             // label3
             // 
@@ -406,45 +448,25 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Adjustments Report";
             // 
-            // label2
+            // btndeleteall
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label2.Location = new System.Drawing.Point(471, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(76, 19);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "Category:";
-            // 
-            // cmbcategory
-            // 
-            this.cmbcategory.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbcategory.FormattingEnabled = true;
-            this.cmbcategory.Location = new System.Drawing.Point(548, 25);
-            this.cmbcategory.Name = "cmbcategory";
-            this.cmbcategory.Size = new System.Drawing.Size(181, 28);
-            this.cmbcategory.TabIndex = 14;
-            // 
-            // btnexport
-            // 
-            this.btnexport.BackColor = System.Drawing.Color.Green;
-            this.btnexport.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnexport.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnexport.FlatAppearance.BorderSize = 0;
-            this.btnexport.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnexport.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnexport.ForeColor = System.Drawing.Color.White;
-            this.btnexport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnexport.ImageIndex = 0;
-            this.btnexport.Location = new System.Drawing.Point(10, 28);
-            this.btnexport.Name = "btnexport";
-            this.btnexport.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnexport.Size = new System.Drawing.Size(140, 40);
-            this.btnexport.TabIndex = 6;
-            this.btnexport.Text = "&Export";
-            this.btnexport.UseVisualStyleBackColor = false;
-            this.btnexport.Click += new System.EventHandler(this.btnexport_Click);
+            this.btndeleteall.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.btndeleteall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btndeleteall.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btndeleteall.FlatAppearance.BorderSize = 0;
+            this.btndeleteall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btndeleteall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btndeleteall.ForeColor = System.Drawing.Color.White;
+            this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btndeleteall.ImageIndex = 5;
+            this.btndeleteall.Location = new System.Drawing.Point(10, 188);
+            this.btndeleteall.Name = "btndeleteall";
+            this.btndeleteall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btndeleteall.Size = new System.Drawing.Size(140, 40);
+            this.btndeleteall.TabIndex = 7;
+            this.btndeleteall.Text = "Delete &All";
+            this.btndeleteall.UseVisualStyleBackColor = false;
+            this.btndeleteall.Click += new System.EventHandler(this.btndeleteall_Click);
             // 
             // frmAdjustments
             // 
@@ -501,5 +523,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cmbcategory;
         private System.Windows.Forms.Button btnexport;
+        private System.Windows.Forms.Button btndeleteall;
     }
 }

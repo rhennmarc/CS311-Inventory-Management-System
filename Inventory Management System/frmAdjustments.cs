@@ -95,6 +95,7 @@ namespace Inventory_Management_System
 
             btnupdate.Enabled = hasSelection;
             btndelete.Enabled = hasSelection && isAdmin; // Only enable delete for admins
+            btndeleteall.Enabled = isAdmin; // Only enable delete all for admins
         }
 
         private void LoadAdjustments(string search = "")
@@ -685,6 +686,77 @@ namespace Inventory_Management_System
                 return "\"" + field.Replace("\"", "\"\"") + "\"";
             }
             return field;
+        }
+
+        private void btndeleteall_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if user is administrator
+                if (usertype == null || usertype.ToUpperInvariant() != "ADMINISTRATOR")
+                {
+                    MessageBox.Show("Only ADMINISTRATOR can delete all adjustment records.", "Permission Denied", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                string duration = cmbduration.SelectedItem?.ToString() ?? "Daily";
+                DateTime selectedDate = dateTimePicker1.Value;
+                string category = cmbcategory.SelectedItem?.ToString() ?? "All";
+
+                // Get the current filter criteria for confirmation message
+                string durationText = $"{duration} adjustments";
+                if (duration != "All Records")
+                {
+                    durationText += $" for {selectedDate:MM/dd/yyyy}";
+                }
+                if (category != "All")
+                {
+                    durationText += $" ({category} category)";
+                }
+
+                DialogResult dr = MessageBox.Show($"Are you sure you want to delete ALL {durationText}? This action cannot be undone.",
+                    "Delete All Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (dr == DialogResult.Yes)
+                {
+                    // Build the DELETE query using the same filters as LoadAdjustments
+                    string deleteQuery = "DELETE FROM tbladjustment WHERE " + GetDurationWhereClause(duration, selectedDate);
+
+                    // Add category filter
+                    if (category == "Quantity")
+                    {
+                        deleteQuery += " AND quantity IS NOT NULL AND quantity != 0";
+                    }
+                    else if (category == "Unit Price")
+                    {
+                        deleteQuery += " AND unitprice IS NOT NULL AND unitprice != 0";
+                    }
+
+                    // Execute the delete query
+                    adjustments.executeSQL(deleteQuery);
+
+                    if (adjustments.rowAffected > 0)
+                    {
+                        MessageBox.Show($"All {durationText} deleted successfully.", "Delete All Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        // Log the delete all action
+                        adjustments.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
+                            "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("HH:mm:ss") +
+                            "', 'DELETE ALL', 'ADJUSTMENT MANAGEMENT', '" + durationText.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
+                    }
+                    else
+                    {
+                        MessageBox.Show("No records found to delete for the selected criteria.", "No Records", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                    // Refresh the data grid
+                    LoadAdjustments();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error deleting all records: " + ex.Message, "Delete All Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
