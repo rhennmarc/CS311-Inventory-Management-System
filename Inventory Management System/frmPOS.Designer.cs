@@ -30,6 +30,11 @@
         {
             this.mainPanel = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtchange = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtpayment = new System.Windows.Forms.TextBox();
+            this.numquantity = new System.Windows.Forms.NumericUpDown();
             this.lblPageInfoProd = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -59,13 +64,9 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.headerPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.numquantity = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtpayment = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtchange = new System.Windows.Forms.TextBox();
             this.mainPanel.SuspendLayout();
             this.contentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvcart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvproducts)).BeginInit();
             this.actionPanel.SuspendLayout();
@@ -75,7 +76,6 @@
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.headerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).BeginInit();
             this.SuspendLayout();
             // 
             // mainPanel
@@ -95,9 +95,9 @@
             // contentPanel
             // 
             this.contentPanel.Controls.Add(this.label6);
-            this.contentPanel.Controls.Add(this.txtchange);
             this.contentPanel.Controls.Add(this.label5);
             this.contentPanel.Controls.Add(this.txtpayment);
+            this.contentPanel.Controls.Add(this.txtchange);
             this.contentPanel.Controls.Add(this.numquantity);
             this.contentPanel.Controls.Add(this.lblPageInfoProd);
             this.contentPanel.Controls.Add(this.label4);
@@ -114,6 +114,54 @@
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
             this.contentPanel.Size = new System.Drawing.Size(1088, 518);
             this.contentPanel.TabIndex = 2;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label6.Location = new System.Drawing.Point(997, 421);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(59, 19);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Change";
+            // 
+            // txtchange
+            // 
+            this.txtchange.Enabled = false;
+            this.txtchange.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtchange.Location = new System.Drawing.Point(966, 443);
+            this.txtchange.Name = "txtchange";
+            this.txtchange.Size = new System.Drawing.Size(115, 31);
+            this.txtchange.TabIndex = 14;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.label5.Location = new System.Drawing.Point(991, 271);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(68, 19);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Payment";
+            // 
+            // txtpayment
+            // 
+            this.txtpayment.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtpayment.Location = new System.Drawing.Point(967, 293);
+            this.txtpayment.Name = "txtpayment";
+            this.txtpayment.Size = new System.Drawing.Size(115, 31);
+            this.txtpayment.TabIndex = 12;
+            // 
+            // numquantity
+            // 
+            this.numquantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numquantity.Location = new System.Drawing.Point(966, 86);
+            this.numquantity.Name = "numquantity";
+            this.numquantity.Size = new System.Drawing.Size(115, 31);
+            this.numquantity.TabIndex = 11;
+            this.numquantity.ValueChanged += new System.EventHandler(this.numquantity_ValueChanged);
             // 
             // lblPageInfoProd
             // 
@@ -186,7 +234,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(999, 421);
+            this.label1.Location = new System.Drawing.Point(1002, 344);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(42, 19);
             this.label1.TabIndex = 4;
@@ -196,7 +244,7 @@
             // 
             this.txttotal.Enabled = false;
             this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttotal.Location = new System.Drawing.Point(966, 443);
+            this.txttotal.Location = new System.Drawing.Point(966, 367);
             this.txttotal.Name = "txttotal";
             this.txttotal.Size = new System.Drawing.Size(115, 31);
             this.txttotal.TabIndex = 2;
@@ -558,54 +606,6 @@
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "POS";
             // 
-            // numquantity
-            // 
-            this.numquantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numquantity.Location = new System.Drawing.Point(966, 86);
-            this.numquantity.Name = "numquantity";
-            this.numquantity.Size = new System.Drawing.Size(115, 31);
-            this.numquantity.TabIndex = 11;
-            this.numquantity.ValueChanged += new System.EventHandler(this.numquantity_ValueChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label5.Location = new System.Drawing.Point(991, 271);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(68, 19);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Payment";
-            // 
-            // txtpayment
-            // 
-            this.txtpayment.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtpayment.Location = new System.Drawing.Point(967, 293);
-            this.txtpayment.Name = "txtpayment";
-            this.txtpayment.Size = new System.Drawing.Size(115, 31);
-            this.txtpayment.TabIndex = 12;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label6.Location = new System.Drawing.Point(997, 341);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(59, 19);
-            this.label6.TabIndex = 15;
-            this.label6.Text = "Change";
-            // 
-            // txtchange
-            // 
-            this.txtchange.Enabled = false;
-            this.txtchange.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtchange.Location = new System.Drawing.Point(966, 363);
-            this.txtchange.Name = "txtchange";
-            this.txtchange.Size = new System.Drawing.Size(115, 31);
-            this.txtchange.TabIndex = 14;
-            // 
             // frmPOS
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -621,6 +621,7 @@
             this.mainPanel.ResumeLayout(false);
             this.contentPanel.ResumeLayout(false);
             this.contentPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvcart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvproducts)).EndInit();
             this.actionPanel.ResumeLayout(false);
@@ -632,7 +633,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.headerPanel.ResumeLayout(false);
             this.headerPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numquantity)).EndInit();
             this.ResumeLayout(false);
 
         }

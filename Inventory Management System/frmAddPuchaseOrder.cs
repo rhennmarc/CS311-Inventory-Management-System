@@ -213,11 +213,79 @@ namespace Inventory_Management_System
             }
         }
 
+        // --- NEW METHOD: Load product details when product is selected ---
+        private void LoadProductDetails(string productName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(productName))
+                {
+                    string query = $"SELECT currentstock, unitprice FROM tblproducts WHERE products = '{productName.Replace("'", "''")}'";
+                    DataTable dt = newPurchaseOrder.GetData(query);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        txtcurrentstock.Text = dt.Rows[0]["currentstock"].ToString();
+                        txtunitprice.Text = dt.Rows[0]["unitprice"].ToString();
+                        // Removed automatic setting of unit cost - user will enter manually
+                    }
+                    else
+                    {
+                        txtcurrentstock.Text = "N/A";
+                        txtunitprice.Text = "N/A";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading product details: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         // --- EVENTS ---
         private void txtquantity_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
         private void txtunitcost_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
         private void txtquantity_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtquantity.Text)) errorProvider1.SetError(txtquantity, ""); CalculateTotalCost(); }
         private void txtunitcost_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtunitcost.Text)) errorProvider1.SetError(txtunitcost, ""); CalculateTotalCost(); }
+
+        // --- NEW EVENT: When product selection changes ---
+        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbproduct.SelectedIndex >= 0)
+            {
+                string selectedProduct = cmbproduct.Text.Trim();
+                LoadProductDetails(selectedProduct);
+                errorProvider1.SetError(cmbproduct, "");
+            }
+        }
+
+        private void cmbproduct_TextChanged(object sender, EventArgs e)
+        {
+            // Load product details when text changes (for auto-complete)
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()) && cmbproduct.SelectedIndex == -1)
+            {
+                // You might want to add a delay or button to search for products
+                // to avoid excessive database queries during typing
+            }
+        }
+
+        private void cmbproduct_Leave(object sender, EventArgs e)
+        {
+            // Load product details when leaving the combobox if there's text
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                LoadProductDetails(cmbproduct.Text.Trim());
+            }
+
+            if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
+            }
+            else
+            {
+                errorProvider1.SetError(cmbproduct, "");
+            }
+        }
 
         // --- KEYPRESS VALIDATION ---
         private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)

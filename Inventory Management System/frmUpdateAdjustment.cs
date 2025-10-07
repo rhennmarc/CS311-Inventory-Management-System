@@ -69,6 +69,9 @@ namespace Inventory_Management_System
             }
 
             this.username = username;
+
+            // Load initial product details
+            LoadProductDetails(originalProduct);
         }
 
         Class1 updateadjustment = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
@@ -118,6 +121,34 @@ namespace Inventory_Management_System
                 cmbaction.Items.AddRange(new string[] { "Add", "Remove" });
                 cmbaction.DropDownStyle = ComboBoxStyle.DropDownList;
                 cmbaction.SelectedIndex = 0; // Default to "Add"
+            }
+        }
+
+        // --- NEW METHOD: Load product details when product is selected ---
+        private void LoadProductDetails(string productName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(productName))
+                {
+                    string query = $"SELECT currentstock, unitprice FROM tblproducts WHERE products = '{productName.Replace("'", "''")}'";
+                    DataTable dt = updateadjustment.GetData(query);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        txtcurrentstock.Text = dt.Rows[0]["currentstock"].ToString();
+                        txtunitprice.Text = dt.Rows[0]["unitprice"].ToString();
+                    }
+                    else
+                    {
+                        txtcurrentstock.Text = "N/A";
+                        txtunitprice.Text = "N/A";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading product details: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -443,54 +474,17 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- AUTO-POPULATE CURRENT PRICE WHEN PRODUCT IS SELECTED ---
-        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
-                {
-                    string selectedProduct = cmbproduct.Text.Trim();
-                    if (!string.IsNullOrEmpty(selectedProduct))
-                    {
-                        // Get current product details
-                        string query = "SELECT unitprice, currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + selectedProduct.Replace("'", "''") + "')";
-                        DataTable dt = updateadjustment.GetData(query);
-
-                        if (dt.Rows.Count > 0)
-                        {
-                            // Only auto-populate if this is a different product than the original and price field is empty
-                            if (selectedProduct != originalProduct && string.IsNullOrEmpty(txtprice.Text))
-                            {
-                                string currentPrice = dt.Rows[0]["unitprice"].ToString();
-                                txtprice.Text = currentPrice;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Don't show error for auto-populate issues
-                System.Diagnostics.Debug.WriteLine("Auto-populate error: " + ex.Message);
-            }
-        }
-
-        // --- Remove error when user starts typing/selecting ---
+        // --- NEW: Load product details immediately when text changes (for auto-complete) ---
         private void cmbproduct_TextChanged(object sender, EventArgs e)
         {
+            // Load product details immediately when text changes
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                LoadProductDetails(cmbproduct.Text.Trim());
+            }
+
             if (!string.IsNullOrEmpty(cmbproduct.Text))
                 errorProvider1.SetError(cmbproduct, "");
-        }
-
-        private void cmbaction_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbaction.SelectedIndex != -1)
-                errorProvider1.SetError(cmbaction, "");
-
-            // Update preview only if quantity is provided
-            if (!string.IsNullOrEmpty(txtquantity.Text.Trim()))
-                UpdateStockPreview();
         }
 
         private void txtquantity_TextChanged(object sender, EventArgs e)
@@ -509,15 +503,6 @@ namespace Inventory_Management_System
             if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
             {
                 cmbaction.SelectedIndex = -1;
-            }
-        }
-
-        private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            // Only allow digits and backspace
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
             }
         }
 
@@ -555,12 +540,6 @@ namespace Inventory_Management_System
         {
             if (!string.IsNullOrEmpty(txtreason.Text))
                 errorProvider1.SetError(txtreason, "");
-        }
-
-        private void txtprice_TextChanged(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrEmpty(txtprice.Text))
-                errorProvider1.SetError(txtprice, "");
         }
 
         private void UpdateStockPreview()
@@ -608,6 +587,59 @@ namespace Inventory_Management_System
             {
                 // Ignore errors in preview calculation
             }
+        }
+
+        private void cmbproduct_Leave(object sender, EventArgs e)
+        {
+            // Load product details when leaving the combobox if there's text
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                LoadProductDetails(cmbproduct.Text.Trim());
+            }
+
+            if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
+            }
+            else
+            {
+                errorProvider1.SetError(cmbproduct, "");
+            }
+        }
+
+        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbproduct.SelectedIndex >= 0)
+            {
+                string selectedProduct = cmbproduct.Text.Trim();
+                LoadProductDetails(selectedProduct);
+                errorProvider1.SetError(cmbproduct, "");
+            }
+        }
+
+        private void cmbaction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbaction.SelectedIndex != -1)
+                errorProvider1.SetError(cmbaction, "");
+
+            // Update preview only if quantity is provided
+            if (!string.IsNullOrEmpty(txtquantity.Text.Trim()))
+                UpdateStockPreview();
+        }
+
+        private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Only allow digits and backspace
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtprice_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtprice.Text))
+                errorProvider1.SetError(txtprice, "");
         }
     }
 }

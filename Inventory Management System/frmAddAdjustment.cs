@@ -335,48 +335,63 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- AUTO-POPULATE CURRENT PRICE WHEN PRODUCT IS SELECTED ---
-        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
+        // --- NEW METHOD: Load product details when product is selected ---
+        private void LoadProductDetails(string productName)
         {
             try
             {
-                if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+                if (!string.IsNullOrEmpty(productName))
                 {
-                    string selectedProduct = cmbproduct.Text.Trim();
-                    if (!string.IsNullOrEmpty(selectedProduct))
+                    string query = $"SELECT currentstock, unitprice FROM tblproducts WHERE products = '{productName.Replace("'", "''")}'";
+                    DataTable dt = newAdjustment.GetData(query);
+
+                    if (dt.Rows.Count > 0)
                     {
-                        // Get current product details
-                        string query = "SELECT unitprice, currentstock FROM tblproducts WHERE LOWER(products) = LOWER('" + selectedProduct.Replace("'", "''") + "')";
-                        DataTable dt = newAdjustment.GetData(query);
-
-                        if (dt.Rows.Count > 0)
-                        {
-                            // Only auto-populate if price field is empty
-                            if (string.IsNullOrEmpty(txtprice.Text.Trim()))
-                            {
-                                string currentPrice = dt.Rows[0]["unitprice"].ToString();
-                                txtprice.Text = currentPrice;
-                            }
-
-                            // Show current stock in a label or tooltip (optional)
-                            string currentStock = dt.Rows[0]["currentstock"].ToString();
-                            // You could add a label to show current stock: lblCurrentStock.Text = $"Current Stock: {currentStock}";
-                        }
+                        txtcurrentstock.Text = dt.Rows[0]["currentstock"].ToString();
+                        txtunitprice.Text = dt.Rows[0]["unitprice"].ToString();
+                    }
+                    else
+                    {
+                        txtcurrentstock.Text = "N/A";
+                        txtunitprice.Text = "N/A";
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Don't show error for auto-populate issues
-                System.Diagnostics.Debug.WriteLine("Auto-populate error: " + ex.Message);
+                MessageBox.Show("Error loading product details: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        // --- Remove error when user starts typing/selecting ---
+        // --- NEW: Load product details immediately when text changes (for auto-complete) ---
         private void cmbproduct_TextChanged(object sender, EventArgs e)
         {
+            // Load product details immediately when text changes
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                LoadProductDetails(cmbproduct.Text.Trim());
+            }
+
             if (!string.IsNullOrEmpty(cmbproduct.Text))
                 errorProvider1.SetError(cmbproduct, "");
+        }
+
+        private void cmbproduct_Leave(object sender, EventArgs e)
+        {
+            // Load product details when leaving the combobox if there's text
+            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                LoadProductDetails(cmbproduct.Text.Trim());
+            }
+
+            if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
+            {
+                errorProvider1.SetError(cmbproduct, "Product name is required.");
+            }
+            else
+            {
+                errorProvider1.SetError(cmbproduct, "");
+            }
         }
 
         private void cmbaction_SelectedIndexChanged(object sender, EventArgs e)
@@ -438,33 +453,6 @@ namespace Inventory_Management_System
                 errorProvider1.SetError(txtreason, "");
         }
 
-        private void txtquantity_TextChanged(object sender, EventArgs e)
-        {
-            // Clear quantity error when user types
-            if (!string.IsNullOrEmpty(txtquantity.Text))
-                errorProvider1.SetError(txtquantity, "");
-
-            // Update preview when quantity changes (only if product is selected)
-            if (!string.IsNullOrEmpty(cmbproduct.Text) && cmbaction.SelectedIndex != -1)
-                UpdateStockPreview();
-
-            // Enable/disable action combobox based on whether quantity is provided
-            cmbaction.Enabled = !string.IsNullOrEmpty(txtquantity.Text.Trim());
-
-            // If quantity is cleared, clear the action selection
-            if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
-            {
-                cmbaction.SelectedIndex = -1;
-            }
-        }
-
-        private void txtprice_TextChanged(object sender, EventArgs e)
-        {
-            // Clear price error when user types
-            if (!string.IsNullOrEmpty(txtprice.Text))
-                errorProvider1.SetError(txtprice, "");
-        }
-
         private void UpdateStockPreview()
         {
             // Show preview of what the adjustment will do (only if quantity is provided)
@@ -517,6 +505,43 @@ namespace Inventory_Management_System
             {
                 // Ignore errors in preview calculation
             }
+        }
+
+        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbproduct.SelectedIndex >= 0)
+            {
+                string selectedProduct = cmbproduct.Text.Trim();
+                LoadProductDetails(selectedProduct);
+                errorProvider1.SetError(cmbproduct, "");
+            }
+        }
+
+        private void txtquantity_TextChanged(object sender, EventArgs e)
+        {
+            // Clear quantity error when user types
+            if (!string.IsNullOrEmpty(txtquantity.Text))
+                errorProvider1.SetError(txtquantity, "");
+
+            // Update preview when quantity changes (only if product is selected)
+            if (!string.IsNullOrEmpty(cmbproduct.Text) && cmbaction.SelectedIndex != -1)
+                UpdateStockPreview();
+
+            // Enable/disable action combobox based on whether quantity is provided
+            cmbaction.Enabled = !string.IsNullOrEmpty(txtquantity.Text.Trim());
+
+            // If quantity is cleared, clear the action selection
+            if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
+            {
+                cmbaction.SelectedIndex = -1;
+            }
+        }
+
+        private void txtprice_TextChanged(object sender, EventArgs e)
+        {
+            // Clear price error when user types
+            if (!string.IsNullOrEmpty(txtprice.Text))
+                errorProvider1.SetError(txtprice, "");
         }
     }
 }

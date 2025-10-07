@@ -38,7 +38,6 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnView = new System.Windows.Forms.Button();
-            this.btnAddPO = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
             this.btnrefresh = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
@@ -140,7 +139,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 338);
+            this.groupBox2.Location = new System.Drawing.Point(20, 298);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
             this.groupBox2.Size = new System.Drawing.Size(160, 116);
@@ -191,14 +190,13 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnView);
-            this.groupBox1.Controls.Add(this.btnAddPO);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
             this.groupBox1.Location = new System.Drawing.Point(20, 219);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(160, 119);
+            this.groupBox1.Size = new System.Drawing.Size(160, 79);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Purchase Order";
@@ -214,7 +212,7 @@
             this.btnView.ForeColor = System.Drawing.Color.White;
             this.btnView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnView.ImageIndex = 1;
-            this.btnView.Location = new System.Drawing.Point(10, 68);
+            this.btnView.Location = new System.Drawing.Point(10, 28);
             this.btnView.Name = "btnView";
             this.btnView.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnView.Size = new System.Drawing.Size(140, 40);
@@ -222,26 +220,6 @@
             this.btnView.Text = "&View";
             this.btnView.UseVisualStyleBackColor = false;
             this.btnView.Click += new System.EventHandler(this.btnView_Click);
-            // 
-            // btnAddPO
-            // 
-            this.btnAddPO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnAddPO.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddPO.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAddPO.FlatAppearance.BorderSize = 0;
-            this.btnAddPO.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAddPO.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddPO.ForeColor = System.Drawing.Color.White;
-            this.btnAddPO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddPO.ImageIndex = 0;
-            this.btnAddPO.Location = new System.Drawing.Point(10, 28);
-            this.btnAddPO.Name = "btnAddPO";
-            this.btnAddPO.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnAddPO.Size = new System.Drawing.Size(140, 40);
-            this.btnAddPO.TabIndex = 0;
-            this.btnAddPO.Text = "A&dd";
-            this.btnAddPO.UseVisualStyleBackColor = false;
-            this.btnAddPO.Click += new System.EventHandler(this.btnAddPO_Click);
             // 
             // actionGroupBox
             // 
@@ -465,7 +443,6 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnView;
-        private System.Windows.Forms.Button btnAddPO;
         private System.Windows.Forms.GroupBox actionGroupBox;
         private System.Windows.Forms.Button btnrefresh;
         private System.Windows.Forms.Button btndelete;

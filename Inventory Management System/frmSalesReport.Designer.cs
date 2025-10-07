@@ -174,7 +174,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label5.Location = new System.Drawing.Point(1128, 314);
+            this.label5.Location = new System.Drawing.Point(1128, 155);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 19);
             this.label5.TabIndex = 10;
@@ -184,7 +184,7 @@
             // 
             this.txtoveralltotal.Enabled = false;
             this.txtoveralltotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtoveralltotal.Location = new System.Drawing.Point(1071, 336);
+            this.txtoveralltotal.Location = new System.Drawing.Point(1071, 177);
             this.txtoveralltotal.Name = "txtoveralltotal";
             this.txtoveralltotal.Size = new System.Drawing.Size(200, 31);
             this.txtoveralltotal.TabIndex = 9;
@@ -214,7 +214,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(1133, 154);
+            this.label1.Location = new System.Drawing.Point(1133, 314);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 19);
             this.label1.TabIndex = 6;
@@ -224,7 +224,7 @@
             // 
             this.txttotal.Enabled = false;
             this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttotal.Location = new System.Drawing.Point(1071, 176);
+            this.txttotal.Location = new System.Drawing.Point(1071, 336);
             this.txttotal.Name = "txttotal";
             this.txttotal.Size = new System.Drawing.Size(200, 31);
             this.txttotal.TabIndex = 5;
