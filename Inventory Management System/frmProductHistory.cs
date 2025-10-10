@@ -16,7 +16,6 @@ namespace Inventory_Management_System
     {
         private string productName;
         private string username;
-        private string usertype;
         private Class1 database;
         private int currentPage = 1;
         private int pageSize = 10;
@@ -30,39 +29,22 @@ namespace Inventory_Management_System
             this.productName = productName;
             this.username = username;
             this.database = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
-            LoadUserType();
-        }
-
-        private void LoadUserType()
-        {
-            try
-            {
-                string query = $"SELECT usertype FROM tblaccounts WHERE username = '{username.Replace("'", "''")}'";
-                DataTable dt = database.GetData(query);
-                if (dt.Rows.Count > 0)
-                {
-                    usertype = dt.Rows[0]["usertype"].ToString().ToUpper();
-                }
-                else
-                {
-                    usertype = "PHARMACIST";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading user type: " + ex.Message, "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                usertype = "PHARMACIST";
-            }
         }
 
         private void frmProductHistory_Load(object sender, EventArgs e)
         {
             try
             {
+                // Set the product name in the label
                 lblProductName.Text = $"History for: {productName}";
+
+                // Initialize DataGridView before loading data
                 InitializeDataGridView();
+
+                // Load the product history
                 LoadProductHistory();
+
+                // Disable delete buttons initially
                 UpdateButtonStates();
             }
             catch (Exception ex)
@@ -74,14 +56,17 @@ namespace Inventory_Management_System
 
         private void InitializeDataGridView()
         {
+            // Clear any existing data and columns
             dataGridViewHistory.DataSource = null;
             dataGridViewHistory.Columns.Clear();
 
+            // Create columns manually to ensure they display correctly
             dataGridViewHistory.Columns.Add("UnitCost", "UNIT COST");
             dataGridViewHistory.Columns.Add("DatePeriod", "DATE PERIOD");
             dataGridViewHistory.Columns.Add("CreatedBy", "CREATED BY");
             dataGridViewHistory.Columns.Add("Occurrences", "OCCURRENCES");
 
+            // Basic grid settings
             dataGridViewHistory.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
             dataGridViewHistory.RowTemplate.Height = 35;
             dataGridViewHistory.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
@@ -94,11 +79,13 @@ namespace Inventory_Management_System
             dataGridViewHistory.BorderStyle = BorderStyle.None;
             dataGridViewHistory.GridColor = Color.FromArgb(240, 240, 240);
 
+            // Cell styling
             dataGridViewHistory.DefaultCellStyle.Padding = new Padding(8);
             dataGridViewHistory.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
             dataGridViewHistory.DefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 128, 185);
             dataGridViewHistory.DefaultCellStyle.SelectionForeColor = Color.White;
 
+            // Header styling
             dataGridViewHistory.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridViewHistory.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9.5F, FontStyle.Bold);
             dataGridViewHistory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(52, 73, 94);
@@ -107,6 +94,7 @@ namespace Inventory_Management_System
             dataGridViewHistory.ColumnHeadersHeight = 40;
             dataGridViewHistory.EnableHeadersVisualStyles = false;
 
+            // Set column widths and alignment
             dataGridViewHistory.Columns["UnitCost"].Width = 130;
             dataGridViewHistory.Columns["UnitCost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             dataGridViewHistory.Columns["UnitCost"].DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -120,6 +108,7 @@ namespace Inventory_Management_System
             dataGridViewHistory.Columns["Occurrences"].Width = 120;
             dataGridViewHistory.Columns["Occurrences"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+            // Auto-size the last column to fill remaining space
             dataGridViewHistory.Columns[dataGridViewHistory.Columns.Count - 1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         }
 
@@ -127,8 +116,10 @@ namespace Inventory_Management_System
         {
             try
             {
+                // Clear existing rows
                 dataGridViewHistory.Rows.Clear();
 
+                // Get all history records for this product, ordered by date and time with PM on top
                 string query = $@"SELECT products, unitcost, datecreated, createdby 
                                 FROM tblhistory 
                                 WHERE products = '{productName.Replace("'", "''")}' 
@@ -150,8 +141,10 @@ namespace Inventory_Management_System
                     return;
                 }
 
+                // Process the data to group consecutive same unit costs
                 List<HistoryRecord> processedRecords = ProcessHistoryData(rawData);
 
+                // Apply search filter if provided
                 if (!string.IsNullOrEmpty(search))
                 {
                     processedRecords = processedRecords.Where(r =>
@@ -165,11 +158,13 @@ namespace Inventory_Management_System
                 totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
                 if (totalPages == 0) totalPages = 1;
 
+                // Apply paging
                 var pagedRecords = processedRecords
                     .Skip((currentPage - 1) * pageSize)
                     .Take(pageSize)
                     .ToList();
 
+                // Add data to DataGridView manually
                 foreach (var record in pagedRecords)
                 {
                     int rowIndex = dataGridViewHistory.Rows.Add(
@@ -179,6 +174,7 @@ namespace Inventory_Management_System
                         record.Occurrences
                     );
 
+                    // Apply alternating row colors
                     if (rowIndex % 2 == 0)
                     {
                         dataGridViewHistory.Rows[rowIndex].DefaultCellStyle.BackColor = Color.White;
@@ -190,7 +186,10 @@ namespace Inventory_Management_System
                     dataGridViewHistory.Rows[rowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(64, 64, 64);
                 }
 
+                // Update page info
                 UpdatePageInfo();
+
+                // Clear selection
                 dataGridViewHistory.ClearSelection();
                 selectedRow = -1;
                 UpdateButtonStates();
@@ -209,6 +208,7 @@ namespace Inventory_Management_System
             if (rawData.Rows.Count == 0)
                 return processedRecords;
 
+            // Group by consecutive same unit costs
             string currentUnitCost = "";
             string startDate = "";
             string endDate = "";
@@ -223,6 +223,7 @@ namespace Inventory_Management_System
 
                 if (i == 0)
                 {
+                    // First record
                     currentUnitCost = rowUnitCost;
                     startDate = rowDate;
                     endDate = rowDate;
@@ -231,11 +232,13 @@ namespace Inventory_Management_System
                 }
                 else if (rowUnitCost == currentUnitCost)
                 {
+                    // Same unit cost as previous - update end date and count
                     endDate = rowDate;
                     consecutiveCount++;
                 }
                 else
                 {
+                    // Unit cost changed - add the previous group to processed records
                     processedRecords.Add(new HistoryRecord
                     {
                         ProductName = productName,
@@ -245,6 +248,7 @@ namespace Inventory_Management_System
                         Occurrences = consecutiveCount > 1 ? $"{consecutiveCount} times" : "1 time"
                     });
 
+                    // Start new group
                     currentUnitCost = rowUnitCost;
                     startDate = rowDate;
                     endDate = rowDate;
@@ -253,6 +257,7 @@ namespace Inventory_Management_System
                 }
             }
 
+            // Add the last group
             if (consecutiveCount > 0)
             {
                 processedRecords.Add(new HistoryRecord
@@ -292,27 +297,16 @@ namespace Inventory_Management_System
         private void UpdateButtonStates()
         {
             bool hasSelection = selectedRow >= 0 && selectedRow < dataGridViewHistory.Rows.Count;
-            bool isAdmin = usertype != null && usertype.ToUpperInvariant() == "ADMINISTRATOR";
+            btnDelete.Enabled = hasSelection;
+            btnDeleteAll.Enabled = totalRecords > 0;
 
-            btnDelete.Enabled = hasSelection && isAdmin;
-            btnDeleteAll.Enabled = totalRecords > 0 && isAdmin;
-
+            // Update pagination buttons
             btnPrev.Enabled = currentPage > 1;
             btnNext.Enabled = currentPage < totalPages;
 
-            btnDelete.BackColor = (hasSelection && isAdmin) ? Color.FromArgb(192, 57, 43) : Color.FromArgb(200, 200, 200);
-            btnDeleteAll.BackColor = (totalRecords > 0 && isAdmin) ? Color.FromArgb(231, 76, 60) : Color.FromArgb(200, 200, 200);
-
-            if (!isAdmin)
-            {
-                btnDelete.Text = "Delete (Admin Only)";
-                btnDeleteAll.Text = "Delete All (Admin Only)";
-            }
-            else
-            {
-                btnDelete.Text = "Delete";
-                btnDeleteAll.Text = "Delete All";
-            }
+            // Visual feedback for disabled buttons
+            btnDelete.BackColor = hasSelection ? Color.FromArgb(192, 57, 43) : Color.FromArgb(200, 200, 200);
+            btnDeleteAll.BackColor = totalRecords > 0 ? Color.FromArgb(231, 76, 60) : Color.FromArgb(200, 200, 200);
         }
 
         private void btnExport_Click(object sender, EventArgs e)
@@ -349,12 +343,15 @@ namespace Inventory_Management_System
             {
                 StringBuilder csvContent = new StringBuilder();
 
+                // Add title and header information
                 csvContent.AppendLine("AMGC PHARMACY - PRODUCT UNIT COST HISTORY");
                 csvContent.AppendLine($"Product: {productName}, Generated: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}");
-                csvContent.AppendLine();
+                csvContent.AppendLine(); // Empty line
 
+                // Add column headers
                 csvContent.AppendLine("Unit Cost,Date Period,Created By,Occurrences");
 
+                // Add data rows
                 foreach (DataGridViewRow row in dataGridViewHistory.Rows)
                 {
                     if (row.IsNewRow) continue;
@@ -371,11 +368,13 @@ namespace Inventory_Management_System
                     csvContent.AppendLine(dataRow.ToString());
                 }
 
+                // Write to file
                 File.WriteAllText(fileName, csvContent.ToString(), Encoding.UTF8);
 
                 MessageBox.Show($"Product history exported successfully!\nLocation: {fileName}",
                     "Export Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                // Log the export action
                 database.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                     "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                     "', 'EXPORT', 'PRODUCT HISTORY', '" + productName.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
@@ -403,13 +402,6 @@ namespace Inventory_Management_System
         {
             try
             {
-                if (usertype == null || usertype.ToUpperInvariant() != "ADMINISTRATOR")
-                {
-                    MessageBox.Show("Only ADMINISTRATOR can delete history records.", "Permission Denied",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 if (selectedRow < 0 || selectedRow >= dataGridViewHistory.Rows.Count)
                 {
                     MessageBox.Show("Please select a history record to delete.", "No Selection",
@@ -417,6 +409,7 @@ namespace Inventory_Management_System
                     return;
                 }
 
+                // Get the selected record details
                 string unitCost = dataGridViewHistory.Rows[selectedRow].Cells["UnitCost"].Value?.ToString() ?? "";
                 string datePeriod = dataGridViewHistory.Rows[selectedRow].Cells["DatePeriod"].Value?.ToString() ?? "";
 
@@ -428,19 +421,13 @@ namespace Inventory_Management_System
 
                 if (result == DialogResult.Yes)
                 {
+                    // Extract the actual unit cost value without currency formatting
                     string cleanUnitCost = unitCost.Replace("₱", "").Replace(",", "").Trim();
 
-                    string startDate = datePeriod;
-                    if (datePeriod.Contains(" to "))
-                    {
-                        string[] dateParts = datePeriod.Split(new[] { " to " }, StringSplitOptions.RemoveEmptyEntries);
-                        startDate = dateParts[0].Trim();
-                    }
-
+                    // Delete from database - this will delete all records for this product with this unit cost
                     string deleteQuery = $@"DELETE FROM tblhistory 
                                           WHERE products = '{productName.Replace("'", "''")}' 
-                                          AND unitcost = '{cleanUnitCost.Replace("'", "''")}'
-                                          AND datecreated >= '{startDate.Replace("'", "''")}'";
+                                          AND unitcost = '{cleanUnitCost.Replace("'", "''")}'";
 
                     database.executeSQL(deleteQuery);
 
@@ -449,16 +436,13 @@ namespace Inventory_Management_System
                         MessageBox.Show("Unit cost history deleted successfully.", "Success",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                        // Log the action
                         database.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                             "', 'DELETE', 'PRODUCT HISTORY', '" + productName.Replace("'", "''") + " - " + unitCost.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
 
+                        // Reload the history
                         LoadProductHistory();
-                    }
-                    else
-                    {
-                        MessageBox.Show("No records were deleted. The record may have been already deleted or modified.", "Deletion Failed",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -473,13 +457,6 @@ namespace Inventory_Management_System
         {
             try
             {
-                if (usertype == null || usertype.ToUpperInvariant() != "ADMINISTRATOR")
-                {
-                    MessageBox.Show("Only ADMINISTRATOR can delete all history records.", "Permission Denied",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 DialogResult result = MessageBox.Show(
                     $"Are you sure you want to delete ALL unit cost history for '{productName}'? This action cannot be undone.",
                     "Confirm Delete All",
@@ -498,10 +475,12 @@ namespace Inventory_Management_System
                         MessageBox.Show($"All unit cost history for '{productName}' has been deleted.", "Success",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                        // Log the action
                         database.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                             "', 'DELETE ALL', 'PRODUCT HISTORY', '" + productName.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
 
+                        // Reload the history
                         LoadProductHistory();
                     }
                 }
@@ -531,6 +510,7 @@ namespace Inventory_Management_System
             }
         }
 
+        // Fixed selection event handlers
         private void dataGridViewHistory_SelectionChanged(object sender, EventArgs e)
         {
             if (dataGridViewHistory.SelectedRows.Count > 0)
@@ -548,9 +528,14 @@ namespace Inventory_Management_System
         {
             if (e.RowIndex >= 0 && e.RowIndex < dataGridViewHistory.Rows.Count)
             {
+                // Clear previous selection
                 dataGridViewHistory.ClearSelection();
+
+                // Select the clicked row
                 dataGridViewHistory.Rows[e.RowIndex].Selected = true;
                 selectedRow = e.RowIndex;
+
+                // Ensure the row is visible
                 dataGridViewHistory.CurrentCell = dataGridViewHistory.Rows[e.RowIndex].Cells[0];
             }
             else
@@ -560,6 +545,7 @@ namespace Inventory_Management_System
             UpdateButtonStates();
         }
 
+        // Add these methods for better user experience
         private void dataGridViewHistory_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0 && e.RowIndex < dataGridViewHistory.Rows.Count)
@@ -574,6 +560,7 @@ namespace Inventory_Management_System
         }
     }
 
+    // Helper class to represent processed history records
     public class HistoryRecord
     {
         public string ProductName { get; set; }

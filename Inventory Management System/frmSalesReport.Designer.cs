@@ -43,8 +43,10 @@
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnPrevRefund = new System.Windows.Forms.Button();
             this.btnNextRefund = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPrevSales = new System.Windows.Forms.Button();
             this.btnNextSales = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
@@ -70,6 +72,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.actionPanel.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -92,11 +96,7 @@
             // 
             // contentPanel
             // 
-            this.contentPanel.Controls.Add(this.btnPrevRefund);
-            this.contentPanel.Controls.Add(this.btnPrevSales);
-            this.contentPanel.Controls.Add(this.btnNextRefund);
             this.contentPanel.Controls.Add(this.label8);
-            this.contentPanel.Controls.Add(this.btnNextSales);
             this.contentPanel.Controls.Add(this.label7);
             this.contentPanel.Controls.Add(this.label6);
             this.contentPanel.Controls.Add(this.dataGridView2);
@@ -118,7 +118,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(727, 530);
+            this.label8.Location = new System.Drawing.Point(905, 516);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(62, 13);
             this.label8.TabIndex = 14;
@@ -174,7 +174,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label5.Location = new System.Drawing.Point(1128, 155);
+            this.label5.Location = new System.Drawing.Point(1128, 314);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(95, 19);
             this.label5.TabIndex = 10;
@@ -184,7 +184,7 @@
             // 
             this.txtoveralltotal.Enabled = false;
             this.txtoveralltotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtoveralltotal.Location = new System.Drawing.Point(1071, 177);
+            this.txtoveralltotal.Location = new System.Drawing.Point(1071, 336);
             this.txtoveralltotal.Name = "txtoveralltotal";
             this.txtoveralltotal.Size = new System.Drawing.Size(200, 31);
             this.txtoveralltotal.TabIndex = 9;
@@ -214,7 +214,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.label1.Location = new System.Drawing.Point(1133, 314);
+            this.label1.Location = new System.Drawing.Point(1133, 154);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 19);
             this.label1.TabIndex = 6;
@@ -224,7 +224,7 @@
             // 
             this.txttotal.Enabled = false;
             this.txttotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txttotal.Location = new System.Drawing.Point(1071, 336);
+            this.txttotal.Location = new System.Drawing.Point(1071, 176);
             this.txttotal.Name = "txttotal";
             this.txttotal.Size = new System.Drawing.Size(200, 31);
             this.txttotal.TabIndex = 5;
@@ -232,7 +232,7 @@
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(185, 530);
+            this.lblPageInfo.Location = new System.Drawing.Point(363, 516);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -264,6 +264,8 @@
             // 
             // actionPanel
             // 
+            this.actionPanel.Controls.Add(this.groupBox2);
+            this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(1290, 160);
@@ -272,21 +274,36 @@
             this.actionPanel.Size = new System.Drawing.Size(182, 557);
             this.actionPanel.TabIndex = 3;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnPrevRefund);
+            this.groupBox2.Controls.Add(this.btnNextRefund);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.groupBox2.Location = new System.Drawing.Point(20, 424);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox2.Size = new System.Drawing.Size(142, 125);
+            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Refund Page";
+            // 
             // btnPrevRefund
             // 
-            this.btnPrevRefund.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrevRefund.BackColor = System.Drawing.Color.DimGray;
             this.btnPrevRefund.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrevRefund.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnPrevRefund.FlatAppearance.BorderSize = 0;
             this.btnPrevRefund.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrevRefund.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevRefund.ForeColor = System.Drawing.Color.White;
             this.btnPrevRefund.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrevRefund.ImageIndex = 1;
-            this.btnPrevRefund.Location = new System.Drawing.Point(556, 519);
+            this.btnPrevRefund.Location = new System.Drawing.Point(10, 68);
             this.btnPrevRefund.Name = "btnPrevRefund";
             this.btnPrevRefund.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnPrevRefund.Size = new System.Drawing.Size(122, 35);
+            this.btnPrevRefund.Size = new System.Drawing.Size(122, 40);
             this.btnPrevRefund.TabIndex = 1;
             this.btnPrevRefund.Text = "&Prev";
             this.btnPrevRefund.UseVisualStyleBackColor = false;
@@ -294,39 +311,54 @@
             // 
             // btnNextRefund
             // 
-            this.btnNextRefund.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextRefund.BackColor = System.Drawing.Color.DimGray;
             this.btnNextRefund.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNextRefund.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNextRefund.FlatAppearance.BorderSize = 0;
             this.btnNextRefund.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnNextRefund.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextRefund.ForeColor = System.Drawing.Color.White;
             this.btnNextRefund.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNextRefund.ImageIndex = 0;
-            this.btnNextRefund.Location = new System.Drawing.Point(914, 519);
+            this.btnNextRefund.Location = new System.Drawing.Point(10, 28);
             this.btnNextRefund.Name = "btnNextRefund";
             this.btnNextRefund.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnNextRefund.Size = new System.Drawing.Size(122, 35);
+            this.btnNextRefund.Size = new System.Drawing.Size(122, 40);
             this.btnNextRefund.TabIndex = 0;
             this.btnNextRefund.Text = "&Next";
             this.btnNextRefund.UseVisualStyleBackColor = false;
             this.btnNextRefund.Click += new System.EventHandler(this.btnNextRefund_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnPrevSales);
+            this.groupBox1.Controls.Add(this.btnNextSales);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.groupBox1.Location = new System.Drawing.Point(20, 299);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
+            this.groupBox1.Size = new System.Drawing.Size(142, 125);
+            this.groupBox1.TabIndex = 1;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Sales Page";
+            // 
             // btnPrevSales
             // 
-            this.btnPrevSales.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrevSales.BackColor = System.Drawing.Color.DimGray;
             this.btnPrevSales.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrevSales.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnPrevSales.FlatAppearance.BorderSize = 0;
             this.btnPrevSales.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrevSales.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrevSales.ForeColor = System.Drawing.Color.White;
             this.btnPrevSales.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrevSales.ImageIndex = 1;
-            this.btnPrevSales.Location = new System.Drawing.Point(21, 519);
+            this.btnPrevSales.Location = new System.Drawing.Point(10, 68);
             this.btnPrevSales.Name = "btnPrevSales";
             this.btnPrevSales.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnPrevSales.Size = new System.Drawing.Size(122, 35);
+            this.btnPrevSales.Size = new System.Drawing.Size(122, 40);
             this.btnPrevSales.TabIndex = 1;
             this.btnPrevSales.Text = "&Prev";
             this.btnPrevSales.UseVisualStyleBackColor = false;
@@ -334,19 +366,19 @@
             // 
             // btnNextSales
             // 
-            this.btnNextSales.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextSales.BackColor = System.Drawing.Color.DimGray;
             this.btnNextSales.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNextSales.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNextSales.FlatAppearance.BorderSize = 0;
             this.btnNextSales.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnNextSales.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNextSales.ForeColor = System.Drawing.Color.White;
             this.btnNextSales.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNextSales.ImageIndex = 0;
-            this.btnNextSales.Location = new System.Drawing.Point(363, 519);
+            this.btnNextSales.Location = new System.Drawing.Point(10, 28);
             this.btnNextSales.Name = "btnNextSales";
             this.btnNextSales.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnNextSales.Size = new System.Drawing.Size(122, 35);
+            this.btnNextSales.Size = new System.Drawing.Size(122, 40);
             this.btnNextSales.TabIndex = 0;
             this.btnNextSales.Text = "&Next";
             this.btnNextSales.UseVisualStyleBackColor = false;
@@ -453,7 +485,7 @@
             // 
             // btnview
             // 
-            this.btnview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.btnview.BackColor = System.Drawing.Color.DimGray;
             this.btnview.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnview.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnview.FlatAppearance.BorderSize = 0;
@@ -635,6 +667,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.actionPanel.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
@@ -652,6 +686,7 @@
         private System.Windows.Forms.Label lblPageInfo;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Panel actionPanel;
+        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnPrevSales;
         private System.Windows.Forms.Button btnNextSales;
         private System.Windows.Forms.GroupBox actionGroupBox;
@@ -681,6 +716,7 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnPrevRefund;
         private System.Windows.Forms.Button btnNextRefund;
         private System.Windows.Forms.Label label8;

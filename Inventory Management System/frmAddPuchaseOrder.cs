@@ -98,7 +98,7 @@ namespace Inventory_Management_System
                         string supplier = supplierName.Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
-                        string timeCreated = DateTime.Now.ToString("hh:mm:ss tt");
+                        string timeCreated = DateTime.Now.ToString("hh:mm:ss tt"); // Added timecreated
                         string status = "Pending";
 
                         string insertPurchaseOrder =
@@ -136,6 +136,7 @@ namespace Inventory_Management_System
                 Class1 db = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
                 // Always log the unit cost history when a new purchase order is created
+                // This ensures every purchase order creates a history record
                 string insertQuery = $@"INSERT INTO tblhistory (products, unitcost, datecreated, createdby) 
                                       VALUES ('{product.Replace("'", "''")}', '{unitCost.Replace("'", "''")}', 
                                               '{DateTime.Now:MM/dd/yyyy hh:mm:ss tt}', '{username.Replace("'", "''")}')";
@@ -195,25 +196,11 @@ namespace Inventory_Management_System
 
             try
             {
-                // Update the form title to show the supplier
-                this.Text = "Add Purchase Order - " + supplierName;
-
-                // Only load products from the selected supplier
-                string query = $"SELECT products FROM tblproducts WHERE supplier = '{supplierName.Replace("'", "''")}' ORDER BY products ASC";
-                DataTable dt = newPurchaseOrder.GetData(query);
-
+                DataTable dt = newPurchaseOrder.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
                 cmbproduct.Items.Clear();
                 foreach (DataRow row in dt.Rows)
                 {
                     cmbproduct.Items.Add(row["products"].ToString());
-                }
-
-                // Display message if no products found for this supplier
-                if (cmbproduct.Items.Count == 0)
-                {
-                    MessageBox.Show($"No products found for supplier: {supplierName}\nPlease add products for this supplier first.",
-                        "No Products Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    cmbproduct.Enabled = false;
                 }
 
                 cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
@@ -226,79 +213,11 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- Load product details when product is selected ---
-        private void LoadProductDetails(string productName)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(productName))
-                {
-                    string query = $"SELECT currentstock, unitprice FROM tblproducts WHERE products = '{productName.Replace("'", "''")}'";
-                    DataTable dt = newPurchaseOrder.GetData(query);
-
-                    if (dt.Rows.Count > 0)
-                    {
-                        txtcurrentstock.Text = dt.Rows[0]["currentstock"].ToString();
-                        txtunitprice.Text = dt.Rows[0]["unitprice"].ToString();
-                        // Removed automatic setting of unit cost - user will enter manually
-                    }
-                    else
-                    {
-                        txtcurrentstock.Text = "N/A";
-                        txtunitprice.Text = "N/A";
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading product details: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         // --- EVENTS ---
         private void txtquantity_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
         private void txtunitcost_KeyUp(object sender, KeyEventArgs e) => CalculateTotalCost();
         private void txtquantity_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtquantity.Text)) errorProvider1.SetError(txtquantity, ""); CalculateTotalCost(); }
         private void txtunitcost_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtunitcost.Text)) errorProvider1.SetError(txtunitcost, ""); CalculateTotalCost(); }
-
-        // --- When product selection changes ---
-        private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cmbproduct.SelectedIndex >= 0)
-            {
-                string selectedProduct = cmbproduct.Text.Trim();
-                LoadProductDetails(selectedProduct);
-                errorProvider1.SetError(cmbproduct, "");
-            }
-        }
-
-        private void cmbproduct_TextChanged(object sender, EventArgs e)
-        {
-            // Load product details when text changes (for auto-complete)
-            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()) && cmbproduct.SelectedIndex == -1)
-            {
-                // You might want to add a delay or button to search for products
-                // to avoid excessive database queries during typing
-            }
-        }
-
-        private void cmbproduct_Leave(object sender, EventArgs e)
-        {
-            // Load product details when leaving the combobox if there's text
-            if (!string.IsNullOrEmpty(cmbproduct.Text.Trim()))
-            {
-                LoadProductDetails(cmbproduct.Text.Trim());
-            }
-
-            if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
-            {
-                errorProvider1.SetError(cmbproduct, "Product name is required.");
-            }
-            else
-            {
-                errorProvider1.SetError(cmbproduct, "");
-            }
-        }
 
         // --- KEYPRESS VALIDATION ---
         private void txtquantity_KeyPress(object sender, KeyPressEventArgs e)

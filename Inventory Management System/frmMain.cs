@@ -18,7 +18,6 @@ namespace Inventory_Management_System
         private int currentSidePanelWidth = 220;
         private const int SIDE_PANEL_WIDTH = 220;
         private const int ANIMATION_SPEED = 15;
-        private bool isLoggingOut = false;
 
         private Dictionary<Button, Color> originalButtonColors = new Dictionary<Button, Color>();
         private Dictionary<Button, Color> hoverButtonColors = new Dictionary<Button, Color>();
@@ -359,7 +358,6 @@ namespace Inventory_Management_System
 
             if (dr == DialogResult.Yes)
             {
-                isLoggingOut = true;
                 CloseAllFormsAndLogout();
             }
         }
@@ -441,33 +439,6 @@ namespace Inventory_Management_System
         private void frmMain_Load(object sender, EventArgs e)
         {
 
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-
-            // If the form is closing and it's not from a logout action, show confirmation
-            if (!isLoggingOut && e.CloseReason == CloseReason.UserClosing)
-            {
-                DialogResult result = MessageBox.Show(
-                    "Are you sure you want to logout and close the application?",
-                    "Confirm Logout",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    // Set flag and perform logout
-                    isLoggingOut = true;
-                    CloseAllFormsAndLogout();
-                }
-                else
-                {
-                    // Cancel the closing operation
-                    e.Cancel = true;
-                }
-            }
         }
     }
 

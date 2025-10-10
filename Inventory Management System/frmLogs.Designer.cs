@@ -32,7 +32,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
             this.cardPanel = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.cmbaction = new System.Windows.Forms.ComboBox();
@@ -41,13 +40,16 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btndeleteall = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnprev = new System.Windows.Forms.Button();
             this.btnnext = new System.Windows.Forms.Button();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.panelHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.cardPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // panelHeader
@@ -84,9 +86,7 @@
             // 
             this.cardPanel.BackColor = System.Drawing.Color.White;
             this.cardPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cardPanel.Controls.Add(this.btnprev);
             this.cardPanel.Controls.Add(this.dataGridView1);
-            this.cardPanel.Controls.Add(this.btnnext);
             this.cardPanel.Controls.Add(this.lblPageInfo);
             this.cardPanel.Controls.Add(this.dateTimePicker1);
             this.cardPanel.Controls.Add(this.cmbaction);
@@ -95,37 +95,13 @@
             this.cardPanel.Location = new System.Drawing.Point(12, 109);
             this.cardPanel.Name = "cardPanel";
             this.cardPanel.Padding = new System.Windows.Forms.Padding(12);
-            this.cardPanel.Size = new System.Drawing.Size(764, 358);
+            this.cardPanel.Size = new System.Drawing.Size(764, 328);
             this.cardPanel.TabIndex = 3;
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.ColumnHeadersHeight = 40;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dataGridView1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
-            this.dataGridView1.EnableHeadersVisualStyles = false;
-            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.dataGridView1.Location = new System.Drawing.Point(16, 55);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.RowTemplate.Height = 35;
-            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(728, 245);
-            this.dataGridView1.TabIndex = 5;
-            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(294, 320);
+            this.lblPageInfo.Location = new System.Drawing.Point(638, 303);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 4;
@@ -173,7 +149,7 @@
             // 
             // btnreset
             // 
-            this.btnreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnreset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnreset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(140)))), ((int)(((byte)(141)))));
             this.btnreset.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnreset.FlatAppearance.BorderSize = 0;
@@ -203,19 +179,19 @@
             // 
             // btndeleteall
             // 
-            this.btndeleteall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btndeleteall.BackColor = System.Drawing.Color.DarkRed;
             this.btndeleteall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btndeleteall.Dock = System.Windows.Forms.DockStyle.Top;
             this.btndeleteall.FlatAppearance.BorderSize = 0;
             this.btndeleteall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btndeleteall.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btndeleteall.ForeColor = System.Drawing.Color.White;
             this.btndeleteall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndeleteall.ImageIndex = 5;
-            this.btndeleteall.Location = new System.Drawing.Point(23, 67);
+            this.btndeleteall.Location = new System.Drawing.Point(3, 61);
             this.btndeleteall.Name = "btndeleteall";
             this.btndeleteall.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btndeleteall.Size = new System.Drawing.Size(154, 40);
+            this.btndeleteall.Size = new System.Drawing.Size(194, 40);
             this.btndeleteall.TabIndex = 4;
             this.btndeleteall.Text = "Delete &All";
             this.btndeleteall.UseVisualStyleBackColor = false;
@@ -223,39 +199,52 @@
             // 
             // btndelete
             // 
-            this.btndelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btndelete.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(76)))), ((int)(((byte)(60)))));
             this.btndelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btndelete.Dock = System.Windows.Forms.DockStyle.Top;
             this.btndelete.FlatAppearance.BorderSize = 0;
             this.btndelete.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btndelete.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btndelete.ForeColor = System.Drawing.Color.White;
             this.btndelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btndelete.ImageIndex = 5;
-            this.btndelete.Location = new System.Drawing.Point(23, 27);
+            this.btndelete.Location = new System.Drawing.Point(3, 21);
             this.btndelete.Name = "btndelete";
             this.btndelete.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btndelete.Size = new System.Drawing.Size(154, 40);
+            this.btndelete.Size = new System.Drawing.Size(194, 40);
             this.btndelete.TabIndex = 3;
             this.btndelete.Text = "&Delete";
             this.btndelete.UseVisualStyleBackColor = false;
             this.btndelete.Click += new System.EventHandler(this.btndelete_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.btnprev);
+            this.groupBox2.Controls.Add(this.btnnext);
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.groupBox2.Location = new System.Drawing.Point(795, 293);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(200, 122);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Page";
+            // 
             // btnprev
             // 
-            this.btnprev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnprev.BackColor = System.Drawing.Color.DimGray;
             this.btnprev.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnprev.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnprev.FlatAppearance.BorderSize = 0;
             this.btnprev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnprev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnprev.ForeColor = System.Drawing.Color.White;
             this.btnprev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnprev.ImageIndex = 5;
-            this.btnprev.Location = new System.Drawing.Point(46, 306);
+            this.btnprev.Location = new System.Drawing.Point(3, 61);
             this.btnprev.Name = "btnprev";
             this.btnprev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnprev.Size = new System.Drawing.Size(154, 40);
+            this.btnprev.Size = new System.Drawing.Size(194, 40);
             this.btnprev.TabIndex = 4;
             this.btnprev.Text = "&Prev";
             this.btnprev.UseVisualStyleBackColor = false;
@@ -263,29 +252,54 @@
             // 
             // btnnext
             // 
-            this.btnnext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnnext.BackColor = System.Drawing.Color.DimGray;
             this.btnnext.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnnext.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnnext.FlatAppearance.BorderSize = 0;
             this.btnnext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnnext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnnext.ForeColor = System.Drawing.Color.White;
             this.btnnext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnnext.ImageIndex = 5;
-            this.btnnext.Location = new System.Drawing.Point(545, 306);
+            this.btnnext.Location = new System.Drawing.Point(3, 21);
             this.btnnext.Name = "btnnext";
             this.btnnext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnnext.Size = new System.Drawing.Size(154, 40);
+            this.btnnext.Size = new System.Drawing.Size(194, 40);
             this.btnnext.TabIndex = 3;
             this.btnnext.Text = "&Next";
             this.btnnext.UseVisualStyleBackColor = false;
             this.btnnext.Click += new System.EventHandler(this.btnnext_Click);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridView1.ColumnHeadersHeight = 40;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.dataGridView1.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dataGridView1.EnableHeadersVisualStyles = false;
+            this.dataGridView1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
+            this.dataGridView1.Location = new System.Drawing.Point(16, 55);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 35;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(728, 245);
+            this.dataGridView1.TabIndex = 5;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            // 
             // frmLogs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 479);
+            this.ClientSize = new System.Drawing.Size(1008, 450);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.cardPanel);
@@ -300,8 +314,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.cardPanel.ResumeLayout(false);
             this.cardPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -320,6 +335,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btndeleteall;
         private System.Windows.Forms.Button btndelete;
+        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnprev;
         private System.Windows.Forms.Button btnnext;
         private System.Windows.Forms.DataGridView dataGridView1;

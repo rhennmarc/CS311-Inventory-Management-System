@@ -73,7 +73,7 @@ namespace Inventory_Management_System
             {
                 try
                 {
-                    DialogResult dr = MessageBox.Show("Are you sure you want to update this supplier?\n\nNote: This will also update the supplier name in all related products.",
+                    DialogResult dr = MessageBox.Show("Are you sure you want to update this supplier?",
                         "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     if (dr == DialogResult.Yes)
@@ -83,39 +83,20 @@ namespace Inventory_Management_System
                         string contactinfo = txtcontactinfo.Text.Trim().Replace("'", "''");
                         string user = string.IsNullOrEmpty(username) ? "" : username.Replace("'", "''");
 
-                        // Update the supplier in tblsupplier
-                        string sqlSupplier =
+                        string sql =
                             "UPDATE tblsupplier SET " +
                             "supplier='" + supplier + "', " +
                             "description='" + description + "', " +
                             "contactinfo='" + contactinfo + "' " +
                             "WHERE supplier='" + originalSupplier.Replace("'", "''") + "'";
 
-                        updatesupplier.executeSQL(sqlSupplier);
+                        updatesupplier.executeSQL(sql);
 
                         if (updatesupplier.rowAffected > 0)
                         {
-                            // If supplier name changed, update all related products
-                            if (supplier != originalSupplier.Replace("'", "''"))
-                            {
-                                string sqlProducts =
-                                    "UPDATE tblproducts SET " +
-                                    "supplier='" + supplier + "' " +
-                                    "WHERE supplier='" + originalSupplier.Replace("'", "''") + "'";
+                            MessageBox.Show("Supplier updated successfully.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                                updatesupplier.executeSQL(sqlProducts);
-
-                                // Log the cascade update
-                                updatesupplier.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
-                                    DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
-                                    "' , 'CASCADE UPDATE', 'SUPPLIER MANAGEMENT', 'Updated supplier in products from " + originalSupplier + " to " + supplier + "', '" + username + "')");
-                            }
-
-                            MessageBox.Show("Supplier updated successfully." +
-                                (supplier != originalSupplier.Replace("'", "''") ? " All related products have been updated." : ""),
-                                "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // Insert into logs for supplier update
+                            // Insert into logs
                             updatesupplier.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
                                 DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
                                 "' , 'UPDATE', 'SUPPLIER MANAGEMENT', '" + supplier + "', '" + username + "')");

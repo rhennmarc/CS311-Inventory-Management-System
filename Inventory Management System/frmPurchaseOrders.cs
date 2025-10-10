@@ -109,22 +109,16 @@ namespace Inventory_Management_System
         {
             // Enable/disable buttons based on whether a row is selected
             bool hasSelection = row >= 0 && row < dataGridView1.Rows.Count;
+            btnupdate.Enabled = hasSelection;
             btndelete.Enabled = hasSelection;
+            btnreceive.Enabled = hasSelection;
             btnhistory.Enabled = hasSelection; // Enable history button only when product is selected
 
-            // Enable update and receive buttons only for pending orders
+            // Enable receive button only for pending orders
             if (hasSelection && dataGridView1.Rows[row].Cells["status"].Value != null)
             {
                 string status = dataGridView1.Rows[row].Cells["status"].Value.ToString();
-                bool isReceived = status.ToUpper() == "RECEIVED";
-
-                btnupdate.Enabled = hasSelection && !isReceived; // Disable update for received orders
-                btnreceive.Enabled = hasSelection && !isReceived; // Disable receive for received orders
-            }
-            else
-            {
-                btnupdate.Enabled = hasSelection;
-                btnreceive.Enabled = hasSelection;
+                btnreceive.Enabled = status.ToUpper() != "RECEIVED";
             }
 
             // Enable receive all button only if there are pending orders in current view
@@ -146,9 +140,44 @@ namespace Inventory_Management_System
                 string query = "SELECT products, quantity, unitcost, totalcost, status, createdby, datecreated, timecreated, datereceived, supplier FROM tblpurchase_order ";
 
                 // Build WHERE clause
-                string whereClause = BuildCurrentFilterWhereClause();
+                string whereClause = "";
 
-                query += whereClause + " ORDER BY datecreated DESC, timecreated DESC";
+                // Supplier filter
+                if (!string.IsNullOrEmpty(selectedSupplier))
+                {
+                    whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
+                }
+
+                // Status filter
+                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
+                if (statusFilter != "All")
+                {
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        whereClause = "WHERE ";
+                    }
+                    else
+                    {
+                        whereClause += "AND ";
+                    }
+                    whereClause += "status = '" + statusFilter + "' ";
+                }
+
+                // Search filter
+                if (!string.IsNullOrEmpty(search))
+                {
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        whereClause = "WHERE ";
+                    }
+                    else
+                    {
+                        whereClause += "AND ";
+                    }
+                    whereClause += "(products LIKE '%" + search.Replace("'", "''") + "%' OR status LIKE '%" + search.Replace("'", "''") + "%' OR createdby LIKE '%" + search.Replace("'", "''") + "%') ";
+                }
+
+                query += whereClause + "ORDER BY datecreated DESC, timecreated DESC";
 
                 // Get all matching rows (this dtAll WILL be filtered by search and status)
                 DataTable dtAll = purchaseOrders.GetData(query);
@@ -177,7 +206,6 @@ namespace Inventory_Management_System
                 ApplyRowColoring();
 
                 // Calculate and display grand total (based on current filters)
-                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
                 CalculateGrandTotal(statusFilter);
 
                 // === Page info ===
@@ -200,133 +228,79 @@ namespace Inventory_Management_System
             }
         }
 
-        private string BuildCurrentFilterWhereClause()
-        {
-            StringBuilder whereClause = new StringBuilder();
-            bool hasCondition = false;
-
-            // Supplier filter
-            if (!string.IsNullOrEmpty(selectedSupplier))
-            {
-                whereClause.Append("WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ");
-                hasCondition = true;
-            }
-
-            // Status filter
-            string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
-            if (statusFilter != "All")
-            {
-                if (hasCondition)
-                {
-                    whereClause.Append("AND ");
-                }
-                else
-                {
-                    whereClause.Append("WHERE ");
-                    hasCondition = true;
-                }
-                whereClause.Append("status = '" + statusFilter + "' ");
-            }
-
-            // Search filter
-            string searchText = txtsearch.Text.Trim();
-            if (!string.IsNullOrEmpty(searchText))
-            {
-                if (hasCondition)
-                {
-                    whereClause.Append("AND ");
-                }
-                else
-                {
-                    whereClause.Append("WHERE ");
-                    hasCondition = true;
-                }
-                whereClause.Append("(products LIKE '%" + searchText.Replace("'", "''") + "%' OR status LIKE '%" + searchText.Replace("'", "''") + "%' OR createdby LIKE '%" + searchText.Replace("'", "''") + "%') ");
-            }
-
-            return whereClause.ToString();
-        }
-
         private void StyleDataGridView()
         {
-            try
-            {
-                dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                dataGridView1.RowTemplate.Height = 28;
-                dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                dataGridView1.MultiSelect = false;
-                dataGridView1.ReadOnly = true;
-                dataGridView1.AllowUserToAddRows = false;
-                dataGridView1.DefaultCellStyle.Padding = new Padding(5);
-                dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+            dataGridView1.RowTemplate.Height = 28;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.DefaultCellStyle.Padding = new Padding(5);
+            dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
-                // === Column headers + widths ===
-                if (dataGridView1.Columns.Contains("products"))
-                {
-                    dataGridView1.Columns["products"].HeaderText = "Products";
-                    dataGridView1.Columns["products"].Width = 150;
-                }
-                if (dataGridView1.Columns.Contains("quantity"))
-                {
-                    dataGridView1.Columns["quantity"].HeaderText = "Quantity";
-                    dataGridView1.Columns["quantity"].Width = 80;
-                    dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                }
-                if (dataGridView1.Columns.Contains("unitcost"))
-                {
-                    dataGridView1.Columns["unitcost"].HeaderText = "Unit Cost";
-                    dataGridView1.Columns["unitcost"].Width = 100;
-                    dataGridView1.Columns["unitcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dataGridView1.Columns["unitcost"].DefaultCellStyle.Format = "C2";
-                }
-                if (dataGridView1.Columns.Contains("totalcost"))
-                {
-                    dataGridView1.Columns["totalcost"].HeaderText = "Total Cost";
-                    dataGridView1.Columns["totalcost"].Width = 100;
-                    dataGridView1.Columns["totalcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                    dataGridView1.Columns["totalcost"].DefaultCellStyle.Format = "C2";
-                }
-                if (dataGridView1.Columns.Contains("status"))
-                {
-                    dataGridView1.Columns["status"].HeaderText = "Status";
-                    dataGridView1.Columns["status"].Width = 100;
-                }
-                if (dataGridView1.Columns.Contains("createdby"))
-                {
-                    dataGridView1.Columns["createdby"].HeaderText = "Created By";
-                    dataGridView1.Columns["createdby"].Width = 120;
-                }
-                if (dataGridView1.Columns.Contains("datecreated"))
-                {
-                    dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
-                    dataGridView1.Columns["datecreated"].Width = 130;
-                }
-                if (dataGridView1.Columns.Contains("timecreated"))
-                {
-                    dataGridView1.Columns["timecreated"].HeaderText = "Time Created";
-                    dataGridView1.Columns["timecreated"].Width = 100;
-                    dataGridView1.Columns["timecreated"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-                }
-                if (dataGridView1.Columns.Contains("datereceived"))
-                {
-                    dataGridView1.Columns["datereceived"].HeaderText = "Date Received";
-                    dataGridView1.Columns["datereceived"].Width = 130;
-                }
-                if (dataGridView1.Columns.Contains("supplier"))
-                {
-                    dataGridView1.Columns["supplier"].HeaderText = "Supplier";
-                    dataGridView1.Columns["supplier"].Width = 120;
-                    // Hide supplier column if we're viewing orders for a specific supplier
-                    if (!string.IsNullOrEmpty(selectedSupplier))
-                    {
-                        dataGridView1.Columns["supplier"].Visible = false;
-                    }
-                }
-            }
-            catch (Exception ex)
+            // === Column headers + widths ===
+            if (dataGridView1.Columns.Contains("products"))
             {
-                System.Diagnostics.Debug.WriteLine("Error in StyleDataGridView: " + ex.Message);
+                dataGridView1.Columns["products"].HeaderText = "Products";
+                dataGridView1.Columns["products"].Width = 150;
+            }
+            if (dataGridView1.Columns.Contains("quantity"))
+            {
+                dataGridView1.Columns["quantity"].HeaderText = "Quantity";
+                dataGridView1.Columns["quantity"].Width = 80;
+                dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            }
+            if (dataGridView1.Columns.Contains("unitcost"))
+            {
+                dataGridView1.Columns["unitcost"].HeaderText = "Unit Cost";
+                dataGridView1.Columns["unitcost"].Width = 100;
+                dataGridView1.Columns["unitcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["unitcost"].DefaultCellStyle.Format = "C2";
+            }
+            if (dataGridView1.Columns.Contains("totalcost"))
+            {
+                dataGridView1.Columns["totalcost"].HeaderText = "Total Cost";
+                dataGridView1.Columns["totalcost"].Width = 100;
+                dataGridView1.Columns["totalcost"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["totalcost"].DefaultCellStyle.Format = "C2";
+            }
+            if (dataGridView1.Columns.Contains("status"))
+            {
+                dataGridView1.Columns["status"].HeaderText = "Status";
+                dataGridView1.Columns["status"].Width = 100;
+            }
+            if (dataGridView1.Columns.Contains("createdby"))
+            {
+                dataGridView1.Columns["createdby"].HeaderText = "Created By";
+                dataGridView1.Columns["createdby"].Width = 120;
+            }
+            if (dataGridView1.Columns.Contains("datecreated"))
+            {
+                dataGridView1.Columns["datecreated"].HeaderText = "Date Created";
+                dataGridView1.Columns["datecreated"].Width = 130;
+            }
+            if (dataGridView1.Columns.Contains("timecreated"))
+            {
+                dataGridView1.Columns["timecreated"].HeaderText = "Time Created";
+                dataGridView1.Columns["timecreated"].Width = 100;
+                dataGridView1.Columns["timecreated"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            if (dataGridView1.Columns.Contains("datereceived"))
+            {
+                dataGridView1.Columns["datereceived"].HeaderText = "Date Received";
+                dataGridView1.Columns["datereceived"].Width = 130;
+            }
+            if (dataGridView1.Columns.Contains("supplier"))
+            {
+                dataGridView1.Columns["supplier"].HeaderText = "Supplier";
+                dataGridView1.Columns["supplier"].Width = 120;
+                // Hide supplier column if we're viewing orders for a specific supplier
+                if (!string.IsNullOrEmpty(selectedSupplier))
+                {
+                    dataGridView1.Columns["supplier"].Visible = false;
+                }
             }
         }
 
@@ -374,7 +348,27 @@ namespace Inventory_Management_System
                 decimal grandTotal = 0m;
                 // Build a query that fetches all totalcost values for the current filters
                 string totalQuery = "SELECT totalcost FROM tblpurchase_order ";
-                string whereClause = BuildCurrentFilterWhereClause();
+                string whereClause = "";
+
+                // Supplier filter
+                if (!string.IsNullOrEmpty(selectedSupplier))
+                {
+                    whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
+                }
+
+                // Status filter
+                if (statusFilter != "All")
+                {
+                    if (string.IsNullOrEmpty(whereClause))
+                    {
+                        whereClause = "WHERE ";
+                    }
+                    else
+                    {
+                        whereClause += "AND ";
+                    }
+                    whereClause += "status = '" + statusFilter + "' ";
+                }
 
                 totalQuery += whereClause;
 
@@ -559,15 +553,6 @@ namespace Inventory_Management_System
                     return;
                 }
 
-                // Check if the order is already received
-                string status = dataGridView1.Rows[row].Cells["status"].Value?.ToString() ?? "";
-                if (status.ToUpper() == "RECEIVED")
-                {
-                    MessageBox.Show("Cannot update a received purchase order.", "Update Not Allowed",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
                 string products = dataGridView1.Rows[row].Cells["products"].Value.ToString();
                 string quantity = dataGridView1.Rows[row].Cells["quantity"].Value.ToString();
                 string unitcost = dataGridView1.Rows[row].Cells["unitcost"].Value.ToString();
@@ -604,7 +589,7 @@ namespace Inventory_Management_System
                 string datereceived = dataGridView1.Rows[row].Cells["datereceived"].Value?.ToString() ?? "";
 
                 string supplier = selectedSupplier;
-                if (dataGridView1.Columns.Contains("supplier") && dataGridView1.Rows[row].Cells["supplier"].Value != null)
+                if (dataGridView1.Columns.Contains("supplier") && dataGridView1.Columns["supplier"].Visible)
                 {
                     supplier = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
                 }
@@ -675,41 +660,27 @@ namespace Inventory_Management_System
         {
             try
             {
-                // Build the WHERE clause based on current filters
+                // Get the current status filter
+                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
+
+                // Build the same WHERE clause used in LoadPurchaseOrders to identify which records to delete
                 string whereClause = BuildCurrentFilterWhereClause();
 
-                // If no filters are applied, we need to be extra careful
-                bool isDeletingAllRecords = string.IsNullOrEmpty(selectedSupplier) &&
-                                           (cmbstatus?.SelectedItem?.ToString() == "All") &&
-                                           string.IsNullOrEmpty(txtsearch.Text.Trim());
+                // Count how many records will be deleted
+                string countQuery = "SELECT COUNT(*) FROM tblpurchase_order " + whereClause;
+                DataTable dtCount = purchaseOrders.GetData(countQuery);
+                int recordCount = Convert.ToInt32(dtCount.Rows[0][0]);
 
-                if (isDeletingAllRecords)
+                if (recordCount == 0)
                 {
-                    // EXTRA SAFETY: Ask for confirmation when deleting ALL records
-                    DialogResult extraConfirmation = MessageBox.Show(
-                        "WARNING: You are about to delete ALL purchase orders in the system!\n\n" +
-                        "This action cannot be undone and will remove all purchase order records.\n\n" +
-                        "Are you absolutely sure you want to continue?",
-                        "CRITICAL WARNING - DELETE ALL RECORDS",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Warning);
-
-                    if (extraConfirmation != DialogResult.Yes)
-                    {
-                        return;
-                    }
+                    MessageBox.Show("No records to delete for the current filter.", "No Records",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
 
-                // Get filter details for confirmation message
-                string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
-                string supplierFilter = string.IsNullOrEmpty(selectedSupplier) ? "All Suppliers" : selectedSupplier;
-                string searchFilter = string.IsNullOrEmpty(txtsearch.Text.Trim()) ? "None" : txtsearch.Text.Trim();
-
-                // Show confirmation with filter details
-                string message = $"Are you sure you want to delete ALL purchase orders matching:\n\n" +
-                                $"• Supplier: {supplierFilter}\n" +
-                                $"• Status: {statusFilter}\n" +
-                                $"• Search: {searchFilter}\n\n" +
+                string message = $"Are you sure you want to delete ALL {recordCount} purchase orders that match the current filter?\n" +
+                                $"Status: {statusFilter}\n" +
+                                $"Supplier: {(string.IsNullOrEmpty(selectedSupplier) ? "All Suppliers" : selectedSupplier)}\n\n" +
                                 $"This action cannot be undone!";
 
                 DialogResult dr = MessageBox.Show(message, "Delete All Confirmation",
@@ -717,7 +688,6 @@ namespace Inventory_Management_System
 
                 if (dr == DialogResult.Yes)
                 {
-                    // SIMPLE AND DIRECT DELETE QUERY - No counting needed
                     string deleteQuery = "DELETE FROM tblpurchase_order " + whereClause;
                     purchaseOrders.executeSQL(deleteQuery);
 
@@ -731,11 +701,11 @@ namespace Inventory_Management_System
                         // Log deletion
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
-                            "', 'DELETE ALL', 'PURCHASE ORDER MANAGEMENT', '" + deletedCount + " RECORDS (" + supplierFilter + " - " + statusFilter + " - " + searchFilter + ")', '" + username.Replace("'", "''") + "')");
+                            "', 'DELETE ALL', 'PURCHASE ORDER MANAGEMENT', '" + deletedCount + " RECORDS (" + statusFilter + ")', '" + username.Replace("'", "''") + "')");
                     }
                     else
                     {
-                        MessageBox.Show("No records were deleted. They may have been already deleted by another user.", "Message",
+                        MessageBox.Show("No records were deleted.", "Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
 
@@ -744,9 +714,51 @@ namespace Inventory_Management_System
             }
             catch (Exception error)
             {
-                MessageBox.Show("Error in delete all operation: " + error.Message,
-                    "ERROR on btndeleteall_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(error.Message, "ERROR on btndeleteall_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string BuildCurrentFilterWhereClause()
+        {
+            string whereClause = "";
+
+            // Supplier filter
+            if (!string.IsNullOrEmpty(selectedSupplier))
+            {
+                whereClause = "WHERE supplier = '" + selectedSupplier.Replace("'", "''") + "' ";
+            }
+
+            // Status filter
+            string statusFilter = cmbstatus?.SelectedItem?.ToString() ?? "All";
+            if (statusFilter != "All")
+            {
+                if (string.IsNullOrEmpty(whereClause))
+                {
+                    whereClause = "WHERE ";
+                }
+                else
+                {
+                    whereClause += "AND ";
+                }
+                whereClause += "status = '" + statusFilter + "' ";
+            }
+
+            // Search filter
+            string searchText = txtsearch.Text.Trim();
+            if (!string.IsNullOrEmpty(searchText))
+            {
+                if (string.IsNullOrEmpty(whereClause))
+                {
+                    whereClause = "WHERE ";
+                }
+                else
+                {
+                    whereClause += "AND ";
+                }
+                whereClause += "(products LIKE '%" + searchText.Replace("'", "''") + "%' OR status LIKE '%" + searchText.Replace("'", "''") + "%' OR createdby LIKE '%" + searchText.Replace("'", "''") + "%') ";
+            }
+
+            return whereClause;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -888,8 +900,6 @@ namespace Inventory_Management_System
                         }
                         MessageBox.Show($"{purchaseOrders.rowAffected} purchase order(s) marked as received.", "Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Log the receive all action
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                             "', 'RECEIVE ALL', 'PURCHASE ORDER MANAGEMENT', 'ALL PENDING ORDERS', '" + username.Replace("'", "''") + "')");
@@ -952,8 +962,6 @@ namespace Inventory_Management_System
                             purchaseOrders.executeSQL(insertProd);
                         }
                         MessageBox.Show("Purchase order marked as received.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                        // Log the receive action
                         purchaseOrders.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                             "VALUES ('" + DateTime.Now.ToString("MM/dd/yyyy") + "', '" + DateTime.Now.ToString("hh:mm:ss tt") +
                             "', 'RECEIVE', 'PURCHASE ORDER MANAGEMENT', '" + products.Replace("'", "''") + "', '" + username.Replace("'", "''") + "')");
@@ -985,14 +993,14 @@ namespace Inventory_Management_System
                 }
 
                 var productsCell = dataGridView1.Rows[row].Cells["products"];
-                if (productsCell == null || productsCell.Value == null)
+                if (productsCell == null)
                 {
                     MessageBox.Show("Invalid product selection.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                string selectedProduct = productsCell.Value.ToString();
+                string selectedProduct = productsCell.Value?.ToString() ?? "";
                 if (string.IsNullOrEmpty(selectedProduct))
                 {
                     MessageBox.Show("No product selected.", "Error",
