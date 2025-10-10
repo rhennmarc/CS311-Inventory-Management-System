@@ -16,6 +16,46 @@ namespace Inventory_Management_System
             InitializeComponent();
             this.username = username;
             InitializeActionComboBox();
+            InitializeAdjustmentComboBox();
+            HideAllFields(); // Hide all fields initially
+        }
+
+        private void HideAllFields()
+        {
+            // Hide all fields except adjustment type
+            lblproduct.Visible = false;
+            panelproduct.Visible = false;
+            lblcurrentstock.Visible = false;
+            panelcurrentstock.Visible = false;
+            lblcurrentprice.Visible = false;
+            panelcurrentprice.Visible = false;
+            lblquantity.Visible = false;
+            panelquantity.Visible = false;
+            lblactionforquantity.Visible = false;
+            panelactionforquantity.Visible = false;
+            lblprice.Visible = false;
+            panelprice.Visible = false;
+            lblreason.Visible = false;
+            panelreason.Visible = false;
+        }
+
+        private void ShowAllFields()
+        {
+            // Show all fields
+            lblproduct.Visible = true;
+            panelproduct.Visible = true;
+            lblcurrentstock.Visible = true;
+            panelcurrentstock.Visible = true;
+            lblcurrentprice.Visible = true;
+            panelcurrentprice.Visible = true;
+            lblquantity.Visible = true;
+            panelquantity.Visible = true;
+            lblactionforquantity.Visible = true;
+            panelactionforquantity.Visible = true;
+            lblprice.Visible = true;
+            panelprice.Visible = true;
+            lblreason.Visible = true;
+            panelreason.Visible = true;
         }
 
         private void InitializeActionComboBox()
@@ -28,6 +68,72 @@ namespace Inventory_Management_System
                 cmbaction.DropDownStyle = ComboBoxStyle.DropDownList;
                 cmbaction.SelectedIndex = 0; // Default to "Add"
             }
+        }
+
+        private void InitializeAdjustmentComboBox()
+        {
+            // Initialize adjustment type combobox
+            if (cmbadjustment != null)
+            {
+                cmbadjustment.Items.Clear();
+                cmbadjustment.Items.AddRange(new string[] { "Quantity", "Price", "Both" });
+                cmbadjustment.DropDownStyle = ComboBoxStyle.DropDownList;
+                cmbadjustment.SelectedIndex = -1; // No selection initially
+            }
+        }
+
+        private void UpdateFieldVisibility()
+        {
+            if (cmbadjustment.SelectedItem == null)
+            {
+                HideAllFields();
+                return;
+            }
+
+            string selectedAdjustment = cmbadjustment.SelectedItem.ToString();
+            ShowAllFields(); // Show all fields first, then hide specific ones
+
+            switch (selectedAdjustment)
+            {
+                case "Quantity":
+                    // Show quantity fields, hide price field
+                    lblprice.Visible = false;
+                    panelprice.Visible = false;
+
+                    // Move reason up to where price would be
+                    lblreason.Top = 374;
+                    panelreason.Top = 395;
+                    break;
+
+                case "Price":
+                    // Show price field, hide quantity fields
+                    lblquantity.Visible = false;
+                    panelquantity.Visible = false;
+                    lblactionforquantity.Visible = false;
+                    panelactionforquantity.Visible = false;
+
+                    // Move price and reason up
+                    lblprice.Top = 230;
+                    panelprice.Top = 252;
+                    lblreason.Top = 301;
+                    panelreason.Top = 323;
+                    break;
+
+                case "Both":
+                    // Show all fields at original positions
+                    lblquantity.Top = 230;
+                    panelquantity.Top = 252;
+                    lblactionforquantity.Top = 301;
+                    panelactionforquantity.Top = 323;
+                    lblprice.Top = 374;
+                    panelprice.Top = 395;
+                    lblreason.Top = 445;
+                    panelreason.Top = 466;
+                    break;
+            }
+
+            // Clear validation errors when visibility changes
+            errorProvider1.Clear();
         }
 
         Class1 newAdjustment = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
@@ -74,52 +180,72 @@ namespace Inventory_Management_System
             errorProvider1.Clear();
             errorcount = 0;
 
+            // Check if adjustment type is selected
+            if (cmbadjustment.SelectedIndex == -1)
+            {
+                errorProvider1.SetError(cmbadjustment, "Please select adjustment type.");
+                errorcount++;
+                return;
+            }
+
+            // Get adjustment type
+            string adjustmentType = cmbadjustment.SelectedItem.ToString();
+
             // --- VALIDATIONS ---
 
-            // Product (required) - only check if text is empty, not SelectedIndex
+            // Product (required)
             if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
                 errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
-            // At least one of quantity or price must be provided
-            bool hasQuantity = !string.IsNullOrEmpty(txtquantity.Text.Trim());
-            bool hasPrice = !string.IsNullOrEmpty(txtprice.Text.Trim());
+            // Adjustment type specific validations
+            bool hasQuantity = adjustmentType == "Quantity" || adjustmentType == "Both";
+            bool hasPrice = adjustmentType == "Price" || adjustmentType == "Both";
 
-            if (!hasQuantity && !hasPrice)
-            {
-                errorProvider1.SetError(txtquantity, "Either quantity or price must be provided.");
-                errorProvider1.SetError(txtprice, "Either quantity or price must be provided.");
-                errorcount++;
-            }
-
-            // Action (required only if quantity is provided)
-            if (hasQuantity && (cmbaction.SelectedIndex == -1 || string.IsNullOrEmpty(cmbaction.Text)))
-            {
-                errorProvider1.SetError(cmbaction, "Action is required when adjusting quantity. Select Add or Remove.");
-                errorcount++;
-            }
-
-            // Quantity validation (if provided)
+            // Quantity validation (if required by adjustment type)
             if (hasQuantity)
             {
-                int qty;
-                if (!int.TryParse(txtquantity.Text.Trim(), out qty) || qty <= 0)
+                if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
                 {
-                    errorProvider1.SetError(txtquantity, "Quantity must be numeric and greater than 0.");
+                    errorProvider1.SetError(txtquantity, "Quantity is required for quantity adjustment.");
+                    errorcount++;
+                }
+                else
+                {
+                    int qty;
+                    if (!int.TryParse(txtquantity.Text.Trim(), out qty) || qty <= 0)
+                    {
+                        errorProvider1.SetError(txtquantity, "Quantity must be numeric and greater than 0.");
+                        errorcount++;
+                    }
+                }
+
+                // Action validation (only if quantity is being adjusted)
+                if (cmbaction.SelectedIndex == -1 || string.IsNullOrEmpty(cmbaction.Text))
+                {
+                    errorProvider1.SetError(cmbaction, "Action is required when adjusting quantity. Select Add or Remove.");
                     errorcount++;
                 }
             }
 
-            // Price validation (if provided)
+            // Price validation (if required by adjustment type)
             if (hasPrice)
             {
-                decimal price;
-                if (!decimal.TryParse(txtprice.Text.Trim(), out price) || price <= 0)
+                if (string.IsNullOrEmpty(txtprice.Text.Trim()))
                 {
-                    errorProvider1.SetError(txtprice, "Price must be numeric and greater than 0.");
+                    errorProvider1.SetError(txtprice, "Price is required for price adjustment.");
                     errorcount++;
+                }
+                else
+                {
+                    decimal price;
+                    if (!decimal.TryParse(txtprice.Text.Trim(), out price) || price <= 0)
+                    {
+                        errorProvider1.SetError(txtprice, "Price must be numeric and greater than 0.");
+                        errorcount++;
+                    }
                 }
             }
 
@@ -147,7 +273,6 @@ namespace Inventory_Management_System
                         string reason = txtreason.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateAdjusted = DateTime.Now.ToString("MM/dd/yyyy");
-                        // Updated to use 12-hour format with AM/PM
                         string timeAdjusted = GetCurrentTime12Hour();
 
                         // Check if product exists in tblproducts
@@ -324,7 +449,6 @@ namespace Inventory_Management_System
                 cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
                 cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
-                cmbproduct.Focus();
 
                 // Initialize quantity as empty
                 txtquantity.Text = "";
@@ -542,6 +666,15 @@ namespace Inventory_Management_System
             // Clear price error when user types
             if (!string.IsNullOrEmpty(txtprice.Text))
                 errorProvider1.SetError(txtprice, "");
+        }
+
+        private void cmbadjustment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFieldVisibility();
+
+            // Clear adjustment error when selection is made
+            if (cmbadjustment.SelectedIndex != -1)
+                errorProvider1.SetError(cmbadjustment, "");
         }
     }
 }

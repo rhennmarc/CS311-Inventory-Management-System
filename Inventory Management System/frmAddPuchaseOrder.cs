@@ -98,7 +98,7 @@ namespace Inventory_Management_System
                         string supplier = supplierName.Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
-                        string timeCreated = DateTime.Now.ToString("hh:mm:ss tt"); // Added timecreated
+                        string timeCreated = DateTime.Now.ToString("hh:mm:ss tt");
                         string status = "Pending";
 
                         string insertPurchaseOrder =
@@ -136,7 +136,6 @@ namespace Inventory_Management_System
                 Class1 db = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
                 // Always log the unit cost history when a new purchase order is created
-                // This ensures every purchase order creates a history record
                 string insertQuery = $@"INSERT INTO tblhistory (products, unitcost, datecreated, createdby) 
                                       VALUES ('{product.Replace("'", "''")}', '{unitCost.Replace("'", "''")}', 
                                               '{DateTime.Now:MM/dd/yyyy hh:mm:ss tt}', '{username.Replace("'", "''")}')";
@@ -196,11 +195,25 @@ namespace Inventory_Management_System
 
             try
             {
-                DataTable dt = newPurchaseOrder.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                // Update the form title to show the supplier
+                this.Text = "Add Purchase Order - " + supplierName;
+
+                // Only load products from the selected supplier
+                string query = $"SELECT products FROM tblproducts WHERE supplier = '{supplierName.Replace("'", "''")}' ORDER BY products ASC";
+                DataTable dt = newPurchaseOrder.GetData(query);
+
                 cmbproduct.Items.Clear();
                 foreach (DataRow row in dt.Rows)
                 {
                     cmbproduct.Items.Add(row["products"].ToString());
+                }
+
+                // Display message if no products found for this supplier
+                if (cmbproduct.Items.Count == 0)
+                {
+                    MessageBox.Show($"No products found for supplier: {supplierName}\nPlease add products for this supplier first.",
+                        "No Products Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cmbproduct.Enabled = false;
                 }
 
                 cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
@@ -213,7 +226,7 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- NEW METHOD: Load product details when product is selected ---
+        // --- Load product details when product is selected ---
         private void LoadProductDetails(string productName)
         {
             try
@@ -248,7 +261,7 @@ namespace Inventory_Management_System
         private void txtquantity_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtquantity.Text)) errorProvider1.SetError(txtquantity, ""); CalculateTotalCost(); }
         private void txtunitcost_TextChanged(object sender, EventArgs e) { if (!string.IsNullOrEmpty(txtunitcost.Text)) errorProvider1.SetError(txtunitcost, ""); CalculateTotalCost(); }
 
-        // --- NEW EVENT: When product selection changes ---
+        // --- When product selection changes ---
         private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbproduct.SelectedIndex >= 0)

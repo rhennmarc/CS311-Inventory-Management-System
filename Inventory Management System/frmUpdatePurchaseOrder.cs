@@ -12,6 +12,7 @@ namespace Inventory_Management_System
         private string originalUnitCost;
         private string originalTimeCreated;
         private string originalDateCreated;
+        private string originalSupplier;
 
         Class1 updatePO = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
@@ -36,21 +37,34 @@ namespace Inventory_Management_System
 
             try
             {
-                DataTable dt = updatePO.GetData("SELECT products FROM tblproducts ORDER BY products ASC");
+                // Load the original supplier from the purchase order
+                LoadPurchaseOrderData();
+
+                // Only load products from the same supplier
+                DataTable dt = updatePO.GetData($"SELECT products FROM tblproducts WHERE supplier = '{originalSupplier.Replace("'", "''")}' ORDER BY products ASC");
                 cmbproduct.Items.Clear();
                 foreach (DataRow row in dt.Rows)
                 {
                     cmbproduct.Items.Add(row["products"].ToString());
                 }
 
+                // Display message if no products found for this supplier
+                if (cmbproduct.Items.Count == 0)
+                {
+                    MessageBox.Show($"No products found for supplier: {originalSupplier}\nPlease add products for this supplier first.",
+                        "No Products Available", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    cmbproduct.Enabled = false;
+                }
+
                 cmbproduct.DropDownStyle = ComboBoxStyle.DropDown;
                 cmbproduct.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
                 cmbproduct.AutoCompleteSource = AutoCompleteSource.ListItems;
 
-                LoadPurchaseOrderData();
-
                 // Load initial product details
                 LoadProductDetails(originalProduct);
+
+                // Update form title to show supplier
+                this.Text = "Update Purchase Order - " + originalSupplier;
             }
             catch (Exception ex)
             {
@@ -62,25 +76,28 @@ namespace Inventory_Management_System
         {
             try
             {
-                string query = $"SELECT datecreated FROM tblpurchase_order WHERE products = '{originalProduct.Replace("'", "''")}' AND timecreated = '{originalTimeCreated.Replace("'", "''")}'";
+                string query = $"SELECT datecreated, supplier FROM tblpurchase_order WHERE products = '{originalProduct.Replace("'", "''")}' AND timecreated = '{originalTimeCreated.Replace("'", "''")}'";
 
                 DataTable dt = updatePO.GetData(query);
                 if (dt.Rows.Count > 0)
                 {
-                    originalDateCreated = dt.Rows[0][0].ToString();
+                    originalDateCreated = dt.Rows[0]["datecreated"].ToString();
+                    originalSupplier = dt.Rows[0]["supplier"].ToString();
                 }
                 else
                 {
                     originalDateCreated = DateTime.Now.ToString("MM/dd/yyyy");
+                    originalSupplier = "Unknown";
                 }
             }
             catch (Exception)
             {
                 originalDateCreated = DateTime.Now.ToString("MM/dd/yyyy");
+                originalSupplier = "Unknown";
             }
         }
 
-        // --- NEW METHOD: Load product details when product is selected ---
+        // --- Load product details when product is selected ---
         private void LoadProductDetails(string productName)
         {
             try
@@ -260,7 +277,6 @@ namespace Inventory_Management_System
             txttotalcost.Text = CalculateTotalFromFields(txtquantity.Text, txtunitcost.Text);
         }
 
-        // ADD THIS MISSING EVENT HANDLER
         private void txttotalcost_TextChanged(object sender, EventArgs e)
         {
             // This can be empty or add validation if needed
@@ -270,7 +286,7 @@ namespace Inventory_Management_System
             }
         }
 
-        // --- NEW EVENT: When product selection changes ---
+        // --- When product selection changes ---
         private void cmbproduct_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cmbproduct.SelectedIndex >= 0)

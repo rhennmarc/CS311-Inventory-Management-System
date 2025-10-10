@@ -31,9 +31,9 @@
             this.mainPanel = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtchange = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtpayment = new System.Windows.Forms.TextBox();
+            this.txtchange = new System.Windows.Forms.TextBox();
             this.numquantity = new System.Windows.Forms.NumericUpDown();
             this.lblPageInfoProd = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -45,10 +45,8 @@
             this.lblPageInfoCart = new System.Windows.Forms.Label();
             this.dgvproducts = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btncartPrev = new System.Windows.Forms.Button();
             this.btncartNext = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnprodPrev = new System.Windows.Forms.Button();
             this.btnprodNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
@@ -70,8 +68,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvcart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvproducts)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -94,7 +90,11 @@
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.btncartPrev);
+            this.contentPanel.Controls.Add(this.btnprodPrev);
+            this.contentPanel.Controls.Add(this.btncartNext);
             this.contentPanel.Controls.Add(this.label6);
+            this.contentPanel.Controls.Add(this.btnprodNext);
             this.contentPanel.Controls.Add(this.label5);
             this.contentPanel.Controls.Add(this.txtpayment);
             this.contentPanel.Controls.Add(this.txtchange);
@@ -126,15 +126,6 @@
             this.label6.TabIndex = 15;
             this.label6.Text = "Change";
             // 
-            // txtchange
-            // 
-            this.txtchange.Enabled = false;
-            this.txtchange.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtchange.Location = new System.Drawing.Point(966, 443);
-            this.txtchange.Name = "txtchange";
-            this.txtchange.Size = new System.Drawing.Size(115, 31);
-            this.txtchange.TabIndex = 14;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -154,6 +145,15 @@
             this.txtpayment.Size = new System.Drawing.Size(115, 31);
             this.txtpayment.TabIndex = 12;
             // 
+            // txtchange
+            // 
+            this.txtchange.Enabled = false;
+            this.txtchange.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtchange.Location = new System.Drawing.Point(966, 443);
+            this.txtchange.Name = "txtchange";
+            this.txtchange.Size = new System.Drawing.Size(115, 31);
+            this.txtchange.TabIndex = 14;
+            // 
             // numquantity
             // 
             this.numquantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,7 +166,7 @@
             // lblPageInfoProd
             // 
             this.lblPageInfoProd.AutoSize = true;
-            this.lblPageInfoProd.Location = new System.Drawing.Point(365, 477);
+            this.lblPageInfoProd.Location = new System.Drawing.Point(172, 489);
             this.lblPageInfoProd.Name = "lblPageInfoProd";
             this.lblPageInfoProd.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfoProd.TabIndex = 10;
@@ -217,7 +217,7 @@
             this.dgvcart.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgvcart.EnableHeadersVisualStyles = false;
             this.dgvcart.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.dgvcart.Location = new System.Drawing.Point(487, 77);
+            this.dgvcart.Location = new System.Drawing.Point(518, 77);
             this.dgvcart.MultiSelect = false;
             this.dgvcart.Name = "dgvcart";
             this.dgvcart.ReadOnly = true;
@@ -225,7 +225,7 @@
             this.dgvcart.RowHeadersWidth = 51;
             this.dgvcart.RowTemplate.Height = 35;
             this.dgvcart.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvcart.Size = new System.Drawing.Size(456, 397);
+            this.dgvcart.Size = new System.Drawing.Size(425, 394);
             this.dgvcart.TabIndex = 5;
             this.dgvcart.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvcart_CellClick);
             // 
@@ -252,7 +252,7 @@
             // lblPageInfoCart
             // 
             this.lblPageInfoCart.AutoSize = true;
-            this.lblPageInfoCart.Location = new System.Drawing.Point(832, 477);
+            this.lblPageInfoCart.Location = new System.Drawing.Point(673, 489);
             this.lblPageInfoCart.Name = "lblPageInfoCart";
             this.lblPageInfoCart.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfoCart.TabIndex = 1;
@@ -278,14 +278,12 @@
             this.dgvproducts.RowHeadersWidth = 51;
             this.dgvproducts.RowTemplate.Height = 35;
             this.dgvproducts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvproducts.Size = new System.Drawing.Size(456, 397);
+            this.dgvproducts.Size = new System.Drawing.Size(435, 394);
             this.dgvproducts.TabIndex = 0;
             this.dgvproducts.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvproducts_CellClick);
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox1);
-            this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(1108, 160);
@@ -294,36 +292,21 @@
             this.actionPanel.Size = new System.Drawing.Size(200, 518);
             this.actionPanel.TabIndex = 3;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btncartPrev);
-            this.groupBox1.Controls.Add(this.btncartNext);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 381);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(160, 116);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Cart Page";
-            // 
             // btncartPrev
             // 
+            this.btncartPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btncartPrev.BackColor = System.Drawing.Color.DimGray;
             this.btncartPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btncartPrev.Dock = System.Windows.Forms.DockStyle.Top;
             this.btncartPrev.FlatAppearance.BorderSize = 0;
             this.btncartPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btncartPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btncartPrev.ForeColor = System.Drawing.Color.White;
             this.btncartPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btncartPrev.ImageIndex = 1;
-            this.btncartPrev.Location = new System.Drawing.Point(10, 68);
+            this.btncartPrev.Location = new System.Drawing.Point(518, 477);
             this.btncartPrev.Name = "btncartPrev";
             this.btncartPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btncartPrev.Size = new System.Drawing.Size(140, 40);
+            this.btncartPrev.Size = new System.Drawing.Size(140, 38);
             this.btncartPrev.TabIndex = 1;
             this.btncartPrev.Text = "Pre&v";
             this.btncartPrev.UseVisualStyleBackColor = false;
@@ -331,54 +314,39 @@
             // 
             // btncartNext
             // 
+            this.btncartNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btncartNext.BackColor = System.Drawing.Color.DimGray;
             this.btncartNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btncartNext.Dock = System.Windows.Forms.DockStyle.Top;
             this.btncartNext.FlatAppearance.BorderSize = 0;
             this.btncartNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btncartNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btncartNext.ForeColor = System.Drawing.Color.White;
             this.btncartNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btncartNext.ImageIndex = 0;
-            this.btncartNext.Location = new System.Drawing.Point(10, 28);
+            this.btncartNext.Location = new System.Drawing.Point(803, 477);
             this.btncartNext.Name = "btncartNext";
             this.btncartNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btncartNext.Size = new System.Drawing.Size(140, 40);
+            this.btncartNext.Size = new System.Drawing.Size(140, 38);
             this.btncartNext.TabIndex = 0;
             this.btncartNext.Text = "N&ext";
             this.btncartNext.UseVisualStyleBackColor = false;
             this.btncartNext.Click += new System.EventHandler(this.btncartNext_Click);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnprodPrev);
-            this.groupBox2.Controls.Add(this.btnprodNext);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 265);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox2.Size = new System.Drawing.Size(160, 116);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Products Page";
-            // 
             // btnprodPrev
             // 
+            this.btnprodPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnprodPrev.BackColor = System.Drawing.Color.DimGray;
             this.btnprodPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnprodPrev.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnprodPrev.FlatAppearance.BorderSize = 0;
             this.btnprodPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnprodPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnprodPrev.ForeColor = System.Drawing.Color.White;
             this.btnprodPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnprodPrev.ImageIndex = 1;
-            this.btnprodPrev.Location = new System.Drawing.Point(10, 68);
+            this.btnprodPrev.Location = new System.Drawing.Point(26, 477);
             this.btnprodPrev.Name = "btnprodPrev";
             this.btnprodPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnprodPrev.Size = new System.Drawing.Size(140, 40);
+            this.btnprodPrev.Size = new System.Drawing.Size(140, 38);
             this.btnprodPrev.TabIndex = 1;
             this.btnprodPrev.Text = "P&rev";
             this.btnprodPrev.UseVisualStyleBackColor = false;
@@ -386,19 +354,19 @@
             // 
             // btnprodNext
             // 
+            this.btnprodNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnprodNext.BackColor = System.Drawing.Color.DimGray;
             this.btnprodNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnprodNext.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnprodNext.FlatAppearance.BorderSize = 0;
             this.btnprodNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnprodNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnprodNext.ForeColor = System.Drawing.Color.White;
             this.btnprodNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnprodNext.ImageIndex = 0;
-            this.btnprodNext.Location = new System.Drawing.Point(10, 28);
+            this.btnprodNext.Location = new System.Drawing.Point(320, 477);
             this.btnprodNext.Name = "btnprodNext";
             this.btnprodNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnprodNext.Size = new System.Drawing.Size(140, 40);
+            this.btnprodNext.Size = new System.Drawing.Size(140, 38);
             this.btnprodNext.TabIndex = 0;
             this.btnprodNext.Text = "&Next";
             this.btnprodNext.UseVisualStyleBackColor = false;
@@ -625,8 +593,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvcart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvproducts)).EndInit();
             this.actionPanel.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
@@ -649,7 +615,6 @@
         private System.Windows.Forms.Label lblPageInfoCart;
         private System.Windows.Forms.DataGridView dgvproducts;
         private System.Windows.Forms.Panel actionPanel;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnprodPrev;
         private System.Windows.Forms.Button btnprodNext;
         private System.Windows.Forms.GroupBox actionGroupBox;
@@ -663,7 +628,6 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label lblPageInfoProd;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btncartPrev;
         private System.Windows.Forms.Button btncartNext;
         private System.Windows.Forms.Button btndelete;

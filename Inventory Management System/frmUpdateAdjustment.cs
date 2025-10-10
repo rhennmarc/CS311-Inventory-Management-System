@@ -20,6 +20,7 @@ namespace Inventory_Management_System
         {
             InitializeComponent();
             InitializeActionComboBox();
+            InitializeAdjustmentComboBox();
 
             cmbproduct.Text = product;
 
@@ -72,6 +73,138 @@ namespace Inventory_Management_System
 
             // Load initial product details
             LoadProductDetails(originalProduct);
+
+            // Auto-detect and set adjustment type based on existing values
+            AutoDetectAdjustmentType();
+        }
+
+        private void InitializeAdjustmentComboBox()
+        {
+            // Initialize adjustment type combobox
+            if (cmbadjustment != null)
+            {
+                cmbadjustment.Items.Clear();
+                cmbadjustment.Items.AddRange(new string[] { "Quantity", "Price", "Both" });
+                cmbadjustment.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
+        }
+
+        private void AutoDetectAdjustmentType()
+        {
+            bool hasQuantity = !string.IsNullOrEmpty(txtquantity.Text.Trim());
+            bool hasPrice = !string.IsNullOrEmpty(txtprice.Text.Trim());
+
+            if (hasQuantity && hasPrice)
+            {
+                cmbadjustment.SelectedItem = "Both";
+            }
+            else if (hasQuantity)
+            {
+                cmbadjustment.SelectedItem = "Quantity";
+            }
+            else if (hasPrice)
+            {
+                cmbadjustment.SelectedItem = "Price";
+            }
+            else
+            {
+                cmbadjustment.SelectedIndex = -1;
+            }
+
+            // Apply visibility based on detected type
+            UpdateFieldVisibility();
+        }
+
+        private void UpdateFieldVisibility()
+        {
+            if (cmbadjustment.SelectedItem == null)
+            {
+                HideAllFields();
+                return;
+            }
+
+            string selectedAdjustment = cmbadjustment.SelectedItem.ToString();
+            ShowAllFields(); // Show all fields first, then hide specific ones
+
+            switch (selectedAdjustment)
+            {
+                case "Quantity":
+                    // Show quantity fields, hide price field
+                    lblprice.Visible = false;
+                    panelprice.Visible = false;
+
+                    // Move reason up to where price would be
+                    lblreason.Top = 383;
+                    panelreason.Top = 405;
+                    break;
+
+                case "Price":
+                    // Show price field, hide quantity fields
+                    lblquantity.Visible = false;
+                    panelquantity.Visible = false;
+                    lblactionforquantity.Visible = false;
+                    panelactionforquantity.Visible = false;
+
+                    // Move price and reason up
+                    lblprice.Top = 236;
+                    panelprice.Top = 258;
+                    lblreason.Top = 310;
+                    panelreason.Top = 332;
+                    break;
+
+                case "Both":
+                    // Show all fields at original positions
+                    lblquantity.Top = 236;
+                    panelquantity.Top = 258;
+                    lblactionforquantity.Top = 310;
+                    panelactionforquantity.Top = 332;
+                    lblprice.Top = 383;
+                    panelprice.Top = 405;
+                    lblreason.Top = 455;
+                    panelreason.Top = 476;
+                    break;
+            }
+
+            // Clear validation errors when visibility changes
+            errorProvider1.Clear();
+        }
+
+        private void HideAllFields()
+        {
+            // Hide all fields except adjustment type
+            lblproduct.Visible = false;
+            panelproduct.Visible = false;
+            lblcurrentstock.Visible = false;
+            panelcurrentstock.Visible = false;
+            lblcurrentprice.Visible = false;
+            panelcurrentprice.Visible = false;
+            lblquantity.Visible = false;
+            panelquantity.Visible = false;
+            lblactionforquantity.Visible = false;
+            panelactionforquantity.Visible = false;
+            lblprice.Visible = false;
+            panelprice.Visible = false;
+            lblreason.Visible = false;
+            panelreason.Visible = false;
+        }
+
+        private void ShowAllFields()
+        {
+            // Show all fields
+            lblproduct.Visible = true;
+            panelproduct.Visible = true;
+            lblcurrentstock.Visible = true;
+            panelcurrentstock.Visible = true;
+            lblcurrentprice.Visible = true;
+            panelcurrentprice.Visible = true;
+            lblquantity.Visible = true;
+            panelquantity.Visible = true;
+            lblactionforquantity.Visible = true;
+            panelactionforquantity.Visible = true;
+            lblprice.Visible = true;
+            panelprice.Visible = true;
+            lblreason.Visible = true;
+            panelreason.Visible = true;
         }
 
         Class1 updateadjustment = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
@@ -203,6 +336,9 @@ namespace Inventory_Management_System
                 {
                     decimal.TryParse(row["unitprice"].ToString(), out originalPrice);
                 }
+
+                // Auto-detect adjustment type after loading
+                AutoDetectAdjustmentType();
             }
         }
 
@@ -213,50 +349,70 @@ namespace Inventory_Management_System
             errorProvider1.Clear();
             errorcount = 0;
 
-            // Validate product - only check if text is empty, not SelectedIndex
+            // Check if adjustment type is selected
+            if (cmbadjustment.SelectedIndex == -1)
+            {
+                errorProvider1.SetError(cmbadjustment, "Please select adjustment type.");
+                errorcount++;
+                return;
+            }
+
+            // Get adjustment type
+            string adjustmentType = cmbadjustment.SelectedItem.ToString();
+
+            // Validate product
             if (string.IsNullOrEmpty(cmbproduct.Text.Trim()))
             {
                 errorProvider1.SetError(cmbproduct, "Product name is required.");
                 errorcount++;
             }
 
-            // At least one of quantity or price must be provided
-            bool hasQuantity = !string.IsNullOrEmpty(txtquantity.Text.Trim());
-            bool hasPrice = !string.IsNullOrEmpty(txtprice.Text.Trim());
+            // Adjustment type specific validations
+            bool hasQuantity = adjustmentType == "Quantity" || adjustmentType == "Both";
+            bool hasPrice = adjustmentType == "Price" || adjustmentType == "Both";
 
-            if (!hasQuantity && !hasPrice)
-            {
-                errorProvider1.SetError(txtquantity, "Either quantity or price must be provided.");
-                errorProvider1.SetError(txtprice, "Either quantity or price must be provided.");
-                errorcount++;
-            }
-
-            // Validate action (only if quantity is provided)
-            if (hasQuantity && (cmbaction.SelectedIndex == -1 || string.IsNullOrEmpty(cmbaction.Text)))
-            {
-                errorProvider1.SetError(cmbaction, "Action is required when adjusting quantity. Select Add or Remove.");
-                errorcount++;
-            }
-
-            // Validate quantity (if provided)
+            // Validate quantity (if required by adjustment type)
             if (hasQuantity)
             {
-                int qty;
-                if (!int.TryParse(txtquantity.Text, out qty) || qty <= 0)
+                if (string.IsNullOrEmpty(txtquantity.Text.Trim()))
                 {
-                    errorProvider1.SetError(txtquantity, "Quantity must be a valid number greater than 0.");
+                    errorProvider1.SetError(txtquantity, "Quantity is required for quantity adjustment.");
+                    errorcount++;
+                }
+                else
+                {
+                    int qty;
+                    if (!int.TryParse(txtquantity.Text.Trim(), out qty) || qty <= 0)
+                    {
+                        errorProvider1.SetError(txtquantity, "Quantity must be numeric and greater than 0.");
+                        errorcount++;
+                    }
+                }
+
+                // Validate action (only if quantity is being adjusted)
+                if (cmbaction.SelectedIndex == -1 || string.IsNullOrEmpty(cmbaction.Text))
+                {
+                    errorProvider1.SetError(cmbaction, "Action is required when adjusting quantity. Select Add or Remove.");
                     errorcount++;
                 }
             }
 
-            // Validate price (if provided)
+            // Validate price (if required by adjustment type)
             if (hasPrice)
             {
-                decimal price;
-                if (!decimal.TryParse(txtprice.Text.Trim(), out price) || price <= 0)
+                if (string.IsNullOrEmpty(txtprice.Text.Trim()))
                 {
-                    errorProvider1.SetError(txtprice, "Price must be numeric and greater than 0.");
+                    errorProvider1.SetError(txtprice, "Price is required for price adjustment.");
                     errorcount++;
+                }
+                else
+                {
+                    decimal price;
+                    if (!decimal.TryParse(txtprice.Text.Trim(), out price) || price <= 0)
+                    {
+                        errorProvider1.SetError(txtprice, "Price must be numeric and greater than 0.");
+                        errorcount++;
+                    }
                 }
             }
 
@@ -504,6 +660,9 @@ namespace Inventory_Management_System
             {
                 cmbaction.SelectedIndex = -1;
             }
+
+            // Auto-update adjustment type if user changes values
+            AutoDetectAdjustmentType();
         }
 
         private void txtprice_KeyPress(object sender, KeyPressEventArgs e)
@@ -640,6 +799,18 @@ namespace Inventory_Management_System
         {
             if (!string.IsNullOrEmpty(txtprice.Text))
                 errorProvider1.SetError(txtprice, "");
+
+            // Auto-update adjustment type if user changes values
+            AutoDetectAdjustmentType();
+        }
+
+        private void cmbadjustment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateFieldVisibility();
+
+            // Clear adjustment error when selection is made
+            if (cmbadjustment.SelectedIndex != -1)
+                errorProvider1.SetError(cmbadjustment, "");
         }
     }
 }

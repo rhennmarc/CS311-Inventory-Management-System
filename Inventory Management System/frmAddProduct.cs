@@ -18,6 +18,35 @@ namespace Inventory_Management_System
 
         private int errorcount;
 
+        private void frmAddProduct_Load(object sender, EventArgs e)
+        {
+            LoadSuppliers();
+        }
+
+        private void LoadSuppliers()
+        {
+            try
+            {
+                DataTable dtSuppliers = newproduct.GetData("SELECT supplier FROM tblsupplier ORDER BY supplier");
+                cmbsupplier.Items.Clear();
+                cmbsupplier.Items.Add(""); // Add empty option
+
+                foreach (DataRow row in dtSuppliers.Rows)
+                {
+                    cmbsupplier.Items.Add(row["supplier"].ToString());
+                }
+
+                if (cmbsupplier.Items.Count > 0)
+                {
+                    cmbsupplier.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading suppliers: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnsave_Click(object sender, EventArgs e)
         {
             errorProvider1.Clear();
@@ -73,6 +102,22 @@ namespace Inventory_Management_System
                 }
             }
 
+            // Supplier (REQUIRED validation)
+            if (string.IsNullOrEmpty(cmbsupplier.Text.Trim()))
+            {
+                errorProvider1.SetError(cmbsupplier, "Supplier is required.");
+                errorcount++;
+            }
+            else
+            {
+                DataTable dt = newproduct.GetData("SELECT supplier FROM tblsupplier WHERE supplier='" + cmbsupplier.Text.Trim().Replace("'", "''") + "' LIMIT 1");
+                if (dt.Rows.Count == 0)
+                {
+                    errorProvider1.SetError(cmbsupplier, "Selected supplier does not exist.");
+                    errorcount++;
+                }
+            }
+
             // --- SAVE TO DATABASE ---
             if (errorcount == 0)
             {
@@ -91,12 +136,13 @@ namespace Inventory_Management_System
                         string unitprice = unitPriceValue.ToString("F2").Replace("'", "''");
 
                         string stock = txtcurrentstock.Text.Trim().Replace("'", "''");
+                        string supplier = cmbsupplier.Text.Trim().Replace("'", "''");
                         string createdBy = username.Replace("'", "''");
                         string dateCreated = DateTime.Now.ToString("MM/dd/yyyy");
 
                         string insertProduct =
-                            "INSERT INTO tblproducts (products, description, unitprice, currentstock, createdby, datecreated) " +
-                            "VALUES ('" + product + "', '" + description + "', '" + unitprice + "', '" + stock + "', '" + createdBy + "', '" + dateCreated + "')";
+                            "INSERT INTO tblproducts (products, description, unitprice, currentstock, supplier, createdby, datecreated) " +
+                            "VALUES ('" + product + "', '" + description + "', '" + unitprice + "', '" + stock + "', '" + supplier + "', '" + createdBy + "', '" + dateCreated + "')";
 
                         newproduct.executeSQL(insertProduct);
 
@@ -174,6 +220,18 @@ namespace Inventory_Management_System
                     txtunitprice.Text = price.ToString("F2");
                 }
             }
+        }
+
+        private void cmbsupplier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cmbsupplier.Text))
+                errorProvider1.SetError(cmbsupplier, "");
+        }
+
+        private void cmbsupplier_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cmbsupplier.Text))
+                errorProvider1.SetError(cmbsupplier, "");
         }
     }
 }

@@ -32,6 +32,8 @@ namespace Inventory_Management_System
 
         // Track discount
         private bool discountApplied = false;
+        private string discountName = "";
+        private string discountId = "";
 
         // Print-related variables
         private PrintDocument printDocument;
@@ -71,7 +73,7 @@ namespace Inventory_Management_System
         {
             printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
-            printDocument.DefaultPageSettings.PaperSize = new PaperSize("Receipt", 280, 600); // 280 points = ~3.9 inches width
+            printDocument.DefaultPageSettings.PaperSize = new PaperSize("Receipt", 280, 600);
             printDocument.DefaultPageSettings.Margins = new Margins(10, 10, 10, 10);
         }
 
@@ -464,7 +466,19 @@ namespace Inventory_Management_System
 
                     g.DrawString("Senior/PWD Discount (20%):", regularFont, brush, leftMargin, yPos);
                     g.DrawString((originalTotal * 0.2m).ToString("-₱#,##0.00"), regularFont, Brushes.Red, 180, yPos);
-                    yPos += 15;
+                    yPos += 12;
+
+                    // Discount information
+                    if (!string.IsNullOrEmpty(discountName))
+                    {
+                        g.DrawString($"Discount Name: {discountName}", smallFont, brush, leftMargin, yPos);
+                        yPos += 10;
+                    }
+                    if (!string.IsNullOrEmpty(discountId))
+                    {
+                        g.DrawString($"Discount ID: {discountId}", smallFont, brush, leftMargin, yPos);
+                        yPos += 10;
+                    }
 
                     // Line before total
                     g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
@@ -534,7 +548,7 @@ namespace Inventory_Management_System
                 // Create a custom form for the receipt
                 Form receiptForm = new Form();
                 receiptForm.Text = "AMGC Pharmacy - Receipt";
-                receiptForm.Size = new System.Drawing.Size(420, 650);
+                receiptForm.Size = new System.Drawing.Size(450, 750); // Increased size for better visibility
                 receiptForm.StartPosition = FormStartPosition.CenterParent;
                 receiptForm.FormBorderStyle = FormBorderStyle.FixedDialog;
                 receiptForm.MaximizeBox = false;
@@ -542,101 +556,110 @@ namespace Inventory_Management_System
                 receiptForm.BackColor = System.Drawing.Color.White;
 
                 // Calculate the required height based on cart items
-                int baseHeight = 400; // Base height for header, footer, totals
-                int itemHeight = 20; // Height per cart item
+                int baseHeight = 450; // Increased base height
+                int itemHeight = 20;
                 int extraHeightForMultipleQty = 0;
 
-                // Calculate extra height for items with quantity > 1 (they show unit price)
                 foreach (DataRow row in cartData.Rows)
                 {
                     int quantity = Convert.ToInt32(row["quantity"]);
                     if (quantity > 1)
-                        extraHeightForMultipleQty += 15; // Extra height for unit price line
+                        extraHeightForMultipleQty += 15;
                 }
 
-                int calculatedHeight = baseHeight + (cartData.Rows.Count * itemHeight) + extraHeightForMultipleQty;
-                int panelHeight = Math.Max(550, calculatedHeight); // Minimum 550, or calculated height
+                // Add extra height for discount information if applied
+                int discountSectionHeight = 0;
+                if (discountApplied)
+                {
+                    discountSectionHeight = 25; // Extra space for discount name and ID
+                }
+
+                int calculatedHeight = baseHeight + (cartData.Rows.Count * itemHeight) + extraHeightForMultipleQty + discountSectionHeight;
+
+                // FIXED: Ensure there's always extra scrollable space
+                int panelHeight = Math.Max(600, calculatedHeight) + 100; // Always add 100px extra for scrolling
 
                 // Create a scrollable panel for the receipt content
                 Panel scrollablePanel = new Panel();
-                scrollablePanel.Size = new System.Drawing.Size(400, 500); // Fixed viewport size
+                scrollablePanel.Size = new System.Drawing.Size(420, 600); // Increased size
                 scrollablePanel.Location = new System.Drawing.Point(10, 10);
                 scrollablePanel.BackColor = System.Drawing.Color.White;
                 scrollablePanel.BorderStyle = BorderStyle.FixedSingle;
-                scrollablePanel.AutoScroll = true; // Enable scrolling
+                scrollablePanel.AutoScroll = true;
+                scrollablePanel.AutoScrollMinSize = new System.Drawing.Size(0, panelHeight); // Important: This enables proper scrolling
 
                 // Create the actual receipt content panel
                 Panel receiptPanel = new Panel();
-                receiptPanel.Size = new System.Drawing.Size(380, panelHeight);
+                receiptPanel.Size = new System.Drawing.Size(400, panelHeight); // Use calculated height
                 receiptPanel.Location = new System.Drawing.Point(0, 0);
                 receiptPanel.BackColor = System.Drawing.Color.White;
 
                 // Create labels for receipt content
-                int yPos = 10;
+                int yPos = 15; // Increased starting position
 
                 // Header
-                Label headerLabel = CreateReceiptLabel("AMGC PHARMACY", new System.Drawing.Font("Arial", 16, System.Drawing.FontStyle.Bold), 380);
+                Label headerLabel = CreateReceiptLabel("AMGC PHARMACY", new System.Drawing.Font("Arial", 16, System.Drawing.FontStyle.Bold), 400);
                 headerLabel.Location = new System.Drawing.Point(0, yPos);
                 headerLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(headerLabel);
-                yPos += 25;
+                yPos += 30; // Increased spacing
 
-                Label taglineLabel = CreateReceiptLabel("Your Health, Our Priority", new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Italic), 380);
+                Label taglineLabel = CreateReceiptLabel("Your Health, Our Priority", new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Italic), 400);
                 taglineLabel.Location = new System.Drawing.Point(0, yPos);
                 taglineLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(taglineLabel);
-                yPos += 20;
+                yPos += 25; // Increased spacing
 
                 // ADD ADDRESS BELOW TAGLINE
-                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new System.Drawing.Font("Arial", 8), 380);
+                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new System.Drawing.Font("Arial", 8), 400);
                 addressLabel.Location = new System.Drawing.Point(0, yPos);
                 addressLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(addressLabel);
-                yPos += 20;
+                yPos += 25; // Increased spacing
 
                 // Separator line
                 Panel line1 = new Panel();
-                line1.Size = new System.Drawing.Size(360, 1);
+                line1.Size = new System.Drawing.Size(380, 1);
                 line1.Location = new System.Drawing.Point(10, yPos);
                 line1.BackColor = System.Drawing.Color.Black;
                 receiptPanel.Controls.Add(line1);
-                yPos += 10;
+                yPos += 15;
 
                 // Order info
-                Label orderInfoLabel = CreateReceiptLabel($"Order ID: {orderID}", new System.Drawing.Font("Arial", 9), 380);
+                Label orderInfoLabel = CreateReceiptLabel($"Order ID: {orderID}", new System.Drawing.Font("Arial", 9), 400);
                 orderInfoLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(orderInfoLabel);
-                yPos += 18;
+                yPos += 20; // Increased spacing
 
-                Label dateTimeLabel = CreateReceiptLabel($"Date & Time: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}", new System.Drawing.Font("Arial", 9), 380);
+                Label dateTimeLabel = CreateReceiptLabel($"Date & Time: {DateTime.Now:MM/dd/yyyy hh:mm:ss tt}", new System.Drawing.Font("Arial", 9), 400);
                 dateTimeLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(dateTimeLabel);
-                yPos += 18;
+                yPos += 20; // Increased spacing
 
-                Label cashierLabel = CreateReceiptLabel($"Cashier: {username}", new System.Drawing.Font("Arial", 9), 380);
+                Label cashierLabel = CreateReceiptLabel($"Cashier: {username}", new System.Drawing.Font("Arial", 9), 400);
                 cashierLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(cashierLabel);
-                yPos += 18;
+                yPos += 20; // Increased spacing
 
                 // ADD TIN BELOW CASHIER
-                Label tinLabel = CreateReceiptLabel("Tin:", new System.Drawing.Font("Arial", 8), 380);
+                Label tinLabel = CreateReceiptLabel("Tin:", new System.Drawing.Font("Arial", 8), 400);
                 tinLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(tinLabel);
-                yPos += 20;
+                yPos += 25; // Increased spacing
 
                 // Product header
                 Panel line2 = new Panel();
-                line2.Size = new System.Drawing.Size(360, 1);
+                line2.Size = new System.Drawing.Size(380, 1);
                 line2.Location = new System.Drawing.Point(10, yPos);
                 line2.BackColor = System.Drawing.Color.Black;
                 receiptPanel.Controls.Add(line2);
-                yPos += 10;
+                yPos += 15;
 
                 // Product header with better alignment
                 Label productHeaderLabel = new Label();
                 productHeaderLabel.Text = "Product";
                 productHeaderLabel.Font = new System.Drawing.Font("Arial", 9, System.Drawing.FontStyle.Bold);
-                productHeaderLabel.Size = new System.Drawing.Size(180, 18);
+                productHeaderLabel.Size = new System.Drawing.Size(200, 18);
                 productHeaderLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(productHeaderLabel);
 
@@ -644,18 +667,18 @@ namespace Inventory_Management_System
                 qtyHeaderLabel.Text = "Qty";
                 qtyHeaderLabel.Font = new System.Drawing.Font("Arial", 9, System.Drawing.FontStyle.Bold);
                 qtyHeaderLabel.Size = new System.Drawing.Size(50, 18);
-                qtyHeaderLabel.Location = new System.Drawing.Point(190, yPos);
+                qtyHeaderLabel.Location = new System.Drawing.Point(210, yPos);
                 qtyHeaderLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(qtyHeaderLabel);
 
                 Label amountHeaderLabel = new Label();
                 amountHeaderLabel.Text = "Amount";
                 amountHeaderLabel.Font = new System.Drawing.Font("Arial", 9, System.Drawing.FontStyle.Bold);
-                amountHeaderLabel.Size = new System.Drawing.Size(100, 18);
+                amountHeaderLabel.Size = new System.Drawing.Size(120, 18);
                 amountHeaderLabel.Location = new System.Drawing.Point(270, yPos);
                 amountHeaderLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(amountHeaderLabel);
-                yPos += 20;
+                yPos += 22; // Increased spacing
 
                 // Products
                 foreach (DataRow row in cartData.Rows)
@@ -667,14 +690,14 @@ namespace Inventory_Management_System
                     decimal itemTotal = discountApplied ? subtotal * 0.8m : subtotal;
 
                     // Truncate product name if too long
-                    if (productName.Length > 20)
-                        productName = productName.Substring(0, 17) + "...";
+                    if (productName.Length > 22) // Increased character limit
+                        productName = productName.Substring(0, 19) + "...";
 
                     // Product line
                     Label productLabel = new Label();
                     productLabel.Text = productName;
                     productLabel.Font = new System.Drawing.Font("Arial", 9);
-                    productLabel.Size = new System.Drawing.Size(180, 18);
+                    productLabel.Size = new System.Drawing.Size(200, 18);
                     productLabel.Location = new System.Drawing.Point(10, yPos);
                     receiptPanel.Controls.Add(productLabel);
 
@@ -682,41 +705,41 @@ namespace Inventory_Management_System
                     qtyLabel.Text = quantity.ToString();
                     qtyLabel.Font = new System.Drawing.Font("Arial", 9);
                     qtyLabel.Size = new System.Drawing.Size(50, 18);
-                    qtyLabel.Location = new System.Drawing.Point(190, yPos);
+                    qtyLabel.Location = new System.Drawing.Point(210, yPos);
                     qtyLabel.TextAlign = ContentAlignment.MiddleCenter;
                     receiptPanel.Controls.Add(qtyLabel);
 
                     Label amountLabel = new Label();
                     amountLabel.Text = itemTotal.ToString("₱#,##0.00");
                     amountLabel.Font = new System.Drawing.Font("Arial", 9);
-                    amountLabel.Size = new System.Drawing.Size(100, 18);
+                    amountLabel.Size = new System.Drawing.Size(120, 18);
                     amountLabel.Location = new System.Drawing.Point(270, yPos);
                     amountLabel.TextAlign = ContentAlignment.MiddleRight;
                     receiptPanel.Controls.Add(amountLabel);
 
-                    yPos += 18;
+                    yPos += 20; // Increased spacing
 
                     // Unit price for multiple quantities
                     if (quantity > 1)
                     {
                         decimal displayUnitPrice = discountApplied ? unitPrice * 0.8m : unitPrice;
-                        Label unitPriceLabel = CreateReceiptLabel($"  @ {displayUnitPrice.ToString("₱#,##0.00")} each", new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Italic), 380);
+                        Label unitPriceLabel = CreateReceiptLabel($"  @ {displayUnitPrice.ToString("₱#,##0.00")} each", new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Italic), 400);
                         unitPriceLabel.Location = new System.Drawing.Point(20, yPos);
                         unitPriceLabel.ForeColor = System.Drawing.Color.Gray;
                         receiptPanel.Controls.Add(unitPriceLabel);
-                        yPos += 15;
+                        yPos += 16; // Increased spacing
                     }
                 }
 
-                yPos += 10;
+                yPos += 12; // Increased spacing before totals
 
                 // Separator line
                 Panel line3 = new Panel();
-                line3.Size = new System.Drawing.Size(360, 1);
+                line3.Size = new System.Drawing.Size(380, 1);
                 line3.Location = new System.Drawing.Point(10, yPos);
                 line3.BackColor = System.Drawing.Color.Black;
                 receiptPanel.Controls.Add(line3);
-                yPos += 15;
+                yPos += 18;
 
                 // Totals section
                 if (discountApplied)
@@ -731,7 +754,7 @@ namespace Inventory_Management_System
                     Label subtotalLabel = new Label();
                     subtotalLabel.Text = "Subtotal:";
                     subtotalLabel.Font = new System.Drawing.Font("Arial", 9);
-                    subtotalLabel.Size = new System.Drawing.Size(200, 18);
+                    subtotalLabel.Size = new System.Drawing.Size(220, 18);
                     subtotalLabel.Location = new System.Drawing.Point(10, yPos);
                     receiptPanel.Controls.Add(subtotalLabel);
 
@@ -739,16 +762,16 @@ namespace Inventory_Management_System
                     subtotalAmountLabel.Text = originalTotal.ToString("₱#,##0.00");
                     subtotalAmountLabel.Font = new System.Drawing.Font("Arial", 9);
                     subtotalAmountLabel.Size = new System.Drawing.Size(150, 18);
-                    subtotalAmountLabel.Location = new System.Drawing.Point(220, yPos);
+                    subtotalAmountLabel.Location = new System.Drawing.Point(240, yPos);
                     subtotalAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                     receiptPanel.Controls.Add(subtotalAmountLabel);
-                    yPos += 18;
+                    yPos += 20;
 
                     // Discount
                     Label discountLabel = new Label();
                     discountLabel.Text = "Senior/PWD Discount (20%):";
                     discountLabel.Font = new System.Drawing.Font("Arial", 9);
-                    discountLabel.Size = new System.Drawing.Size(200, 18);
+                    discountLabel.Size = new System.Drawing.Size(220, 18);
                     discountLabel.Location = new System.Drawing.Point(10, yPos);
                     receiptPanel.Controls.Add(discountLabel);
 
@@ -756,26 +779,51 @@ namespace Inventory_Management_System
                     discountAmountLabel.Text = (originalTotal * 0.2m).ToString("-₱#,##0.00");
                     discountAmountLabel.Font = new System.Drawing.Font("Arial", 9);
                     discountAmountLabel.Size = new System.Drawing.Size(150, 18);
-                    discountAmountLabel.Location = new System.Drawing.Point(220, yPos);
+                    discountAmountLabel.Location = new System.Drawing.Point(240, yPos);
                     discountAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                     discountAmountLabel.ForeColor = System.Drawing.Color.Red;
                     receiptPanel.Controls.Add(discountAmountLabel);
-                    yPos += 18;
+                    yPos += 20;
+
+                    // Discount Information
+                    if (!string.IsNullOrEmpty(discountName))
+                    {
+                        Label discountNameLabel = new Label();
+                        discountNameLabel.Text = $"Discount Name: {discountName}";
+                        discountNameLabel.Font = new System.Drawing.Font("Arial", 8);
+                        discountNameLabel.Size = new System.Drawing.Size(320, 15);
+                        discountNameLabel.Location = new System.Drawing.Point(10, yPos);
+                        discountNameLabel.ForeColor = System.Drawing.Color.DarkBlue;
+                        receiptPanel.Controls.Add(discountNameLabel);
+                        yPos += 16;
+                    }
+
+                    if (!string.IsNullOrEmpty(discountId))
+                    {
+                        Label discountIdLabel = new Label();
+                        discountIdLabel.Text = $"Discount ID: {discountId}";
+                        discountIdLabel.Font = new System.Drawing.Font("Arial", 8);
+                        discountIdLabel.Size = new System.Drawing.Size(320, 15);
+                        discountIdLabel.Location = new System.Drawing.Point(10, yPos);
+                        discountIdLabel.ForeColor = System.Drawing.Color.DarkBlue;
+                        receiptPanel.Controls.Add(discountIdLabel);
+                        yPos += 16;
+                    }
 
                     // Line before total
                     Panel line4 = new Panel();
-                    line4.Size = new System.Drawing.Size(360, 1);
+                    line4.Size = new System.Drawing.Size(380, 1);
                     line4.Location = new System.Drawing.Point(10, yPos);
                     line4.BackColor = System.Drawing.Color.Black;
                     receiptPanel.Controls.Add(line4);
-                    yPos += 10;
+                    yPos += 12;
                 }
 
                 // Total
                 Label totalLabel = new Label();
                 totalLabel.Text = "TOTAL AMOUNT:";
                 totalLabel.Font = new System.Drawing.Font("Arial", 11, System.Drawing.FontStyle.Bold);
-                totalLabel.Size = new System.Drawing.Size(200, 20);
+                totalLabel.Size = new System.Drawing.Size(220, 20);
                 totalLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(totalLabel);
 
@@ -783,16 +831,16 @@ namespace Inventory_Management_System
                 totalAmountLabel.Text = finalTotal.ToString("₱#,##0.00");
                 totalAmountLabel.Font = new System.Drawing.Font("Arial", 11, System.Drawing.FontStyle.Bold);
                 totalAmountLabel.Size = new System.Drawing.Size(150, 20);
-                totalAmountLabel.Location = new System.Drawing.Point(220, yPos);
+                totalAmountLabel.Location = new System.Drawing.Point(240, yPos);
                 totalAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(totalAmountLabel);
-                yPos += 25;
+                yPos += 28;
 
                 // Payment
                 Label paymentLabel = new Label();
                 paymentLabel.Text = "Cash Payment:";
                 paymentLabel.Font = new System.Drawing.Font("Arial", 9);
-                paymentLabel.Size = new System.Drawing.Size(200, 18);
+                paymentLabel.Size = new System.Drawing.Size(220, 18);
                 paymentLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(paymentLabel);
 
@@ -800,16 +848,16 @@ namespace Inventory_Management_System
                 paymentAmountLabel.Text = payment.ToString("₱#,##0.00");
                 paymentAmountLabel.Font = new System.Drawing.Font("Arial", 9);
                 paymentAmountLabel.Size = new System.Drawing.Size(150, 18);
-                paymentAmountLabel.Location = new System.Drawing.Point(220, yPos);
+                paymentAmountLabel.Location = new System.Drawing.Point(240, yPos);
                 paymentAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(paymentAmountLabel);
-                yPos += 18;
+                yPos += 20;
 
                 // Change
                 Label changeLabel = new Label();
                 changeLabel.Text = "Change:";
                 changeLabel.Font = new System.Drawing.Font("Arial", 9);
-                changeLabel.Size = new System.Drawing.Size(200, 18);
+                changeLabel.Size = new System.Drawing.Size(220, 18);
                 changeLabel.Location = new System.Drawing.Point(10, yPos);
                 receiptPanel.Controls.Add(changeLabel);
 
@@ -817,46 +865,46 @@ namespace Inventory_Management_System
                 changeAmountLabel.Text = change.ToString("₱#,##0.00");
                 changeAmountLabel.Font = new System.Drawing.Font("Arial", 9);
                 changeAmountLabel.Size = new System.Drawing.Size(150, 18);
-                changeAmountLabel.Location = new System.Drawing.Point(220, yPos);
+                changeAmountLabel.Location = new System.Drawing.Point(240, yPos);
                 changeAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(changeAmountLabel);
-                yPos += 30;
+                yPos += 32;
 
                 // Footer separator
                 Panel line5 = new Panel();
-                line5.Size = new System.Drawing.Size(360, 2);
+                line5.Size = new System.Drawing.Size(380, 2);
                 line5.Location = new System.Drawing.Point(10, yPos);
                 line5.BackColor = System.Drawing.Color.Black;
                 receiptPanel.Controls.Add(line5);
-                yPos += 15;
+                yPos += 18;
 
                 // Thank you message
-                Label thankYouLabel = CreateReceiptLabel("THANK YOU!", new System.Drawing.Font("Arial", 14, System.Drawing.FontStyle.Bold), 380);
+                Label thankYouLabel = CreateReceiptLabel("THANK YOU!", new System.Drawing.Font("Arial", 14, System.Drawing.FontStyle.Bold), 400);
                 thankYouLabel.Location = new System.Drawing.Point(0, yPos);
                 thankYouLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(thankYouLabel);
-                yPos += 25;
+                yPos += 28;
 
-                Label greatDayLabel = CreateReceiptLabel("Have a great day ahead!", new System.Drawing.Font("Arial", 10), 380);
+                Label greatDayLabel = CreateReceiptLabel("Have a great day ahead!", new System.Drawing.Font("Arial", 10), 400);
                 greatDayLabel.Location = new System.Drawing.Point(0, yPos);
                 greatDayLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(greatDayLabel);
-                yPos += 25;
+                yPos += 28;
 
                 // Contact info
-                Label contactLabel = CreateReceiptLabel("For concerns, please contact us at:", new System.Drawing.Font("Arial", 8), 380);
+                Label contactLabel = CreateReceiptLabel("For concerns, please contact us at:", new System.Drawing.Font("Arial", 8), 400);
                 contactLabel.Location = new System.Drawing.Point(0, yPos);
                 contactLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(contactLabel);
-                yPos += 15;
+                yPos += 18;
 
-                Label phoneLabel = CreateReceiptLabel("Phone: (02) 123-4567", new System.Drawing.Font("Arial", 8), 380);
+                Label phoneLabel = CreateReceiptLabel("Phone: (02) 123-4567", new System.Drawing.Font("Arial", 8), 400);
                 phoneLabel.Location = new System.Drawing.Point(0, yPos);
                 phoneLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(phoneLabel);
-                yPos += 12;
+                yPos += 14;
 
-                Label emailLabel = CreateReceiptLabel("Email: info@amgcpharmacy.com", new System.Drawing.Font("Arial", 8), 380);
+                Label emailLabel = CreateReceiptLabel("Email: info@amgcpharmacy.com", new System.Drawing.Font("Arial", 8), 400);
                 emailLabel.Location = new System.Drawing.Point(0, yPos);
                 emailLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(emailLabel);
@@ -867,25 +915,25 @@ namespace Inventory_Management_System
                 // Add the scrollable panel to the form
                 receiptForm.Controls.Add(scrollablePanel);
 
-                // Buttons
+                // Buttons - positioned at the bottom of the form
                 Button printButton = new Button();
                 printButton.Text = "Print";
                 printButton.Size = new System.Drawing.Size(80, 30);
-                printButton.Location = new System.Drawing.Point(80, 520);
+                printButton.Location = new System.Drawing.Point(80, 620); // Adjusted position
                 printButton.Click += (s, ev) => PrintReceipt();
                 receiptForm.Controls.Add(printButton);
 
                 Button saveButton = new Button();
                 saveButton.Text = "Save as Image";
                 saveButton.Size = new System.Drawing.Size(100, 30);
-                saveButton.Location = new System.Drawing.Point(170, 520);
+                saveButton.Location = new System.Drawing.Point(170, 620); // Adjusted position
                 saveButton.Click += (s, ev) => SaveReceiptAsImage(receiptPanel, orderID);
                 receiptForm.Controls.Add(saveButton);
 
                 Button closeButton = new Button();
                 closeButton.Text = "Close";
                 closeButton.Size = new System.Drawing.Size(80, 30);
-                closeButton.Location = new System.Drawing.Point(280, 520);
+                closeButton.Location = new System.Drawing.Point(280, 620); // Adjusted position
                 closeButton.DialogResult = DialogResult.OK;
                 receiptForm.Controls.Add(closeButton);
 
@@ -1086,6 +1134,8 @@ namespace Inventory_Management_System
                     if (cartData.Rows.Count == 0)
                     {
                         discountApplied = false; // reset if empty
+                        discountName = "";
+                        discountId = "";
                         txtpayment.Text = "";
                         txtchange.Text = "";
                     }
@@ -1116,6 +1166,8 @@ namespace Inventory_Management_System
                 {
                     cartData.Clear();
                     discountApplied = false; // reset
+                    discountName = "";
+                    discountId = "";
                     txtpayment.Text = "";
                     txtchange.Text = "";
                     LoadCart();
@@ -1260,24 +1312,43 @@ namespace Inventory_Management_System
                     return;
                 }
 
-                decimal total = 0;
-                foreach (DataRow row in cartData.Rows)
+                // Show discount form
+                frmDiscount discountForm = new frmDiscount();
+                if (discountForm.ShowDialog() == DialogResult.OK)
                 {
-                    if (row["subtotal"] != null && row["subtotal"] != DBNull.Value)
+                    discountName = discountForm.DiscountName;
+                    discountId = discountForm.DiscountId;
+
+                    if (string.IsNullOrEmpty(discountName) || string.IsNullOrEmpty(discountId))
                     {
-                        total += Convert.ToDecimal(row["subtotal"]);
+                        MessageBox.Show("Both name and discount ID are required.", "Required Fields", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
-                }
 
-                DialogResult result = MessageBox.Show(
-                    $"Are you sure you want to give a 20% discount?\n\nOriginal Total: {total:₱#,##0.00}\nDiscounted Total: {(total * 0.8m):₱#,##0.00}",
-                    "Discount Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    decimal total = 0;
+                    foreach (DataRow row in cartData.Rows)
+                    {
+                        if (row["subtotal"] != null && row["subtotal"] != DBNull.Value)
+                        {
+                            total += Convert.ToDecimal(row["subtotal"]);
+                        }
+                    }
 
-                if (result == DialogResult.Yes)
-                {
-                    discountApplied = true;
-                    UpdateTotal();
-                    MessageBox.Show("Discount applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult result = MessageBox.Show(
+                        $"Apply 20% discount for:\nName: {discountName}\nID: {discountId}\n\nOriginal Total: {total:₱#,##0.00}\nDiscounted Total: {(total * 0.8m):₱#,##0.00}",
+                        "Discount Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        discountApplied = true;
+                        UpdateTotal();
+                        MessageBox.Show("Discount applied successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        discountName = "";
+                        discountId = "";
+                    }
                 }
             }
             catch (Exception ex)
@@ -1321,7 +1392,11 @@ namespace Inventory_Management_System
 
                 decimal change = paymentAmount - finalGrandTotal;
 
-                DialogResult result = MessageBox.Show($"Confirm purchase?\n\nTotal Amount: {finalGrandTotal:₱#,##0.00}\nPayment: {paymentAmount:₱#,##0.00}\nChange: {change:₱#,##0.00}",
+                string discountInfo = discountApplied ?
+                    $"\nDiscount Applied: Yes\nName: {discountName}\nID: {discountId}" :
+                    "\nDiscount Applied: No";
+
+                DialogResult result = MessageBox.Show($"Confirm purchase?\n\nTotal Amount: {finalGrandTotal:₱#,##0.00}\nPayment: {paymentAmount:₱#,##0.00}\nChange: {change:₱#,##0.00}{discountInfo}",
                     "Purchase Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
@@ -1340,10 +1415,10 @@ namespace Inventory_Management_System
                         decimal savedSubtotal = discountApplied ? Math.Round(subtotal * 0.8m, 2) : subtotal;
 
                         // Insert into tblsales with orderid and payment and change information
-                        string insertSale = "INSERT INTO tblsales (orderid, products, quantity, payment, paymentchange, totalcost, discounted, datecreated, timecreated, createdby) " +
+                        string insertSale = "INSERT INTO tblsales (orderid, products, quantity, payment, paymentchange, totalcost, discounted, discountedname, discountedid, datecreated, timecreated, createdby) " +
                             "VALUES ('" + orderID.Replace("'", "''") + "', '" + productName.Replace("'", "''") + "', '" + quantity + "', '" + paymentAmount.ToString("F2") + "', '" +
                             change.ToString("F2") + "', '" + savedSubtotal.ToString("F2") + "', '" +
-                            discountedFlag + "', '" + currentDate + "', '" + currentTime + "', '" + username.Replace("'", "''") + "')";
+                            discountedFlag + "', '" + discountName.Replace("'", "''") + "', '" + discountId.Replace("'", "''") + "', '" + currentDate + "', '" + currentTime + "', '" + username.Replace("'", "''") + "')";
                         pos.executeSQL(insertSale);
 
                         // Update product stock
@@ -1356,7 +1431,7 @@ namespace Inventory_Management_System
                     pos.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                         "VALUES ('" + currentDate + "', '" + currentTime + "', 'PURCHASE', 'POS', 'ORDER ID: " + orderID +
                         " | TOTAL: " + finalGrandTotal.ToString("F2") + " | PAYMENT: " + paymentAmount.ToString("F2") + " | CHANGE: " + change.ToString("F2") +
-                        " | DISCOUNTED: " + (discountApplied ? "Yes" : "No") + "', '" + username.Replace("'", "''") + "')");
+                        " | DISCOUNTED: " + (discountApplied ? "Yes" : "No") + " | NAME: " + discountName + " | ID: " + discountId + "', '" + username.Replace("'", "''") + "')");
 
                     // Show receipt
                     ShowReceipt(orderID, finalGrandTotal, paymentAmount, change);
@@ -1364,6 +1439,8 @@ namespace Inventory_Management_System
                     // Clear cart, reset discount, and clear payment fields
                     cartData.Clear();
                     discountApplied = false;
+                    discountName = "";
+                    discountId = "";
                     txtpayment.Text = "";
                     txtchange.Text = "";
                     LoadProducts(); // Refresh to show updated stock
@@ -1374,6 +1451,209 @@ namespace Inventory_Management_System
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR on btnpurchase_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+
+    // Discount Form inside the same file
+    public partial class frmDiscount : Form
+    {
+        public string DiscountName { get; private set; }
+        public string DiscountId { get; private set; }
+
+        private ErrorProvider errorProvider;
+
+        public frmDiscount()
+        {
+            InitializeComponent();
+        }
+
+        private void InitializeComponent()
+        {
+            // Form Properties
+            this.Text = "Senior/PWD Discount";
+            this.Size = new System.Drawing.Size(400, 350);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.BackColor = System.Drawing.Color.FromArgb(250, 250, 250);
+
+            errorProvider = new ErrorProvider();
+            errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
+
+            // Main Panel
+            Panel mainPanel = new Panel();
+            mainPanel.Dock = DockStyle.Fill;
+            mainPanel.BackColor = System.Drawing.Color.White;
+            mainPanel.BorderStyle = BorderStyle.FixedSingle;
+
+            // Header Panel
+            Panel headerPanel = new Panel();
+            headerPanel.Dock = DockStyle.Top;
+            headerPanel.Height = 50;
+            headerPanel.BackColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            headerPanel.Padding = new Padding(20, 0, 0, 0);
+
+            Label lblHeader = new Label();
+            lblHeader.Text = "SENIOR/PWD DISCOUNT";
+            lblHeader.Font = new System.Drawing.Font("Segoe UI", 14F, FontStyle.Bold);
+            lblHeader.ForeColor = System.Drawing.Color.White;
+            lblHeader.Dock = DockStyle.Fill;
+            lblHeader.TextAlign = ContentAlignment.MiddleLeft;
+            headerPanel.Controls.Add(lblHeader);
+
+            // Content Panel
+            Panel contentPanel = new Panel();
+            contentPanel.Dock = DockStyle.Fill;
+            contentPanel.Padding = new Padding(30);
+
+            // Title Label
+            Label titleLabel = new Label();
+            titleLabel.Text = "Please enter discount information";
+            titleLabel.Font = new System.Drawing.Font("Segoe UI", 10F, FontStyle.Regular);
+            titleLabel.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            titleLabel.Size = new System.Drawing.Size(300, 25);
+            titleLabel.Location = new System.Drawing.Point(30, 20);
+            titleLabel.TextAlign = ContentAlignment.MiddleLeft;
+            contentPanel.Controls.Add(titleLabel);
+
+            // Name Label
+            Label nameLabel = new Label();
+            nameLabel.Text = "Name:";
+            nameLabel.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold);
+            nameLabel.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            nameLabel.Size = new System.Drawing.Size(80, 20);
+            nameLabel.Location = new System.Drawing.Point(30, 70);
+            contentPanel.Controls.Add(nameLabel);
+
+            // Name TextBox
+            TextBox txtName = new TextBox();
+            txtName.Font = new System.Drawing.Font("Segoe UI", 9F);
+            txtName.Size = new System.Drawing.Size(280, 25);
+            txtName.Location = new System.Drawing.Point(30, 95);
+            txtName.MaxLength = 50;
+            txtName.BorderStyle = BorderStyle.FixedSingle;
+            contentPanel.Controls.Add(txtName);
+
+            // ID Label
+            Label idLabel = new Label();
+            idLabel.Text = "Discount ID:";
+            idLabel.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold);
+            idLabel.ForeColor = System.Drawing.Color.FromArgb(52, 73, 94);
+            idLabel.Size = new System.Drawing.Size(80, 20);
+            idLabel.Location = new System.Drawing.Point(30, 140);
+            contentPanel.Controls.Add(idLabel);
+
+            // ID TextBox
+            TextBox txtId = new TextBox();
+            txtId.Font = new System.Drawing.Font("Segoe UI", 9F);
+            txtId.Size = new System.Drawing.Size(280, 25);
+            txtId.Location = new System.Drawing.Point(30, 165);
+            txtId.MaxLength = 50;
+            txtId.BorderStyle = BorderStyle.FixedSingle;
+            contentPanel.Controls.Add(txtId);
+
+            // Button Panel
+            Panel buttonPanel = new Panel();
+            buttonPanel.Dock = DockStyle.Bottom;
+            buttonPanel.Height = 60;
+            buttonPanel.Padding = new Padding(80, 10, 80, 10);
+            buttonPanel.BackColor = System.Drawing.Color.FromArgb(240, 240, 240);
+
+            // Confirm Button
+            Button btnConfirm = new Button();
+            btnConfirm.Text = "Confirm";
+            btnConfirm.Size = new System.Drawing.Size(100, 35);
+            btnConfirm.Location = new System.Drawing.Point(80, 10);
+            btnConfirm.BackColor = System.Drawing.Color.FromArgb(46, 204, 113);
+            btnConfirm.FlatStyle = FlatStyle.Flat;
+            btnConfirm.FlatAppearance.BorderSize = 0;
+            btnConfirm.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold);
+            btnConfirm.ForeColor = System.Drawing.Color.White;
+            btnConfirm.Cursor = Cursors.Hand;
+            btnConfirm.Click += (s, e) => ConfirmDiscount(txtName, txtId);
+            buttonPanel.Controls.Add(btnConfirm);
+
+            // Cancel Button
+            Button btnCancel = new Button();
+            btnCancel.Text = "Cancel";
+            btnCancel.Size = new System.Drawing.Size(100, 35);
+            btnCancel.Location = new System.Drawing.Point(190, 10);
+            btnCancel.BackColor = System.Drawing.Color.FromArgb(231, 76, 60);
+            btnCancel.FlatStyle = FlatStyle.Flat;
+            btnCancel.FlatAppearance.BorderSize = 0;
+            btnCancel.Font = new System.Drawing.Font("Segoe UI", 9F, FontStyle.Bold);
+            btnCancel.ForeColor = System.Drawing.Color.White;
+            btnCancel.Cursor = Cursors.Hand;
+            btnCancel.Click += (s, e) =>
+            {
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
+            };
+            buttonPanel.Controls.Add(btnCancel);
+
+            // Add panels to main container
+            mainPanel.Controls.Add(contentPanel);
+            mainPanel.Controls.Add(buttonPanel);
+            mainPanel.Controls.Add(headerPanel);
+
+            // Set form controls
+            this.Controls.Add(mainPanel);
+            this.AcceptButton = btnConfirm;
+            this.CancelButton = btnCancel;
+        }
+
+        private void ConfirmDiscount(TextBox txtName, TextBox txtId)
+        {
+            errorProvider.Clear();
+
+            bool isValid = true;
+
+            if (string.IsNullOrEmpty(txtName.Text.Trim()))
+            {
+                errorProvider.SetError(txtName, "Name is required");
+                isValid = false;
+            }
+
+            if (string.IsNullOrEmpty(txtId.Text.Trim()))
+            {
+                errorProvider.SetError(txtId, "Discount ID is required");
+                isValid = false;
+            }
+
+            if (isValid)
+            {
+                DiscountName = txtName.Text.Trim();
+                DiscountId = txtId.Text.Trim();
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            // Set focus to name field when form loads
+            foreach (Control control in this.Controls)
+            {
+                if (control is Panel mainPanel)
+                {
+                    foreach (Control subControl in mainPanel.Controls)
+                    {
+                        if (subControl is Panel contentPanel)
+                        {
+                            foreach (Control field in contentPanel.Controls)
+                            {
+                                if (field is TextBox textBox && textBox.Name == "txtName")
+                                {
+                                    textBox.Focus();
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
