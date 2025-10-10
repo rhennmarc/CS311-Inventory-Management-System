@@ -32,8 +32,8 @@
             this.titleLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelFooter = new System.Windows.Forms.Panel();
-            this.lblPageInfo = new System.Windows.Forms.Label();
             this.btnDeleteAll = new System.Windows.Forms.Button();
+            this.lblPageInfo = new System.Windows.Forms.Label();
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
@@ -97,18 +97,6 @@
             this.panelFooter.Size = new System.Drawing.Size(784, 82);
             this.panelFooter.TabIndex = 2;
             // 
-            // lblPageInfo
-            // 
-            this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblPageInfo.ForeColor = System.Drawing.Color.White;
-            this.lblPageInfo.Location = new System.Drawing.Point(332, 36);
-            this.lblPageInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblPageInfo.Name = "lblPageInfo";
-            this.lblPageInfo.Size = new System.Drawing.Size(87, 15);
-            this.lblPageInfo.TabIndex = 6;
-            this.lblPageInfo.Text = "Page 1 of 1 (0)";
-            // 
             // btnDeleteAll
             // 
             this.btnDeleteAll.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -127,6 +115,18 @@
             this.btnDeleteAll.Text = "Delete &All";
             this.btnDeleteAll.UseVisualStyleBackColor = false;
             this.btnDeleteAll.Click += new System.EventHandler(this.btnDeleteAll_Click);
+            // 
+            // lblPageInfo
+            // 
+            this.lblPageInfo.AutoSize = true;
+            this.lblPageInfo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.lblPageInfo.ForeColor = System.Drawing.Color.White;
+            this.lblPageInfo.Location = new System.Drawing.Point(332, 36);
+            this.lblPageInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPageInfo.Name = "lblPageInfo";
+            this.lblPageInfo.Size = new System.Drawing.Size(87, 15);
+            this.lblPageInfo.TabIndex = 6;
+            this.lblPageInfo.Text = "Page 1 of 1 (0)";
             // 
             // btnDelete
             // 
@@ -228,6 +228,10 @@
             this.dataGridViewHistory.ReadOnly = true;
             this.dataGridViewHistory.Size = new System.Drawing.Size(720, 288);
             this.dataGridViewHistory.TabIndex = 1;
+            this.dataGridViewHistory.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHistory_CellClick);
+            this.dataGridViewHistory.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHistory_CellMouseEnter);
+            this.dataGridViewHistory.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHistory_CellMouseLeave);
+            this.dataGridViewHistory.SelectionChanged += new System.EventHandler(this.dataGridViewHistory_SelectionChanged);
             // 
             // cardPanel
             // 
