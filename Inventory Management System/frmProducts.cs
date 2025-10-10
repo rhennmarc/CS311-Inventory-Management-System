@@ -62,7 +62,7 @@ namespace Inventory_Management_System
         {
             try
             {
-                string query = @"SELECT products, description, unitprice, currentstock, createdby, datecreated 
+                string query = @"SELECT products, description, unitprice, currentstock, supplier, createdby, datecreated 
                          FROM tblproducts ";
                 if (!string.IsNullOrEmpty(search))
                 {
@@ -117,6 +117,11 @@ namespace Inventory_Management_System
                     dataGridView1.Columns["currentstock"].HeaderText = "Stock";
                     dataGridView1.Columns["currentstock"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     dataGridView1.Columns["currentstock"].Width = 100;
+                }
+                if (dataGridView1.Columns.Contains("supplier"))
+                {
+                    dataGridView1.Columns["supplier"].HeaderText = "Supplier";
+                    dataGridView1.Columns["supplier"].Width = 150;
                 }
                 if (dataGridView1.Columns.Contains("createdby"))
                 {
@@ -179,8 +184,9 @@ namespace Inventory_Management_System
                 string description = dataGridView1.Rows[row].Cells["description"].Value.ToString();
                 string unitprice = dataGridView1.Rows[row].Cells["unitprice"].Value.ToString();
                 string currentstock = dataGridView1.Rows[row].Cells["currentstock"].Value.ToString();
+                string supplier = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
 
-                ShowOrActivateForm(() => new frmUpdateProduct(productname, description, unitprice, currentstock, username));
+                ShowOrActivateForm(() => new frmUpdateProduct(productname, description, unitprice, currentstock, supplier, username));
             }
             catch (Exception error)
             {

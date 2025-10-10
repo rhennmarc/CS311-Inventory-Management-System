@@ -10,7 +10,7 @@ namespace Inventory_Management_System
         private string username;
         private string originalProduct;
 
-        public frmUpdateProduct(string product, string description, string unitprice, string currentstock, string username)
+        public frmUpdateProduct(string product, string description, string unitprice, string currentstock, string supplier, string username)
         {
             InitializeComponent();
 
@@ -25,6 +25,13 @@ namespace Inventory_Management_System
 
         Class1 updateproduct = new Class1("127.0.0.1", "inventory_management", "rhennmarc", "mercado");
 
+        private void frmUpdateProduct_Load(object sender, EventArgs e)
+        {
+            LoadProduct(originalProduct);
+            LoadSuppliers();
+            this.ActiveControl = titleLabel;
+        }
+
         private void LoadProduct(string product)
         {
             DataTable dt = updateproduct.GetData("SELECT * FROM tblproducts WHERE products='" + product.Replace("'", "''") + "'");
@@ -36,7 +43,32 @@ namespace Inventory_Management_System
                 txtunitprice.Text = row["unitprice"].ToString();
                 txtcurrentstock.Text = row["currentstock"].ToString();
 
+                // Set the supplier in combobox
+                if (!string.IsNullOrEmpty(row["supplier"].ToString()))
+                {
+                    cmbsupplier.Text = row["supplier"].ToString();
+                }
+
                 originalProduct = txtproduct.Text;
+            }
+        }
+
+        private void LoadSuppliers()
+        {
+            try
+            {
+                DataTable dtSuppliers = updateproduct.GetData("SELECT supplier FROM tblsupplier ORDER BY supplier");
+                cmbsupplier.Items.Clear();
+                cmbsupplier.Items.Add(""); // Add empty option
+
+                foreach (DataRow row in dtSuppliers.Rows)
+                {
+                    cmbsupplier.Items.Add(row["supplier"].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading suppliers: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -81,6 +113,22 @@ namespace Inventory_Management_System
                 }
             }
 
+            // Supplier (REQUIRED validation)
+            if (string.IsNullOrEmpty(cmbsupplier.Text.Trim()))
+            {
+                errorProvider1.SetError(cmbsupplier, "Supplier is required.");
+                errorcount++;
+            }
+            else
+            {
+                DataTable dt = updateproduct.GetData("SELECT supplier FROM tblsupplier WHERE supplier='" + cmbsupplier.Text.Trim().Replace("'", "''") + "' LIMIT 1");
+                if (dt.Rows.Count == 0)
+                {
+                    errorProvider1.SetError(cmbsupplier, "Selected supplier does not exist.");
+                    errorcount++;
+                }
+            }
+
             // Check for duplicate product name if changed
             if (!string.IsNullOrEmpty(txtproduct.Text) && txtproduct.Text != originalProduct)
             {
@@ -102,8 +150,13 @@ namespace Inventory_Management_System
                     {
                         string product = txtproduct.Text.Replace("'", "''");
                         string description = txtdescription.Text.Replace("'", "''");
-                        string unitprice = txtunitprice.Text.Replace("'", "''");
+
+                        // Format unit price to always show 2 decimal places
+                        decimal unitPriceValue = decimal.Parse(txtunitprice.Text.Trim());
+                        string unitprice = unitPriceValue.ToString("F2").Replace("'", "''");
+
                         string currentstock = txtcurrentstock.Text.Replace("'", "''");
+                        string supplier = cmbsupplier.Text.Trim().Replace("'", "''");
                         string user = string.IsNullOrEmpty(username) ? "" : username.Replace("'", "''");
 
                         string sql =
@@ -111,7 +164,8 @@ namespace Inventory_Management_System
                             "products='" + product + "', " +
                             "description='" + description + "', " +
                             "unitprice='" + unitprice + "', " +
-                            "currentstock='" + currentstock + "' " +
+                            "currentstock='" + currentstock + "', " +
+                            "supplier='" + supplier + "' " +
                             "WHERE products='" + originalProduct.Replace("'", "''") + "'";
 
                         updateproduct.executeSQL(sql);
@@ -122,7 +176,7 @@ namespace Inventory_Management_System
 
                             updateproduct.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) VALUES ('" +
                                 DateTime.Now.ToString("MM/dd/yyyy") + "' , '" + DateTime.Now.ToShortTimeString() +
-                                "' , 'UPDATE', 'PRODUCT MANAGEMENT', '" + product + "', '" + username + "')");
+                                "' , 'UPDATE', 'PRODUCTS MANAGEMENT', '" + product + "', '" + username + "')");
 
                             this.Close();
                         }
@@ -144,11 +198,6 @@ namespace Inventory_Management_System
             this.Close();
         }
 
-        private void frmUpdateProduct_Load(object sender, EventArgs e)
-        {
-            this.ActiveControl = titleLabel;
-        }
-
         private void txtproduct_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(txtproduct.Text))
@@ -165,6 +214,55 @@ namespace Inventory_Management_System
         {
             if (!string.IsNullOrEmpty(txtcurrentstock.Text))
                 errorProvider1.SetError(txtcurrentstock, "");
+        }
+
+        private void txtunitprice_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only numbers, decimal point, and control characters
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            // Allow only one decimal point
+            if (e.KeyChar == '.' && txtunitprice.Text.IndexOf('.') > -1)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtcurrentstock_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Allow only numbers and control characters
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtunitprice_Leave(object sender, EventArgs e)
+        {
+            // Format the unit price when leaving the textbox
+            if (!string.IsNullOrEmpty(txtunitprice.Text.Trim()))
+            {
+                decimal price;
+                if (decimal.TryParse(txtunitprice.Text.Trim(), out price) && price > 0)
+                {
+                    txtunitprice.Text = price.ToString("F2");
+                }
+            }
+        }
+
+        private void cmbsupplier_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cmbsupplier.Text))
+                errorProvider1.SetError(cmbsupplier, "");
+        }
+
+        private void cmbsupplier_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(cmbsupplier.Text))
+                errorProvider1.SetError(cmbsupplier, "");
         }
     }
 }

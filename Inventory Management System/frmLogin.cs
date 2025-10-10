@@ -25,18 +25,37 @@ namespace Inventory_Management_System
         {
             try
             {
-                DataTable dt = login.GetData("SELECT * FROM tblaccounts WHERE username = '" + txtusername.Text + "' AND password = '" + txtpassword.Text
-                    + "'AND status = 'ACTIVE'");
-                if (dt.Rows.Count > 0)
+                // First check if username exists
+                DataTable dtUser = login.GetData("SELECT * FROM tblaccounts WHERE username = '" + txtusername.Text + "'");
+
+                if (dtUser.Rows.Count == 0)
                 {
-                    frmMain mainForm = new frmMain(txtusername.Text, dt.Rows[0].Field<string>("usertype"));
-                    mainForm.Show();
-                    this.Hide();
+                    MessageBox.Show("Username is wrong.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                else
+
+                // If username exists, check password and status
+                DataTable dtLogin = login.GetData("SELECT * FROM tblaccounts WHERE username = '" + txtusername.Text + "' AND password = '" + txtpassword.Text + "'");
+
+                if (dtLogin.Rows.Count == 0)
                 {
-                    MessageBox.Show("Incorrect username or password or account is inactive.", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Password is wrong.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                // If username and password are correct, check if account is active
+                DataTable dtActive = login.GetData("SELECT * FROM tblaccounts WHERE username = '" + txtusername.Text + "' AND password = '" + txtpassword.Text + "' AND status = 'ACTIVE'");
+
+                if (dtActive.Rows.Count == 0)
+                {
+                    MessageBox.Show("Account is inactive.", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // If all validations pass, login successful
+                frmMain mainForm = new frmMain(txtusername.Text, dtActive.Rows[0].Field<string>("usertype"));
+                mainForm.Show();
+                this.Hide();
             }
             catch (Exception error)
             {
@@ -58,7 +77,7 @@ namespace Inventory_Management_System
                 btnlogin_Click(sender, e);
             }
         }
-        
+
         private void cbshowpassword_CheckedChanged(object sender, EventArgs e)
         {
             if (cbshowpassword.Checked)
