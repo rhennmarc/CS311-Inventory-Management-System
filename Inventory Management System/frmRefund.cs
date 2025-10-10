@@ -38,6 +38,8 @@ namespace Inventory_Management_System
         private string printCreatedBy;
         private DataTable printRefundData;
         private decimal printTotalRefund;
+        private string printDiscountName;
+        private string printDiscountId;
 
         public frmRefund(string username, string orderID = null)
         {
@@ -58,43 +60,6 @@ namespace Inventory_Management_System
             refundPrintDocument.PrintPage += RefundPrintDocument_PrintPage;
             refundPrintDocument.DefaultPageSettings.PaperSize = new PaperSize("Receipt", 280, 600);
             refundPrintDocument.DefaultPageSettings.Margins = new Margins(10, 10, 10, 10);
-        }
-
-        // Helper method to convert 24-hour time to 12-hour format with AM/PM
-        private string ConvertTo12HourFormat(string time24)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(time24))
-                    return string.Empty;
-
-                // Handle different time formats that might come from the database
-                string[] timeFormats = new[] { "HH:mm:ss", "H:mm:ss", "HH:mm", "H:mm" };
-                DateTime time;
-
-                if (DateTime.TryParseExact(time24, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out time))
-                {
-                    return time.ToString("h:mm:ss tt");
-                }
-
-                // If parsing fails, try regular DateTime parsing as fallback
-                if (DateTime.TryParse(time24, out time))
-                {
-                    return time.ToString("h:mm:ss tt");
-                }
-
-                return time24; // Return original if parsing fails
-            }
-            catch
-            {
-                return time24; // Return original if any error occurs
-            }
-        }
-
-        // Helper method to get current time in 12-hour format
-        private string GetCurrentTime12Hour()
-        {
-            return DateTime.Now.ToString("h:mm:ss tt");
         }
 
         private void RefundPrintDocument_PrintPage(object sender, PrintPageEventArgs e)
@@ -124,7 +89,6 @@ namespace Inventory_Management_System
                 g.DrawString(taglineText, regularFont, brush, centerPos - (taglineSize.Width / 2), yPos);
                 yPos += 15;
 
-                // Address below tagline - EXACT same as sales report
                 string addressText = "1340 G Tuazon St Sampaloc Manila";
                 SizeF addressSize = g.MeasureString(addressText, smallFont);
                 g.DrawString(addressText, smallFont, brush, centerPos - (addressSize.Width / 2), yPos);
@@ -134,19 +98,14 @@ namespace Inventory_Management_System
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
                 yPos += 15;
 
-                // Order details - EXACT same as sales report with 12-hour time format
+                // Order details - EXACT same as sales report
                 g.DrawString($"Order ID: {printOrderID}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
-
-                // Convert time to 12-hour format for display
-                string displayTime = ConvertTo12HourFormat(printTimeCreated);
-                g.DrawString($"Date: {printDateCreated} {displayTime}", regularFont, brush, leftMargin, yPos);
+                g.DrawString($"Date: {printDateCreated} {printTimeCreated}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
-
                 g.DrawString($"Cashier: {printCreatedBy}", regularFont, brush, leftMargin, yPos);
                 yPos += 15;
 
-                // TIN below cashier - EXACT same as sales report
                 string tinText = "Tin:";
                 g.DrawString(tinText, smallFont, brush, leftMargin, yPos);
                 yPos += 20;
@@ -161,7 +120,7 @@ namespace Inventory_Management_System
                 g.DrawString("Amount", headerFont, brush, 180, yPos);
                 yPos += 15;
 
-                // UPDATED PRODUCTS - Show remaining products after refund
+                // Products - Show REMAINING purchased products after refund
                 foreach (DataRow row in printOrderData.Rows)
                 {
                     string productName = row["products"].ToString();
@@ -173,7 +132,6 @@ namespace Inventory_Management_System
                     decimal displayUnitPrice = printDiscounted ? unitPrice * 0.8m : unitPrice;
                     decimal displayItemTotal = printDiscounted ? itemTotal * 0.8m : itemTotal;
 
-                    // Truncate product name if too long - EXACT same as sales report
                     if (productName.Length > 18)
                         productName = productName.Substring(0, 15) + "...";
 
@@ -192,20 +150,20 @@ namespace Inventory_Management_System
 
                 yPos += 10;
 
-                // REFUNDED ITEMS SECTION - EXACT same as sales report but with total refund
-                if (printRefundData.Rows.Count > 0)
+                // REFUND SECTION - EXACT same as sales report
+                if (printRefundData != null && printRefundData.Rows.Count > 0)
                 {
-                    // Separator line before refunds - EXACT same as sales report
+                    // Line separator before refunds
                     g.DrawLine(Pens.Red, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
                     yPos += 10;
 
-                    // Refund header - EXACT same as sales report
-                    string refundHeaderText = "REFUNDED ITEMS";
-                    SizeF refundHeaderSize = g.MeasureString(refundHeaderText, headerFont);
-                    g.DrawString(refundHeaderText, headerFont, Brushes.Red, centerPos - (refundHeaderSize.Width / 2), yPos);
+                    // Refund header
+                    string refundHeader = "REFUNDED ITEMS";
+                    SizeF refundHeaderSize = g.MeasureString(refundHeader, headerFont);
+                    g.DrawString(refundHeader, headerFont, Brushes.Red, centerPos - (refundHeaderSize.Width / 2), yPos);
                     yPos += 15;
 
-                    // Refunded items - EXACT layout as sales report
+                    // Refunded items
                     foreach (DataRow row in printRefundData.Rows)
                     {
                         string productName = row["products"].ToString();
@@ -213,13 +171,8 @@ namespace Inventory_Management_System
                         decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
                         decimal itemTotal = quantity * unitPrice;
                         string refundDate = row["daterefunded"].ToString();
-                        string refundTime = row["timerefunded"]?.ToString() ?? "";
-                        string refundReason = row["reason"].ToString();
+                        string reason = row["reason"].ToString();
 
-                        // Convert refund time to 12-hour format
-                        string displayRefundTime = ConvertTo12HourFormat(refundTime);
-
-                        // Truncate product name if too long - EXACT same as sales report
                         if (productName.Length > 18)
                             productName = productName.Substring(0, 15) + "...";
 
@@ -228,30 +181,30 @@ namespace Inventory_Management_System
                         g.DrawString($"-{itemTotal:₱#,##0.00}", regularFont, Brushes.Red, 180, yPos);
                         yPos += 12;
 
-                        // Unit price for multiple quantities - EXACT same as sales report
+                        // Unit price for multiple quantities
                         if (quantity > 1)
                         {
                             g.DrawString($"  @ {unitPrice:₱#,##0.00} each", smallFont, Brushes.Gray, leftMargin + 5, yPos);
                             yPos += 10;
                         }
 
-                        // Refund details - Refunded on and reason - EXACT same as sales report with 12-hour time
-                        g.DrawString($"Refunded on {refundDate} {displayRefundTime} - Reason: {refundReason}", smallFont, Brushes.DarkRed, leftMargin, yPos);
+                        // Refund details - FIXED: Use only daterefunded, not timerefunded
+                        g.DrawString($"Refunded on {refundDate} - Reason: {reason}", smallFont, Brushes.DarkRed, leftMargin, yPos);
                         yPos += 10;
                     }
 
                     yPos += 5;
 
-                    // TOTAL REFUND section - Added to match sales report consistency
+                    // TOTAL REFUND line
                     g.DrawLine(Pens.Red, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
                     yPos += 10;
 
                     g.DrawString("TOTAL REFUND:", headerFont, Brushes.Red, leftMargin, yPos);
-                    g.DrawString(printTotalRefund.ToString("₱#,##0.00"), headerFont, Brushes.Red, 180, yPos);
+                    g.DrawString(printTotalRefund.ToString("-₱#,##0.00"), headerFont, Brushes.Red, 180, yPos);
                     yPos += 20;
                 }
 
-                // Line separator - EXACT same as sales report
+                // Line separator
                 g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
                 yPos += 15;
 
@@ -264,13 +217,34 @@ namespace Inventory_Management_System
                         originalTotal += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
                     }
 
+                    // Add refunded items to the original total for accurate calculation
+                    if (printRefundData != null)
+                    {
+                        foreach (DataRow row in printRefundData.Rows)
+                        {
+                            originalTotal += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
+                        }
+                    }
+
                     g.DrawString("Subtotal:", regularFont, brush, leftMargin, yPos);
                     g.DrawString(originalTotal.ToString("₱#,##0.00"), regularFont, brush, 180, yPos);
                     yPos += 12;
 
                     g.DrawString("Senior/PWD Discount (20%):", regularFont, brush, leftMargin, yPos);
                     g.DrawString((originalTotal * 0.2m).ToString("-₱#,##0.00"), regularFont, Brushes.Red, 180, yPos);
-                    yPos += 15;
+                    yPos += 12;
+
+                    // DISCOUNT INFORMATION - NEW: Add discount name and ID
+                    if (!string.IsNullOrEmpty(printDiscountName))
+                    {
+                        g.DrawString($"Discount Name: {printDiscountName}", smallFont, brush, leftMargin, yPos);
+                        yPos += 10;
+                    }
+                    if (!string.IsNullOrEmpty(printDiscountId))
+                    {
+                        g.DrawString($"Discount ID: {printDiscountId}", smallFont, brush, leftMargin, yPos);
+                        yPos += 10;
+                    }
 
                     // Line before total
                     g.DrawLine(Pens.Black, leftMargin, yPos, e.PageBounds.Width - 20, yPos);
@@ -319,6 +293,7 @@ namespace Inventory_Management_System
                 string email = "Email: info@amgcpharmacy.com";
                 SizeF emailSize = g.MeasureString(email, smallFont);
                 g.DrawString(email, smallFont, brush, centerPos - (emailSize.Width / 2), yPos);
+
             }
             catch (Exception ex)
             {
@@ -384,6 +359,8 @@ namespace Inventory_Management_System
                     newRow["paymentchange"] = row["paymentchange"];
                     newRow["totalcost"] = row["totalcost"];
                     newRow["discounted"] = row["discounted"];
+                    newRow["discountedname"] = row["discountedname"];
+                    newRow["discountedid"] = row["discountedid"];
                     newRow["datecreated"] = row["datecreated"];
                     newRow["timecreated"] = row["timecreated"];
                     newRow["createdby"] = row["createdby"];
@@ -458,7 +435,7 @@ namespace Inventory_Management_System
                 dgvOrderItems.Columns["RefundAmount"].ReadOnly = true;
 
                 // Hide unnecessary columns
-                string[] columnsToHide = { "orderid", "payment", "paymentchange", "discounted", "datecreated", "timecreated", "createdby" };
+                string[] columnsToHide = { "orderid", "payment", "paymentchange", "discounted", "discountedname", "discountedid", "datecreated", "timecreated", "createdby" };
                 foreach (string colName in columnsToHide)
                 {
                     if (dgvOrderItems.Columns.Contains(colName))
@@ -647,8 +624,7 @@ namespace Inventory_Management_System
             try
             {
                 string refundDate = DateTime.Now.ToString("MM/dd/yyyy");
-                // Get current time in 12-hour format for storage and display
-                string refundTime = GetCurrentTime12Hour(); // Store in 12-hour format
+                string refundTime = DateTime.Now.ToString("hh:mm:ss tt");
 
                 // Get original order details for receipt
                 DataRow firstRow = originalOrderData.Rows[0];
@@ -659,23 +635,26 @@ namespace Inventory_Management_System
                 decimal originalPayment = Convert.ToDecimal(firstRow["payment"]);
                 decimal originalChange = Convert.ToDecimal(firstRow["paymentchange"]);
 
-                // Convert original time to 12-hour format for display
-                string displayOriginalTime = ConvertTo12HourFormat(originalTime);
+                // Get discount name and ID
+                string discountName = firstRow["discountedname"]?.ToString() ?? "";
+                string discountId = firstRow["discountedid"]?.ToString() ?? "";
 
-                // Create DataTable for UPDATED products (remaining after refund)
-                DataTable updatedProductsData = new DataTable();
-                updatedProductsData.Columns.Add("products", typeof(string));
-                updatedProductsData.Columns.Add("quantity", typeof(int));
-                updatedProductsData.Columns.Add("unitprice", typeof(decimal));
+                // Get existing refunds for this order
+                DataTable existingRefunds = GetExistingRefunds(orderID);
 
-                // Create DataTable for REFUNDED products
-                DataTable refundReceiptData = new DataTable();
-                refundReceiptData.Columns.Add("products", typeof(string));
-                refundReceiptData.Columns.Add("quantity", typeof(int));
-                refundReceiptData.Columns.Add("unitprice", typeof(decimal));
-                refundReceiptData.Columns.Add("daterefunded", typeof(string));
-                refundReceiptData.Columns.Add("timerefunded", typeof(string)); // Add time column
-                refundReceiptData.Columns.Add("reason", typeof(string));
+                // Create DataTable for REMAINING products after CURRENT refund only
+                DataTable remainingProductsData = new DataTable();
+                remainingProductsData.Columns.Add("products", typeof(string));
+                remainingProductsData.Columns.Add("quantity", typeof(int));
+                remainingProductsData.Columns.Add("unitprice", typeof(decimal));
+
+                // Create DataTable for CURRENT refund products
+                DataTable currentRefundData = new DataTable();
+                currentRefundData.Columns.Add("products", typeof(string));
+                currentRefundData.Columns.Add("quantity", typeof(int));
+                currentRefundData.Columns.Add("unitprice", typeof(decimal));
+                currentRefundData.Columns.Add("daterefunded", typeof(string));
+                currentRefundData.Columns.Add("reason", typeof(string));
 
                 decimal totalRefundAmount = 0;
 
@@ -687,19 +666,18 @@ namespace Inventory_Management_System
                     decimal refundAmount = Convert.ToDecimal(row.Cells["RefundAmount"].Value);
                     decimal unitPrice = refundAmount / refundQty;
 
-                    // Add to refund receipt data
-                    DataRow refundRow = refundReceiptData.NewRow();
+                    // Add to current refund data
+                    DataRow refundRow = currentRefundData.NewRow();
                     refundRow["products"] = product;
                     refundRow["quantity"] = refundQty;
                     refundRow["unitprice"] = unitPrice;
                     refundRow["daterefunded"] = refundDate;
-                    refundRow["timerefunded"] = refundTime; // Store the 12-hour time
                     refundRow["reason"] = txtReason.Text.Trim();
-                    refundReceiptData.Rows.Add(refundRow);
+                    currentRefundData.Rows.Add(refundRow);
 
                     totalRefundAmount += refundAmount;
 
-                    // Insert into tblrefunds - store time in 12-hour format
+                    // Insert into tblrefunds
                     string insertRefund = $"INSERT INTO tblrefunds (orderid, products, quantity, unitprice, reason, daterefunded, timerefunded, refundedby) " +
                         $"VALUES ('{orderID.Replace("'", "''")}', '{product.Replace("'", "''")}', '{refundQty}', '{unitPrice:F2}', " +
                         $"'{txtReason.Text.Trim().Replace("'", "''")}', '{refundDate}', '{refundTime}', '{username.Replace("'", "''")}')";
@@ -708,40 +686,38 @@ namespace Inventory_Management_System
                     // Update product stock
                     UpdateProductStock(product, refundQty);
 
-                    // Update sales record and get remaining products
-                    UpdateSalesRecordAndGetRemaining(product, refundQty, refundAmount, updatedProductsData);
+                    // Update sales record
+                    UpdateSalesRecord(product, refundQty, refundAmount);
                 }
 
-                // Log the refund action - store time in 12-hour format
+                // Combine existing refunds with current refunds for the receipt
+                DataTable combinedRefunds = CombineRefunds(existingRefunds, currentRefundData);
+
+                // Calculate remaining products after CURRENT refund only
+                CalculateRemainingProducts(remainingProductsData, currentRefundData);
+
+                // Calculate updated order total after CURRENT refund
+                decimal updatedOrderTotal = CalculateRemainingTotal(remainingProductsData, discounted);
+
+                // Log the refund action
                 db.executeSQL("INSERT INTO tbllogs (datelog, timelog, action, module, performedto, performedby) " +
                     "VALUES ('" + refundDate + "', '" + refundTime + "', 'REFUND', 'SALES', " +
                     "'ORDER ID: " + orderID.Replace("'", "''") + " - " + refundItems.Count + " items', '" + username.Replace("'", "''") + "')");
 
-                // Calculate updated order total
-                decimal updatedOrderTotal = 0;
-                foreach (DataRow row in updatedProductsData.Rows)
-                {
-                    updatedOrderTotal += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
-                }
-
-                // Apply discount if original order was discounted
-                if (discounted)
-                {
-                    updatedOrderTotal *= 0.8m;
-                }
-
-                // Store print data for receipt - EXACT same structure as sales report
+                // Store print data for receipt
                 printOrderID = orderID;
-                printFinalTotal = updatedOrderTotal; // Updated order total after refund
-                printPayment = originalPayment; // Original cash payment
-                printChange = originalChange; // Original change
-                printOrderData = updatedProductsData; // Updated products (remaining after refund)
-                printRefundData = refundReceiptData; // Refunded items with details
-                printDiscounted = discounted; // Keep original discount status
-                printDateCreated = originalDate; // Original order date
-                printTimeCreated = displayOriginalTime; // Original order time converted to 12-hour format
-                printCreatedBy = originalCashier; // Original cashier
-                printTotalRefund = totalRefundAmount; // Total refund amount
+                printFinalTotal = updatedOrderTotal;
+                printPayment = originalPayment;
+                printChange = originalChange;
+                printOrderData = remainingProductsData; // REMAINING products after CURRENT refund
+                printRefundData = combinedRefunds; // All refunded items (existing + current)
+                printDiscounted = discounted;
+                printDateCreated = originalDate;
+                printTimeCreated = originalTime;
+                printCreatedBy = originalCashier;
+                printTotalRefund = CalculateTotalRefundAmount(combinedRefunds);
+                printDiscountName = discountName;
+                printDiscountId = discountId;
 
                 // Show success message and receipt
                 MessageBox.Show($"Successfully refunded {refundItems.Count} item(s).\nTotal Refund Amount: {txtTotalRefund.Text}",
@@ -759,13 +735,108 @@ namespace Inventory_Management_System
             }
         }
 
+        private DataTable GetExistingRefunds(string orderID)
+        {
+            try
+            {
+                string query = $"SELECT products, quantity, unitprice, reason, daterefunded FROM tblrefunds WHERE orderid = '{orderID.Replace("'", "''")}'";
+                return db.GetData(query);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading existing refunds: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new DataTable();
+            }
+        }
+
+        private DataTable CombineRefunds(DataTable existingRefunds, DataTable currentRefunds)
+        {
+            DataTable combined = existingRefunds.Clone();
+
+            // Add existing refunds
+            foreach (DataRow row in existingRefunds.Rows)
+            {
+                combined.ImportRow(row);
+            }
+
+            // Add current refunds
+            foreach (DataRow row in currentRefunds.Rows)
+            {
+                combined.ImportRow(row);
+            }
+
+            return combined;
+        }
+
+        private void CalculateRemainingProducts(DataTable remainingProductsData, DataTable currentRefunds)
+        {
+            // Start with current quantities (which already have previous refunds subtracted)
+            foreach (DataRow originalRow in originalOrderData.Rows)
+            {
+                string product = originalRow["products"].ToString();
+                int currentQty = Convert.ToInt32(originalRow["quantity"]); // This is already after previous refunds
+                decimal totalCost = Convert.ToDecimal(originalRow["totalcost"]);
+                decimal unitPrice = totalCost / currentQty;
+
+                // Calculate only CURRENT refund quantity for this product (not all refunds)
+                int currentRefundQty = 0;
+                foreach (DataRow refundRow in currentRefunds.Rows)
+                {
+                    if (refundRow["products"].ToString() == product)
+                    {
+                        currentRefundQty = Convert.ToInt32(refundRow["quantity"]);
+                        break;
+                    }
+                }
+
+                // Calculate remaining quantity: current quantity minus current refund
+                int remainingQty = currentQty - currentRefundQty;
+
+                // Only add to remaining products if quantity is greater than 0
+                if (remainingQty > 0)
+                {
+                    DataRow remainingRow = remainingProductsData.NewRow();
+                    remainingRow["products"] = product;
+                    remainingRow["quantity"] = remainingQty;
+                    remainingRow["unitprice"] = unitPrice;
+                    remainingProductsData.Rows.Add(remainingRow);
+                }
+            }
+        }
+
+        private decimal CalculateRemainingTotal(DataTable remainingProducts, bool discounted)
+        {
+            decimal total = 0;
+            foreach (DataRow row in remainingProducts.Rows)
+            {
+                total += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
+            }
+
+            if (discounted)
+            {
+                total *= 0.8m;
+            }
+
+            return total;
+        }
+
+        private decimal CalculateTotalRefundAmount(DataTable refunds)
+        {
+            decimal total = 0;
+            foreach (DataRow row in refunds.Rows)
+            {
+                total += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
+            }
+            return total;
+        }
+
         private void ShowRefundReceipt()
         {
             try
             {
                 Form receiptForm = new Form();
                 receiptForm.Text = "AMGC Pharmacy - Refund Receipt";
-                receiptForm.Size = new Size(420, 650);
+                receiptForm.Size = new Size(450, 750);
                 receiptForm.StartPosition = FormStartPosition.CenterParent;
                 receiptForm.FormBorderStyle = FormBorderStyle.FixedDialog;
                 receiptForm.MaximizeBox = false;
@@ -773,11 +844,12 @@ namespace Inventory_Management_System
                 receiptForm.BackColor = Color.White;
 
                 // Calculate the required height based on items
-                int baseHeight = 400;
+                int baseHeight = 450;
                 int itemHeight = 20;
+                int refundItemHeight = 35;
                 int extraHeightForMultipleQty = 0;
 
-                // Calculate extra height for updated products
+                // Calculate extra height for remaining products
                 foreach (DataRow row in printOrderData.Rows)
                 {
                     int quantity = Convert.ToInt32(row["quantity"]);
@@ -785,107 +857,112 @@ namespace Inventory_Management_System
                         extraHeightForMultipleQty += 15;
                 }
 
-                // Calculate extra height for refund items (including refund details)
+                // Calculate extra height for refund items
                 int refundSectionHeight = 0;
                 if (printRefundData.Rows.Count > 0)
                 {
-                    refundSectionHeight = 60; // Header + separator + total refund
+                    refundSectionHeight = 100 + (printRefundData.Rows.Count * refundItemHeight);
                     foreach (DataRow row in printRefundData.Rows)
                     {
-                        refundSectionHeight += 32; // Product line + refund details line
                         int quantity = Convert.ToInt32(row["quantity"]);
                         if (quantity > 1)
-                            refundSectionHeight += 12; // Unit price line
+                            refundSectionHeight += 15;
                     }
+                }
+
+                // Add extra height for discount information
+                int discountSectionHeight = 0;
+                if (printDiscounted && (!string.IsNullOrEmpty(printDiscountName) || !string.IsNullOrEmpty(printDiscountId)))
+                {
+                    discountSectionHeight = 25;
                 }
 
                 int calculatedHeight = baseHeight +
                     (printOrderData.Rows.Count * itemHeight) +
+                    extraHeightForMultipleQty +
                     refundSectionHeight +
-                    extraHeightForMultipleQty;
-                int panelHeight = Math.Max(550, calculatedHeight);
+                    discountSectionHeight;
+
+                int panelHeight = Math.Max(600, calculatedHeight) + 100;
 
                 // Create a scrollable panel for the receipt content
                 Panel scrollablePanel = new Panel();
-                scrollablePanel.Size = new Size(400, 500);
+                scrollablePanel.Size = new Size(420, 600);
                 scrollablePanel.Location = new Point(10, 10);
                 scrollablePanel.BackColor = Color.White;
                 scrollablePanel.BorderStyle = BorderStyle.FixedSingle;
                 scrollablePanel.AutoScroll = true;
+                scrollablePanel.AutoScrollMinSize = new Size(0, panelHeight);
 
                 // Create the actual receipt content panel
                 Panel receiptPanel = new Panel();
-                receiptPanel.Size = new Size(380, panelHeight);
+                receiptPanel.Size = new Size(400, panelHeight);
                 receiptPanel.Location = new Point(0, 0);
                 receiptPanel.BackColor = Color.White;
 
-                int yPos = 10;
+                int yPos = 15;
 
-                // Header - EXACT same as sales report
-                Label headerLabel = CreateReceiptLabel("AMGC PHARMACY", new Font("Arial", 16, FontStyle.Bold), 380);
+                // Header
+                Label headerLabel = CreateReceiptLabel("AMGC PHARMACY", new Font("Arial", 16, FontStyle.Bold), 400);
                 headerLabel.Location = new Point(0, yPos);
                 headerLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(headerLabel);
-                yPos += 25;
+                yPos += 30;
 
-                Label taglineLabel = CreateReceiptLabel("Your Health, Our Priority", new Font("Arial", 10, FontStyle.Italic), 380);
+                Label taglineLabel = CreateReceiptLabel("Your Health, Our Priority", new Font("Arial", 10, FontStyle.Italic), 400);
                 taglineLabel.Location = new Point(0, yPos);
                 taglineLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(taglineLabel);
-                yPos += 20;
+                yPos += 25;
 
-                // Address below tagline - EXACT same as sales report
-                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new Font("Arial", 8), 380);
+                Label addressLabel = CreateReceiptLabel("1340 G Tuazon St Sampaloc Manila", new Font("Arial", 8), 400);
                 addressLabel.Location = new Point(0, yPos);
                 addressLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(addressLabel);
-                yPos += 20;
+                yPos += 25;
 
-                // Separator line - EXACT same as sales report
+                // Separator line
                 Panel line1 = new Panel();
-                line1.Size = new Size(360, 1);
+                line1.Size = new Size(380, 1);
                 line1.Location = new Point(10, yPos);
                 line1.BackColor = Color.Black;
                 receiptPanel.Controls.Add(line1);
-                yPos += 10;
+                yPos += 15;
 
-                // Order info - EXACT same layout as sales report with 12-hour time
-                Label orderInfoLabel = CreateReceiptLabel($"Order ID: {printOrderID}", new Font("Arial", 9), 380);
+                // Order info
+                Label orderInfoLabel = CreateReceiptLabel($"Order ID: {printOrderID}", new Font("Arial", 9), 400);
                 orderInfoLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(orderInfoLabel);
-                yPos += 18;
-
-                // Convert time to 12-hour format for display
-                string displayTime = ConvertTo12HourFormat(printTimeCreated);
-                Label dateTimeLabel = CreateReceiptLabel($"Date: {printDateCreated} {printTimeCreated}", new Font("Arial", 9), 380);
-                dateTimeLabel.Location = new Point(10, yPos);
-                receiptPanel.Controls.Add(dateTimeLabel);
-                yPos += 18;
-
-                Label cashierLabel = CreateReceiptLabel($"Cashier: {printCreatedBy}", new Font("Arial", 9), 380);
-                cashierLabel.Location = new Point(10, yPos);
-                receiptPanel.Controls.Add(cashierLabel);
-                yPos += 18;
-
-                // TIN below cashier - EXACT same as sales report
-                Label tinLabel = CreateReceiptLabel("Tin:", new Font("Arial", 8), 380);
-                tinLabel.Location = new Point(10, yPos);
-                receiptPanel.Controls.Add(tinLabel);
                 yPos += 20;
 
-                // Product header - EXACT same layout as sales report
+                Label dateTimeLabel = CreateReceiptLabel($"Date: {printDateCreated} {printTimeCreated}", new Font("Arial", 9), 400);
+                dateTimeLabel.Location = new Point(10, yPos);
+                receiptPanel.Controls.Add(dateTimeLabel);
+                yPos += 20;
+
+                Label cashierLabel = CreateReceiptLabel($"Cashier: {printCreatedBy}", new Font("Arial", 9), 400);
+                cashierLabel.Location = new Point(10, yPos);
+                receiptPanel.Controls.Add(cashierLabel);
+                yPos += 20;
+
+                Label tinLabel = CreateReceiptLabel("Tin:", new Font("Arial", 8), 400);
+                tinLabel.Location = new Point(10, yPos);
+                receiptPanel.Controls.Add(tinLabel);
+                yPos += 25;
+
+                // Product header
                 Panel line2 = new Panel();
-                line2.Size = new Size(360, 1);
+                line2.Size = new Size(380, 1);
                 line2.Location = new Point(10, yPos);
                 line2.BackColor = Color.Black;
                 receiptPanel.Controls.Add(line2);
-                yPos += 10;
+                yPos += 15;
 
-                // Product header with better alignment - EXACT same as sales report
+                // Product header with better alignment
                 Label productHeaderLabel = new Label();
                 productHeaderLabel.Text = "Product";
                 productHeaderLabel.Font = new Font("Arial", 9, FontStyle.Bold);
-                productHeaderLabel.Size = new Size(180, 18);
+                productHeaderLabel.Size = new Size(200, 18);
                 productHeaderLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(productHeaderLabel);
 
@@ -893,20 +970,20 @@ namespace Inventory_Management_System
                 qtyHeaderLabel.Text = "Qty";
                 qtyHeaderLabel.Font = new Font("Arial", 9, FontStyle.Bold);
                 qtyHeaderLabel.Size = new Size(50, 18);
-                qtyHeaderLabel.Location = new Point(190, yPos);
+                qtyHeaderLabel.Location = new Point(210, yPos);
                 qtyHeaderLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(qtyHeaderLabel);
 
                 Label amountHeaderLabel = new Label();
                 amountHeaderLabel.Text = "Amount";
                 amountHeaderLabel.Font = new Font("Arial", 9, FontStyle.Bold);
-                amountHeaderLabel.Size = new Size(100, 18);
+                amountHeaderLabel.Size = new Size(120, 18);
                 amountHeaderLabel.Location = new Point(270, yPos);
                 amountHeaderLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(amountHeaderLabel);
-                yPos += 20;
+                yPos += 22;
 
-                // UPDATED PRODUCTS - Show remaining products after refund
+                // REMAINING PRODUCTS - Show only products that still have remaining quantity
                 foreach (DataRow row in printOrderData.Rows)
                 {
                     string productName = row["products"].ToString();
@@ -918,15 +995,14 @@ namespace Inventory_Management_System
                     decimal displayUnitPrice = printDiscounted ? unitPrice * 0.8m : unitPrice;
                     decimal displayItemTotal = printDiscounted ? itemTotal * 0.8m : itemTotal;
 
-                    // Truncate product name if too long - EXACT same as sales report
-                    if (productName.Length > 20)
-                        productName = productName.Substring(0, 17) + "...";
+                    if (productName.Length > 22)
+                        productName = productName.Substring(0, 19) + "...";
 
-                    // Product line - EXACT same layout as sales report
+                    // Product line
                     Label productLabel = new Label();
                     productLabel.Text = productName;
                     productLabel.Font = new Font("Arial", 9);
-                    productLabel.Size = new Size(180, 18);
+                    productLabel.Size = new Size(200, 18);
                     productLabel.Location = new Point(10, yPos);
                     receiptPanel.Controls.Add(productLabel);
 
@@ -934,53 +1010,53 @@ namespace Inventory_Management_System
                     qtyLabel.Text = quantity.ToString();
                     qtyLabel.Font = new Font("Arial", 9);
                     qtyLabel.Size = new Size(50, 18);
-                    qtyLabel.Location = new Point(190, yPos);
+                    qtyLabel.Location = new Point(210, yPos);
                     qtyLabel.TextAlign = ContentAlignment.MiddleCenter;
                     receiptPanel.Controls.Add(qtyLabel);
 
                     Label amountLabel = new Label();
                     amountLabel.Text = displayItemTotal.ToString("₱#,##0.00");
                     amountLabel.Font = new Font("Arial", 9);
-                    amountLabel.Size = new Size(100, 18);
+                    amountLabel.Size = new Size(120, 18);
                     amountLabel.Location = new Point(270, yPos);
                     amountLabel.TextAlign = ContentAlignment.MiddleRight;
                     receiptPanel.Controls.Add(amountLabel);
 
-                    yPos += 18;
+                    yPos += 20;
 
-                    // Unit price for multiple quantities - EXACT same as sales report
+                    // Unit price for multiple quantities
                     if (quantity > 1)
                     {
-                        Label unitPriceLabel = CreateReceiptLabel($"  @ {displayUnitPrice.ToString("₱#,##0.00")} each", new Font("Arial", 8, FontStyle.Italic), 380);
+                        Label unitPriceLabel = CreateReceiptLabel($"  @ {displayUnitPrice.ToString("₱#,##0.00")} each", new Font("Arial", 8, FontStyle.Italic), 400);
                         unitPriceLabel.Location = new Point(20, yPos);
                         unitPriceLabel.ForeColor = Color.Gray;
                         receiptPanel.Controls.Add(unitPriceLabel);
-                        yPos += 15;
+                        yPos += 16;
                     }
                 }
 
-                yPos += 10;
+                yPos += 12;
 
-                // REFUNDED ITEMS SECTION - EXACT same as sales report but with total refund
+                // REFUNDED ITEMS SECTION
                 if (printRefundData.Rows.Count > 0)
                 {
-                    // Separator line before refunds - EXACT same as sales report
+                    // Separator line before refunds
                     Panel refundSeparator = new Panel();
-                    refundSeparator.Size = new Size(360, 2);
+                    refundSeparator.Size = new Size(380, 2);
                     refundSeparator.Location = new Point(10, yPos);
                     refundSeparator.BackColor = Color.Red;
                     receiptPanel.Controls.Add(refundSeparator);
-                    yPos += 10;
+                    yPos += 12;
 
-                    // Refund header - EXACT same as sales report
-                    Label refundHeaderLabel = CreateReceiptLabel("REFUNDED ITEMS", new Font("Arial", 10, FontStyle.Bold), 380);
+                    // Refund header
+                    Label refundHeaderLabel = CreateReceiptLabel("REFUNDED ITEMS", new Font("Arial", 10, FontStyle.Bold), 400);
                     refundHeaderLabel.Location = new Point(0, yPos);
                     refundHeaderLabel.TextAlign = ContentAlignment.MiddleCenter;
                     refundHeaderLabel.ForeColor = Color.Red;
                     receiptPanel.Controls.Add(refundHeaderLabel);
-                    yPos += 20;
+                    yPos += 22;
 
-                    // Refunded items - EXACT same layout as sales report
+                    // Refunded items
                     foreach (DataRow row in printRefundData.Rows)
                     {
                         string productName = row["products"].ToString();
@@ -988,21 +1064,16 @@ namespace Inventory_Management_System
                         decimal unitPrice = Convert.ToDecimal(row["unitprice"]);
                         decimal itemTotal = quantity * unitPrice;
                         string refundDate = row["daterefunded"].ToString();
-                        string refundTime = row["timerefunded"]?.ToString() ?? "";
-                        string refundReason = row["reason"].ToString();
+                        string reason = row["reason"].ToString();
 
-                        // Convert refund time to 12-hour format (already stored in 12-hour format)
-                        string displayRefundTime = refundTime; // Already in 12-hour format
+                        if (productName.Length > 22)
+                            productName = productName.Substring(0, 19) + "...";
 
-                        // Truncate product name if too long - EXACT same as sales report
-                        if (productName.Length > 20)
-                            productName = productName.Substring(0, 17) + "...";
-
-                        // Product line - EXACT same layout as sales report but with negative values
+                        // Product line with negative values
                         Label productLabel = new Label();
                         productLabel.Text = productName;
                         productLabel.Font = new Font("Arial", 9);
-                        productLabel.Size = new Size(180, 18);
+                        productLabel.Size = new Size(200, 18);
                         productLabel.Location = new Point(10, yPos);
                         receiptPanel.Controls.Add(productLabel);
 
@@ -1010,7 +1081,7 @@ namespace Inventory_Management_System
                         qtyLabel.Text = $"-{quantity}";
                         qtyLabel.Font = new Font("Arial", 9);
                         qtyLabel.Size = new Size(50, 18);
-                        qtyLabel.Location = new Point(190, yPos);
+                        qtyLabel.Location = new Point(210, yPos);
                         qtyLabel.TextAlign = ContentAlignment.MiddleCenter;
                         qtyLabel.ForeColor = Color.Red;
                         receiptPanel.Controls.Add(qtyLabel);
@@ -1018,83 +1089,94 @@ namespace Inventory_Management_System
                         Label amountLabel = new Label();
                         amountLabel.Text = $"-{itemTotal.ToString("₱#,##0.00")}";
                         amountLabel.Font = new Font("Arial", 9);
-                        amountLabel.Size = new Size(100, 18);
+                        amountLabel.Size = new Size(120, 18);
                         amountLabel.Location = new Point(270, yPos);
                         amountLabel.TextAlign = ContentAlignment.MiddleRight;
                         amountLabel.ForeColor = Color.Red;
                         receiptPanel.Controls.Add(amountLabel);
 
-                        yPos += 18;
+                        yPos += 20;
 
-                        // Unit price for multiple quantities - EXACT same as sales report
+                        // Unit price for multiple quantities
                         if (quantity > 1)
                         {
-                            Label unitPriceLabel = CreateReceiptLabel($"  @ {unitPrice.ToString("₱#,##0.00")} each", new Font("Arial", 8, FontStyle.Italic), 380);
+                            Label unitPriceLabel = CreateReceiptLabel($"  @ {unitPrice.ToString("₱#,##0.00")} each", new Font("Arial", 8, FontStyle.Italic), 400);
                             unitPriceLabel.Location = new Point(20, yPos);
                             unitPriceLabel.ForeColor = Color.Gray;
                             receiptPanel.Controls.Add(unitPriceLabel);
-                            yPos += 12;
+                            yPos += 14;
                         }
 
-                        // Refund details - Refunded on and reason - EXACT same as sales report with 12-hour time
-                        Label refundDetailsLabel = CreateReceiptLabel($"Refunded on {refundDate} {displayRefundTime} - Reason: {refundReason}", new Font("Arial", 7, FontStyle.Italic), 380);
+                        // Refund details
+                        Label refundDetailsLabel = CreateReceiptLabel($"Refunded on {refundDate} - Reason: {reason}", new Font("Arial", 7, FontStyle.Italic), 400);
                         refundDetailsLabel.Location = new Point(15, yPos);
                         refundDetailsLabel.ForeColor = Color.DarkRed;
                         receiptPanel.Controls.Add(refundDetailsLabel);
-                        yPos += 14;
+                        yPos += 16;
                     }
 
-                    yPos += 10;
+                    yPos += 12;
 
-                    // TOTAL REFUND section - Added to match sales report consistency
+                    // TOTAL REFUND section
                     Panel totalRefundSeparator = new Panel();
-                    totalRefundSeparator.Size = new Size(360, 1);
+                    totalRefundSeparator.Size = new Size(380, 1);
                     totalRefundSeparator.Location = new Point(10, yPos);
                     totalRefundSeparator.BackColor = Color.Red;
                     receiptPanel.Controls.Add(totalRefundSeparator);
-                    yPos += 10;
+                    yPos += 12;
 
                     Label totalRefundLabel = new Label();
                     totalRefundLabel.Text = "TOTAL REFUND:";
                     totalRefundLabel.Font = new Font("Arial", 9, FontStyle.Bold);
-                    totalRefundLabel.Size = new Size(200, 18);
+                    totalRefundLabel.Size = new Size(220, 18);
                     totalRefundLabel.Location = new Point(10, yPos);
                     totalRefundLabel.ForeColor = Color.Red;
                     receiptPanel.Controls.Add(totalRefundLabel);
 
                     Label totalRefundAmountLabel = new Label();
-                    totalRefundAmountLabel.Text = printTotalRefund.ToString("₱#,##0.00");
+                    totalRefundAmountLabel.Text = printTotalRefund.ToString("-₱#,##0.00");
                     totalRefundAmountLabel.Font = new Font("Arial", 9, FontStyle.Bold);
                     totalRefundAmountLabel.Size = new Size(150, 18);
-                    totalRefundAmountLabel.Location = new Point(220, yPos);
+                    totalRefundAmountLabel.Location = new Point(240, yPos);
                     totalRefundAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                     totalRefundAmountLabel.ForeColor = Color.Red;
                     receiptPanel.Controls.Add(totalRefundAmountLabel);
-                    yPos += 25;
+                    yPos += 28;
                 }
 
-                // Separator line - EXACT same as sales report
+                // Separator line
                 Panel line3 = new Panel();
-                line3.Size = new Size(360, 1);
+                line3.Size = new Size(380, 1);
                 line3.Location = new Point(10, yPos);
                 line3.BackColor = Color.Black;
                 receiptPanel.Controls.Add(line3);
-                yPos += 15;
+                yPos += 18;
 
-                // Totals section - EXACT same as sales report
+                // Totals section
                 if (printDiscounted)
                 {
                     decimal originalTotal = 0;
+
+                    // Calculate original total from remaining products
                     foreach (DataRow row in printOrderData.Rows)
                     {
                         originalTotal += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
+                    }
+
+                    // Add refunded items to get the complete original total
+                    if (printRefundData != null)
+                    {
+                        foreach (DataRow row in printRefundData.Rows)
+                        {
+                            originalTotal += Convert.ToDecimal(row["unitprice"]) * Convert.ToInt32(row["quantity"]);
+                        }
                     }
 
                     // Subtotal
                     Label subtotalLabel = new Label();
                     subtotalLabel.Text = "Subtotal:";
                     subtotalLabel.Font = new Font("Arial", 9);
-                    subtotalLabel.Size = new Size(200, 18);
+                    subtotalLabel.Size = new Size(220, 18);
                     subtotalLabel.Location = new Point(10, yPos);
                     receiptPanel.Controls.Add(subtotalLabel);
 
@@ -1102,16 +1184,16 @@ namespace Inventory_Management_System
                     subtotalAmountLabel.Text = originalTotal.ToString("₱#,##0.00");
                     subtotalAmountLabel.Font = new Font("Arial", 9);
                     subtotalAmountLabel.Size = new Size(150, 18);
-                    subtotalAmountLabel.Location = new Point(220, yPos);
+                    subtotalAmountLabel.Location = new Point(240, yPos);
                     subtotalAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                     receiptPanel.Controls.Add(subtotalAmountLabel);
-                    yPos += 18;
+                    yPos += 20;
 
                     // Discount
                     Label discountLabel = new Label();
                     discountLabel.Text = "Senior/PWD Discount (20%):";
                     discountLabel.Font = new Font("Arial", 9);
-                    discountLabel.Size = new Size(200, 18);
+                    discountLabel.Size = new Size(220, 18);
                     discountLabel.Location = new Point(10, yPos);
                     receiptPanel.Controls.Add(discountLabel);
 
@@ -1119,26 +1201,51 @@ namespace Inventory_Management_System
                     discountAmountLabel.Text = (originalTotal * 0.2m).ToString("-₱#,##0.00");
                     discountAmountLabel.Font = new Font("Arial", 9);
                     discountAmountLabel.Size = new Size(150, 18);
-                    discountAmountLabel.Location = new Point(220, yPos);
+                    discountAmountLabel.Location = new Point(240, yPos);
                     discountAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                     discountAmountLabel.ForeColor = Color.Red;
                     receiptPanel.Controls.Add(discountAmountLabel);
-                    yPos += 18;
+                    yPos += 20;
+
+                    // Discount Information Section
+                    if (!string.IsNullOrEmpty(printDiscountName))
+                    {
+                        Label discountNameLabel = new Label();
+                        discountNameLabel.Text = $"Discount Name: {printDiscountName}";
+                        discountNameLabel.Font = new Font("Arial", 8);
+                        discountNameLabel.Size = new Size(320, 15);
+                        discountNameLabel.Location = new Point(10, yPos);
+                        discountNameLabel.ForeColor = Color.DarkBlue;
+                        receiptPanel.Controls.Add(discountNameLabel);
+                        yPos += 16;
+                    }
+
+                    if (!string.IsNullOrEmpty(printDiscountId))
+                    {
+                        Label discountIdLabel = new Label();
+                        discountIdLabel.Text = $"Discount ID: {printDiscountId}";
+                        discountIdLabel.Font = new Font("Arial", 8);
+                        discountIdLabel.Size = new Size(320, 15);
+                        discountIdLabel.Location = new Point(10, yPos);
+                        discountIdLabel.ForeColor = Color.DarkBlue;
+                        receiptPanel.Controls.Add(discountIdLabel);
+                        yPos += 16;
+                    }
 
                     // Line before total
                     Panel line4 = new Panel();
-                    line4.Size = new Size(360, 1);
+                    line4.Size = new Size(380, 1);
                     line4.Location = new Point(10, yPos);
                     line4.BackColor = Color.Black;
                     receiptPanel.Controls.Add(line4);
-                    yPos += 10;
+                    yPos += 12;
                 }
 
                 // Total
                 Label totalLabel = new Label();
                 totalLabel.Text = "TOTAL AMOUNT:";
                 totalLabel.Font = new Font("Arial", 11, FontStyle.Bold);
-                totalLabel.Size = new Size(200, 20);
+                totalLabel.Size = new Size(220, 20);
                 totalLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(totalLabel);
 
@@ -1146,16 +1253,16 @@ namespace Inventory_Management_System
                 totalAmountLabel.Text = printFinalTotal.ToString("₱#,##0.00");
                 totalAmountLabel.Font = new Font("Arial", 11, FontStyle.Bold);
                 totalAmountLabel.Size = new Size(150, 20);
-                totalAmountLabel.Location = new Point(220, yPos);
+                totalAmountLabel.Location = new Point(240, yPos);
                 totalAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(totalAmountLabel);
-                yPos += 25;
+                yPos += 28;
 
                 // Payment
                 Label paymentLabel = new Label();
                 paymentLabel.Text = "Cash Payment:";
                 paymentLabel.Font = new Font("Arial", 9);
-                paymentLabel.Size = new Size(200, 18);
+                paymentLabel.Size = new Size(220, 18);
                 paymentLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(paymentLabel);
 
@@ -1163,16 +1270,16 @@ namespace Inventory_Management_System
                 paymentAmountLabel.Text = printPayment.ToString("₱#,##0.00");
                 paymentAmountLabel.Font = new Font("Arial", 9);
                 paymentAmountLabel.Size = new Size(150, 18);
-                paymentAmountLabel.Location = new Point(220, yPos);
+                paymentAmountLabel.Location = new Point(240, yPos);
                 paymentAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(paymentAmountLabel);
-                yPos += 18;
+                yPos += 20;
 
                 // Change
                 Label changeLabel = new Label();
                 changeLabel.Text = "Change:";
                 changeLabel.Font = new Font("Arial", 9);
-                changeLabel.Size = new Size(200, 18);
+                changeLabel.Size = new Size(220, 18);
                 changeLabel.Location = new Point(10, yPos);
                 receiptPanel.Controls.Add(changeLabel);
 
@@ -1180,46 +1287,46 @@ namespace Inventory_Management_System
                 changeAmountLabel.Text = printChange.ToString("₱#,##0.00");
                 changeAmountLabel.Font = new Font("Arial", 9);
                 changeAmountLabel.Size = new Size(150, 18);
-                changeAmountLabel.Location = new Point(220, yPos);
+                changeAmountLabel.Location = new Point(240, yPos);
                 changeAmountLabel.TextAlign = ContentAlignment.MiddleRight;
                 receiptPanel.Controls.Add(changeAmountLabel);
-                yPos += 30;
+                yPos += 32;
 
-                // Footer separator - EXACT same as sales report
+                // Footer separator
                 Panel line5 = new Panel();
-                line5.Size = new Size(360, 2);
+                line5.Size = new Size(380, 2);
                 line5.Location = new Point(10, yPos);
                 line5.BackColor = Color.Black;
                 receiptPanel.Controls.Add(line5);
-                yPos += 15;
+                yPos += 18;
 
-                // Thank you message - EXACT same as sales report
-                Label thankYouLabel = CreateReceiptLabel("THANK YOU!", new Font("Arial", 14, FontStyle.Bold), 380);
+                // Thank you message
+                Label thankYouLabel = CreateReceiptLabel("THANK YOU!", new Font("Arial", 14, FontStyle.Bold), 400);
                 thankYouLabel.Location = new Point(0, yPos);
                 thankYouLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(thankYouLabel);
-                yPos += 25;
+                yPos += 28;
 
-                Label greatDayLabel = CreateReceiptLabel("Have a great day ahead!", new Font("Arial", 10), 380);
+                Label greatDayLabel = CreateReceiptLabel("Have a great day ahead!", new Font("Arial", 10), 400);
                 greatDayLabel.Location = new Point(0, yPos);
                 greatDayLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(greatDayLabel);
-                yPos += 25;
+                yPos += 28;
 
-                // Contact info - EXACT same as sales report
-                Label contactLabel = CreateReceiptLabel("For concerns, please contact us at:", new Font("Arial", 8), 380);
+                // Contact info
+                Label contactLabel = CreateReceiptLabel("For concerns, please contact us at:", new Font("Arial", 8), 400);
                 contactLabel.Location = new Point(0, yPos);
                 contactLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(contactLabel);
-                yPos += 15;
+                yPos += 18;
 
-                Label phoneLabel = CreateReceiptLabel("Phone: (02) 123-4567", new Font("Arial", 8), 380);
+                Label phoneLabel = CreateReceiptLabel("Phone: (02) 123-4567", new Font("Arial", 8), 400);
                 phoneLabel.Location = new Point(0, yPos);
                 phoneLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(phoneLabel);
-                yPos += 12;
+                yPos += 14;
 
-                Label emailLabel = CreateReceiptLabel("Email: info@amgcpharmacy.com", new Font("Arial", 8), 380);
+                Label emailLabel = CreateReceiptLabel("Email: info@amgcpharmacy.com", new Font("Arial", 8), 400);
                 emailLabel.Location = new Point(0, yPos);
                 emailLabel.TextAlign = ContentAlignment.MiddleCenter;
                 receiptPanel.Controls.Add(emailLabel);
@@ -1230,25 +1337,25 @@ namespace Inventory_Management_System
                 // Add the scrollable panel to the form
                 receiptForm.Controls.Add(scrollablePanel);
 
-                // Buttons - EXACT same as sales report
+                // Buttons
                 Button printButton = new Button();
                 printButton.Text = "Print";
                 printButton.Size = new Size(80, 30);
-                printButton.Location = new Point(80, 520);
+                printButton.Location = new Point(80, 620);
                 printButton.Click += (s, ev) => PrintRefundReceipt();
                 receiptForm.Controls.Add(printButton);
 
                 Button saveButton = new Button();
                 saveButton.Text = "Save as Image";
                 saveButton.Size = new Size(100, 30);
-                saveButton.Location = new Point(170, 520);
+                saveButton.Location = new Point(170, 620);
                 saveButton.Click += (s, ev) => SaveRefundReceiptAsImage(receiptPanel);
                 receiptForm.Controls.Add(saveButton);
 
                 Button closeButton = new Button();
                 closeButton.Text = "Close";
                 closeButton.Size = new Size(80, 30);
-                closeButton.Location = new Point(280, 520);
+                closeButton.Location = new Point(280, 620);
                 closeButton.DialogResult = DialogResult.OK;
                 receiptForm.Controls.Add(closeButton);
 
@@ -1338,7 +1445,7 @@ namespace Inventory_Management_System
             }
         }
 
-        private void UpdateSalesRecordAndGetRemaining(string product, int refundQty, decimal refundAmount, DataTable updatedProductsData)
+        private void UpdateSalesRecord(string product, int refundQty, decimal refundAmount)
         {
             try
             {
@@ -1366,13 +1473,6 @@ namespace Inventory_Management_System
                         string updateSales = $"UPDATE tblsales SET quantity = '{newQty}', totalcost = '{newTotal:F2}' " +
                             $"WHERE orderid = '{orderID.Replace("'", "''")}' AND products = '{product.Replace("'", "''")}'";
                         db.executeSQL(updateSales);
-
-                        // Add to updated products data for receipt
-                        DataRow updatedRow = updatedProductsData.NewRow();
-                        updatedRow["products"] = product;
-                        updatedRow["quantity"] = newQty;
-                        updatedRow["unitprice"] = newTotal / newQty;
-                        updatedProductsData.Rows.Add(updatedRow);
                     }
                 }
             }

@@ -33,7 +33,6 @@
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
@@ -52,7 +51,6 @@
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -70,24 +68,26 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.mainPanel.Size = new System.Drawing.Size(1142, 647);
+            this.mainPanel.Size = new System.Drawing.Size(1329, 647);
             this.mainPanel.TabIndex = 1;
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.btnPrev);
+            this.contentPanel.Controls.Add(this.btnNext);
             this.contentPanel.Controls.Add(this.lblPageInfo);
             this.contentPanel.Controls.Add(this.dataGridView1);
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentPanel.Location = new System.Drawing.Point(20, 160);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
-            this.contentPanel.Size = new System.Drawing.Size(902, 467);
+            this.contentPanel.Size = new System.Drawing.Size(1089, 467);
             this.contentPanel.TabIndex = 2;
             // 
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(834, 448);
+            this.lblPageInfo.Location = new System.Drawing.Point(512, 417);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -113,48 +113,32 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 35;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(893, 425);
+            this.dataGridView1.Size = new System.Drawing.Size(1080, 377);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.actionPanel.Location = new System.Drawing.Point(922, 160);
+            this.actionPanel.Location = new System.Drawing.Point(1109, 160);
             this.actionPanel.Name = "actionPanel";
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
             this.actionPanel.TabIndex = 3;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnPrev);
-            this.groupBox1.Controls.Add(this.btnNext);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 220);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(160, 125);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Page";
-            // 
             // btnPrev
             // 
+            this.btnPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrev.BackColor = System.Drawing.Color.DimGray;
             this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPrev.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnPrev.FlatAppearance.BorderSize = 0;
             this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrev.ForeColor = System.Drawing.Color.White;
             this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrev.ImageIndex = 1;
-            this.btnPrev.Location = new System.Drawing.Point(10, 68);
+            this.btnPrev.Location = new System.Drawing.Point(257, 403);
             this.btnPrev.Name = "btnPrev";
             this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnPrev.Size = new System.Drawing.Size(140, 40);
@@ -167,14 +151,13 @@
             // 
             this.btnNext.BackColor = System.Drawing.Color.DimGray;
             this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNext.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNext.FlatAppearance.BorderSize = 0;
             this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNext.ForeColor = System.Drawing.Color.White;
             this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNext.ImageIndex = 0;
-            this.btnNext.Location = new System.Drawing.Point(10, 28);
+            this.btnNext.Location = new System.Drawing.Point(718, 403);
             this.btnNext.Name = "btnNext";
             this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnNext.Size = new System.Drawing.Size(140, 40);
@@ -292,7 +275,7 @@
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.searchPanel.Size = new System.Drawing.Size(1102, 80);
+            this.searchPanel.Size = new System.Drawing.Size(1289, 80);
             this.searchPanel.TabIndex = 1;
             // 
             // btnsearch
@@ -304,7 +287,7 @@
             this.btnsearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnsearch.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnsearch.ForeColor = System.Drawing.Color.White;
-            this.btnsearch.Location = new System.Drawing.Point(962, 25);
+            this.btnsearch.Location = new System.Drawing.Point(1140, 24);
             this.btnsearch.Name = "btnsearch";
             this.btnsearch.Size = new System.Drawing.Size(110, 35);
             this.btnsearch.TabIndex = 2;
@@ -319,7 +302,7 @@
             this.txtsearch.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtsearch.Location = new System.Drawing.Point(150, 28);
             this.txtsearch.Name = "txtsearch";
-            this.txtsearch.Size = new System.Drawing.Size(797, 27);
+            this.txtsearch.Size = new System.Drawing.Size(984, 27);
             this.txtsearch.TabIndex = 1;
             this.txtsearch.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtsearch_KeyPress);
             // 
@@ -350,7 +333,7 @@
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(20, 20);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(1102, 60);
+            this.headerPanel.Size = new System.Drawing.Size(1289, 60);
             this.headerPanel.TabIndex = 0;
             // 
             // lblTitle
@@ -368,7 +351,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1142, 647);
+            this.ClientSize = new System.Drawing.Size(1329, 647);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -381,7 +364,6 @@
             this.contentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.actionPanel.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
@@ -411,7 +393,6 @@
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblPageInfo;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
     }

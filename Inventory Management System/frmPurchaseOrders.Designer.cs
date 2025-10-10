@@ -30,14 +30,13 @@
         {
             this.mainPanel = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
+            this.btnPrev = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnNext = new System.Windows.Forms.Button();
             this.txttotal = new System.Windows.Forms.TextBox();
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnPrev = new System.Windows.Forms.Button();
-            this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
             this.btnhistory = new System.Windows.Forms.Button();
             this.btnexport = new System.Windows.Forms.Button();
@@ -61,7 +60,6 @@
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -84,7 +82,9 @@
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.btnPrev);
             this.contentPanel.Controls.Add(this.label1);
+            this.contentPanel.Controls.Add(this.btnNext);
             this.contentPanel.Controls.Add(this.txttotal);
             this.contentPanel.Controls.Add(this.lblPageInfo);
             this.contentPanel.Controls.Add(this.dataGridView1);
@@ -94,6 +94,25 @@
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
             this.contentPanel.Size = new System.Drawing.Size(1292, 544);
             this.contentPanel.TabIndex = 2;
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPrev.BackColor = System.Drawing.Color.DimGray;
+            this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrev.FlatAppearance.BorderSize = 0;
+            this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrev.ForeColor = System.Drawing.Color.White;
+            this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnPrev.ImageIndex = 1;
+            this.btnPrev.Location = new System.Drawing.Point(194, 481);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnPrev.Size = new System.Drawing.Size(140, 40);
+            this.btnPrev.TabIndex = 1;
+            this.btnPrev.Text = "&Prev";
+            this.btnPrev.UseVisualStyleBackColor = false;
             // 
             // label1
             // 
@@ -105,6 +124,25 @@
             this.label1.Size = new System.Drawing.Size(42, 19);
             this.label1.TabIndex = 4;
             this.label1.Text = "Total";
+            // 
+            // btnNext
+            // 
+            this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNext.BackColor = System.Drawing.Color.DimGray;
+            this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNext.FlatAppearance.BorderSize = 0;
+            this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.ForeColor = System.Drawing.Color.White;
+            this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnNext.ImageIndex = 0;
+            this.btnNext.Location = new System.Drawing.Point(736, 481);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnNext.Size = new System.Drawing.Size(140, 40);
+            this.btnNext.TabIndex = 0;
+            this.btnNext.Text = "&Next";
+            this.btnNext.UseVisualStyleBackColor = false;
             // 
             // txttotal
             // 
@@ -118,7 +156,7 @@
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(978, 478);
+            this.lblPageInfo.Location = new System.Drawing.Point(467, 495);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -150,7 +188,6 @@
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.actionPanel.Location = new System.Drawing.Point(1312, 160);
@@ -158,59 +195,6 @@
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 544);
             this.actionPanel.TabIndex = 3;
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnPrev);
-            this.groupBox2.Controls.Add(this.btnNext);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 419);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox2.Size = new System.Drawing.Size(160, 116);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Page";
-            // 
-            // btnPrev
-            // 
-            this.btnPrev.BackColor = System.Drawing.Color.DimGray;
-            this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPrev.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnPrev.FlatAppearance.BorderSize = 0;
-            this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrev.ForeColor = System.Drawing.Color.White;
-            this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnPrev.ImageIndex = 1;
-            this.btnPrev.Location = new System.Drawing.Point(10, 68);
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnPrev.Size = new System.Drawing.Size(140, 40);
-            this.btnPrev.TabIndex = 1;
-            this.btnPrev.Text = "&Prev";
-            this.btnPrev.UseVisualStyleBackColor = false;
-            // 
-            // btnNext
-            // 
-            this.btnNext.BackColor = System.Drawing.Color.DimGray;
-            this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNext.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNext.FlatAppearance.BorderSize = 0;
-            this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.ForeColor = System.Drawing.Color.White;
-            this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnNext.ImageIndex = 0;
-            this.btnNext.Location = new System.Drawing.Point(10, 28);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnNext.Size = new System.Drawing.Size(140, 40);
-            this.btnNext.TabIndex = 0;
-            this.btnNext.Text = "&Next";
-            this.btnNext.UseVisualStyleBackColor = false;
             // 
             // actionGroupBox
             // 
@@ -236,7 +220,7 @@
             // 
             // btnhistory
             // 
-            this.btnhistory.BackColor = System.Drawing.Color.DimGray;
+            this.btnhistory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnhistory.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnhistory.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnhistory.FlatAppearance.BorderSize = 0;
@@ -537,7 +521,6 @@
             this.contentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.actionPanel.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
             this.searchPanel.PerformLayout();
@@ -555,7 +538,6 @@
         private System.Windows.Forms.Label lblPageInfo;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Panel actionPanel;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.GroupBox actionGroupBox;

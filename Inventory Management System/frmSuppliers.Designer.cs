@@ -33,12 +33,10 @@
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnView = new System.Windows.Forms.Button();
-            this.btnAddPO = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
             this.btnrefresh = new System.Windows.Forms.Button();
             this.btndelete = new System.Windows.Forms.Button();
@@ -55,7 +53,6 @@
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
             this.searchPanel.SuspendLayout();
@@ -79,7 +76,9 @@
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.btnPrev);
             this.contentPanel.Controls.Add(this.lblPageInfo);
+            this.contentPanel.Controls.Add(this.btnNext);
             this.contentPanel.Controls.Add(this.dataGridView1);
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentPanel.Location = new System.Drawing.Point(20, 160);
@@ -91,7 +90,7 @@
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(737, 448);
+            this.lblPageInfo.Location = new System.Drawing.Point(378, 434);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 1;
@@ -117,13 +116,12 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 35;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(796, 425);
+            this.dataGridView1.Size = new System.Drawing.Size(796, 394);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -133,33 +131,18 @@
             this.actionPanel.Size = new System.Drawing.Size(200, 467);
             this.actionPanel.TabIndex = 3;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.btnPrev);
-            this.groupBox2.Controls.Add(this.btnNext);
-            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox2.Location = new System.Drawing.Point(20, 338);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox2.Size = new System.Drawing.Size(160, 116);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Page";
-            // 
             // btnPrev
             // 
+            this.btnPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPrev.BackColor = System.Drawing.Color.DimGray;
             this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPrev.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnPrev.FlatAppearance.BorderSize = 0;
             this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnPrev.ForeColor = System.Drawing.Color.White;
             this.btnPrev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPrev.ImageIndex = 1;
-            this.btnPrev.Location = new System.Drawing.Point(10, 68);
+            this.btnPrev.Location = new System.Drawing.Point(151, 420);
             this.btnPrev.Name = "btnPrev";
             this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnPrev.Size = new System.Drawing.Size(140, 40);
@@ -170,16 +153,16 @@
             // 
             // btnNext
             // 
+            this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNext.BackColor = System.Drawing.Color.DimGray;
             this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNext.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnNext.FlatAppearance.BorderSize = 0;
             this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNext.ForeColor = System.Drawing.Color.White;
             this.btnNext.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnNext.ImageIndex = 0;
-            this.btnNext.Location = new System.Drawing.Point(10, 28);
+            this.btnNext.Location = new System.Drawing.Point(538, 420);
             this.btnNext.Name = "btnNext";
             this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnNext.Size = new System.Drawing.Size(140, 40);
@@ -191,21 +174,20 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.btnView);
-            this.groupBox1.Controls.Add(this.btnAddPO);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
             this.groupBox1.Location = new System.Drawing.Point(20, 219);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(160, 119);
+            this.groupBox1.Size = new System.Drawing.Size(160, 79);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Purchase Order";
             // 
             // btnView
             // 
-            this.btnView.BackColor = System.Drawing.Color.DimGray;
+            this.btnView.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
             this.btnView.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnView.Dock = System.Windows.Forms.DockStyle.Top;
             this.btnView.FlatAppearance.BorderSize = 0;
@@ -214,7 +196,7 @@
             this.btnView.ForeColor = System.Drawing.Color.White;
             this.btnView.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnView.ImageIndex = 1;
-            this.btnView.Location = new System.Drawing.Point(10, 68);
+            this.btnView.Location = new System.Drawing.Point(10, 28);
             this.btnView.Name = "btnView";
             this.btnView.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.btnView.Size = new System.Drawing.Size(140, 40);
@@ -222,26 +204,6 @@
             this.btnView.Text = "&View";
             this.btnView.UseVisualStyleBackColor = false;
             this.btnView.Click += new System.EventHandler(this.btnView_Click);
-            // 
-            // btnAddPO
-            // 
-            this.btnAddPO.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(204)))), ((int)(((byte)(113)))));
-            this.btnAddPO.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddPO.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAddPO.FlatAppearance.BorderSize = 0;
-            this.btnAddPO.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnAddPO.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAddPO.ForeColor = System.Drawing.Color.White;
-            this.btnAddPO.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAddPO.ImageIndex = 0;
-            this.btnAddPO.Location = new System.Drawing.Point(10, 28);
-            this.btnAddPO.Name = "btnAddPO";
-            this.btnAddPO.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnAddPO.Size = new System.Drawing.Size(140, 40);
-            this.btnAddPO.TabIndex = 0;
-            this.btnAddPO.Text = "A&dd";
-            this.btnAddPO.UseVisualStyleBackColor = false;
-            this.btnAddPO.Click += new System.EventHandler(this.btnAddPO_Click);
             // 
             // actionGroupBox
             // 
@@ -441,7 +403,6 @@
             this.contentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.actionPanel.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.actionGroupBox.ResumeLayout(false);
             this.searchPanel.ResumeLayout(false);
@@ -460,12 +421,10 @@
         private System.Windows.Forms.Label lblPageInfo;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Panel actionPanel;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnView;
-        private System.Windows.Forms.Button btnAddPO;
         private System.Windows.Forms.GroupBox actionGroupBox;
         private System.Windows.Forms.Button btnrefresh;
         private System.Windows.Forms.Button btndelete;

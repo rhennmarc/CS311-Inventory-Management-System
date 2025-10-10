@@ -58,7 +58,6 @@ namespace Inventory_Management_System
             btnView.Enabled = hasSelection;
             btnupdate.Enabled = hasSelection;
             btndelete.Enabled = hasSelection;
-            btnAddPO.Enabled = hasSelection;
         }
 
         private void LoadSuppliers(string search = "")
@@ -218,26 +217,6 @@ namespace Inventory_Management_System
             catch (Exception error)
             {
                 MessageBox.Show(error.Message, "ERROR on btndelete_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnAddPO_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (row < 0 || row >= dataGridView1.Rows.Count)
-                {
-                    MessageBox.Show("Please select a supplier first.", "Add Purchase Order", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                string suppliername = dataGridView1.Rows[row].Cells["supplier"].Value.ToString();
-
-                ShowOrActivateForm(() => new frmAddPurchaseOrder(username, suppliername));
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message, "ERROR on btnAddPO_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -22,17 +22,16 @@
             this.dgvOrderItems = new System.Windows.Forms.DataGridView();
             this.lblPageInfo = new System.Windows.Forms.Label();
             this.actionPanel = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtTotalRefund = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtReason = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPrev = new System.Windows.Forms.Button();
             this.btnNext = new System.Windows.Forms.Button();
             this.actionGroupBox = new System.Windows.Forms.GroupBox();
             this.btnRefundAll = new System.Windows.Forms.Button();
             this.btnRefund = new System.Windows.Forms.Button();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtTotalRefund = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtReason = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.numQuantity = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -49,9 +48,8 @@
             this.contentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderItems)).BeginInit();
             this.actionPanel.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.actionGroupBox.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).BeginInit();
             this.searchPanel.SuspendLayout();
@@ -69,18 +67,20 @@
             this.mainPanel.Location = new System.Drawing.Point(0, 0);
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.mainPanel.Size = new System.Drawing.Size(1000, 669);
+            this.mainPanel.Size = new System.Drawing.Size(1048, 669);
             this.mainPanel.TabIndex = 0;
             // 
             // contentPanel
             // 
+            this.contentPanel.Controls.Add(this.btnPrev);
             this.contentPanel.Controls.Add(this.dgvOrderItems);
+            this.contentPanel.Controls.Add(this.btnNext);
             this.contentPanel.Controls.Add(this.lblPageInfo);
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentPanel.Location = new System.Drawing.Point(20, 160);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Padding = new System.Windows.Forms.Padding(0, 20, 200, 20);
-            this.contentPanel.Size = new System.Drawing.Size(760, 489);
+            this.contentPanel.Size = new System.Drawing.Size(808, 489);
             this.contentPanel.TabIndex = 3;
             // 
             // dgvOrderItems
@@ -109,7 +109,7 @@
             // lblPageInfo
             // 
             this.lblPageInfo.AutoSize = true;
-            this.lblPageInfo.Location = new System.Drawing.Point(617, 433);
+            this.lblPageInfo.Location = new System.Drawing.Point(315, 440);
             this.lblPageInfo.Name = "lblPageInfo";
             this.lblPageInfo.Size = new System.Drawing.Size(62, 13);
             this.lblPageInfo.TabIndex = 0;
@@ -117,16 +117,98 @@
             // 
             // actionPanel
             // 
-            this.actionPanel.Controls.Add(this.groupBox1);
             this.actionPanel.Controls.Add(this.actionGroupBox);
             this.actionPanel.Controls.Add(this.groupBox2);
             this.actionPanel.Controls.Add(this.groupBox3);
             this.actionPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.actionPanel.Location = new System.Drawing.Point(780, 160);
+            this.actionPanel.Location = new System.Drawing.Point(828, 160);
             this.actionPanel.Name = "actionPanel";
             this.actionPanel.Padding = new System.Windows.Forms.Padding(20);
             this.actionPanel.Size = new System.Drawing.Size(200, 489);
             this.actionPanel.TabIndex = 2;
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPrev.BackColor = System.Drawing.Color.DimGray;
+            this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnPrev.FlatAppearance.BorderSize = 0;
+            this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnPrev.ForeColor = System.Drawing.Color.White;
+            this.btnPrev.Location = new System.Drawing.Point(92, 426);
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnPrev.Size = new System.Drawing.Size(140, 40);
+            this.btnPrev.TabIndex = 1;
+            this.btnPrev.Text = "&Prev";
+            this.btnPrev.UseVisualStyleBackColor = false;
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
+            // btnNext
+            // 
+            this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNext.BackColor = System.Drawing.Color.DimGray;
+            this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnNext.FlatAppearance.BorderSize = 0;
+            this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNext.ForeColor = System.Drawing.Color.White;
+            this.btnNext.Location = new System.Drawing.Point(543, 426);
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnNext.Size = new System.Drawing.Size(140, 40);
+            this.btnNext.TabIndex = 0;
+            this.btnNext.Text = "&Next";
+            this.btnNext.UseVisualStyleBackColor = false;
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // actionGroupBox
+            // 
+            this.actionGroupBox.Controls.Add(this.btnRefundAll);
+            this.actionGroupBox.Controls.Add(this.btnRefund);
+            this.actionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.actionGroupBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
+            this.actionGroupBox.Location = new System.Drawing.Point(20, 294);
+            this.actionGroupBox.Name = "actionGroupBox";
+            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
+            this.actionGroupBox.Size = new System.Drawing.Size(160, 126);
+            this.actionGroupBox.TabIndex = 0;
+            this.actionGroupBox.TabStop = false;
+            this.actionGroupBox.Text = "Actions";
+            // 
+            // btnRefundAll
+            // 
+            this.btnRefundAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(126)))), ((int)(((byte)(34)))));
+            this.btnRefundAll.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRefundAll.FlatAppearance.BorderSize = 0;
+            this.btnRefundAll.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRefundAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefundAll.ForeColor = System.Drawing.Color.White;
+            this.btnRefundAll.Location = new System.Drawing.Point(10, 73);
+            this.btnRefundAll.Name = "btnRefundAll";
+            this.btnRefundAll.Size = new System.Drawing.Size(140, 40);
+            this.btnRefundAll.TabIndex = 1;
+            this.btnRefundAll.Text = "&All";
+            this.btnRefundAll.UseVisualStyleBackColor = false;
+            this.btnRefundAll.Click += new System.EventHandler(this.btnRefundAll_Click);
+            // 
+            // btnRefund
+            // 
+            this.btnRefund.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(196)))), ((int)(((byte)(15)))));
+            this.btnRefund.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnRefund.FlatAppearance.BorderSize = 0;
+            this.btnRefund.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnRefund.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRefund.ForeColor = System.Drawing.Color.White;
+            this.btnRefund.Location = new System.Drawing.Point(10, 28);
+            this.btnRefund.Name = "btnRefund";
+            this.btnRefund.Size = new System.Drawing.Size(140, 40);
+            this.btnRefund.TabIndex = 0;
+            this.btnRefund.Text = "&Refund";
+            this.btnRefund.UseVisualStyleBackColor = false;
+            this.btnRefund.Click += new System.EventHandler(this.btnRefund_Click);
             // 
             // groupBox2
             // 
@@ -188,106 +270,6 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Reason:";
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.btnPrev);
-            this.groupBox1.Controls.Add(this.btnNext);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.groupBox1.Location = new System.Drawing.Point(20, 368);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(10);
-            this.groupBox1.Size = new System.Drawing.Size(160, 116);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Page";
-            // 
-            // btnPrev
-            // 
-            this.btnPrev.BackColor = System.Drawing.Color.DimGray;
-            this.btnPrev.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnPrev.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnPrev.FlatAppearance.BorderSize = 0;
-            this.btnPrev.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnPrev.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrev.ForeColor = System.Drawing.Color.White;
-            this.btnPrev.Location = new System.Drawing.Point(10, 68);
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnPrev.Size = new System.Drawing.Size(140, 40);
-            this.btnPrev.TabIndex = 1;
-            this.btnPrev.Text = "&Prev";
-            this.btnPrev.UseVisualStyleBackColor = false;
-            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
-            // 
-            // btnNext
-            // 
-            this.btnNext.BackColor = System.Drawing.Color.DimGray;
-            this.btnNext.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnNext.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnNext.FlatAppearance.BorderSize = 0;
-            this.btnNext.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnNext.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNext.ForeColor = System.Drawing.Color.White;
-            this.btnNext.Location = new System.Drawing.Point(10, 28);
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnNext.Size = new System.Drawing.Size(140, 40);
-            this.btnNext.TabIndex = 0;
-            this.btnNext.Text = "&Next";
-            this.btnNext.UseVisualStyleBackColor = false;
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
-            // 
-            // actionGroupBox
-            // 
-            this.actionGroupBox.Controls.Add(this.btnRefundAll);
-            this.actionGroupBox.Controls.Add(this.btnRefund);
-            this.actionGroupBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.actionGroupBox.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.actionGroupBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(73)))), ((int)(((byte)(94)))));
-            this.actionGroupBox.Location = new System.Drawing.Point(20, 294);
-            this.actionGroupBox.Name = "actionGroupBox";
-            this.actionGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.actionGroupBox.Size = new System.Drawing.Size(160, 74);
-            this.actionGroupBox.TabIndex = 0;
-            this.actionGroupBox.TabStop = false;
-            this.actionGroupBox.Text = "Actions";
-            // 
-            // btnRefundAll
-            // 
-            this.btnRefundAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(126)))), ((int)(((byte)(34)))));
-            this.btnRefundAll.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRefundAll.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnRefundAll.FlatAppearance.BorderSize = 0;
-            this.btnRefundAll.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRefundAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefundAll.ForeColor = System.Drawing.Color.White;
-            this.btnRefundAll.Location = new System.Drawing.Point(85, 28);
-            this.btnRefundAll.Name = "btnRefundAll";
-            this.btnRefundAll.Size = new System.Drawing.Size(65, 36);
-            this.btnRefundAll.TabIndex = 1;
-            this.btnRefundAll.Text = "All";
-            this.btnRefundAll.UseVisualStyleBackColor = false;
-            this.btnRefundAll.Click += new System.EventHandler(this.btnRefundAll_Click);
-            // 
-            // btnRefund
-            // 
-            this.btnRefund.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(241)))), ((int)(((byte)(196)))), ((int)(((byte)(15)))));
-            this.btnRefund.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnRefund.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnRefund.FlatAppearance.BorderSize = 0;
-            this.btnRefund.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnRefund.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnRefund.ForeColor = System.Drawing.Color.White;
-            this.btnRefund.Location = new System.Drawing.Point(10, 28);
-            this.btnRefund.Name = "btnRefund";
-            this.btnRefund.Size = new System.Drawing.Size(75, 36);
-            this.btnRefund.TabIndex = 0;
-            this.btnRefund.Text = "&Refund";
-            this.btnRefund.UseVisualStyleBackColor = false;
-            this.btnRefund.Click += new System.EventHandler(this.btnRefund_Click);
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.numQuantity);
@@ -340,7 +322,7 @@
             this.searchPanel.Location = new System.Drawing.Point(20, 80);
             this.searchPanel.Name = "searchPanel";
             this.searchPanel.Padding = new System.Windows.Forms.Padding(20);
-            this.searchPanel.Size = new System.Drawing.Size(960, 80);
+            this.searchPanel.Size = new System.Drawing.Size(1008, 80);
             this.searchPanel.TabIndex = 1;
             // 
             // btnSearch
@@ -417,7 +399,7 @@
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(20, 20);
             this.headerPanel.Name = "headerPanel";
-            this.headerPanel.Size = new System.Drawing.Size(960, 60);
+            this.headerPanel.Size = new System.Drawing.Size(1008, 60);
             this.headerPanel.TabIndex = 0;
             // 
             // lblTitle
@@ -435,7 +417,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 669);
+            this.ClientSize = new System.Drawing.Size(1048, 669);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -448,10 +430,9 @@
             this.contentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOrderItems)).EndInit();
             this.actionPanel.ResumeLayout(false);
+            this.actionGroupBox.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.actionGroupBox.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numQuantity)).EndInit();
@@ -476,7 +457,6 @@
         private System.Windows.Forms.GroupBox actionGroupBox;
         private System.Windows.Forms.Button btnRefundAll;
         private System.Windows.Forms.Button btnRefund;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnPrev;
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.GroupBox groupBox2;
